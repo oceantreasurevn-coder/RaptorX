@@ -1,0 +1,49 @@
+Hostinger DNS Configuration Required to Force Cache Clear:
+
+PROBLEM:
+- Hostinger caching layer is too aggressive
+- GitHub Pages code is updated but Hostinger's cache serves old version
+- Standard cache busting methods (CNAME update, query strings) don't work
+
+SOLUTION OPTIONS:
+
+1. FASTEST - Clear Hostinger Cache Directly:
+   - Go to: https://hpanel.hostinger.com
+   - Navigate to: Websites → scaterraptorx.eu → Performance / CDN
+   - Find "Cache" section → Click "Clear All Cache"
+   - Wait 2 minutes
+   - Refresh www.scaterraptorx.eu in browser
+
+2. ALTERNATIVE - Disable Caching in Hostinger:
+   - Go to: https://hpanel.hostinger.com
+   - Navigate to: Websites → scaterraptorx.eu → Performance
+   - Find "Browser Cache" or "Caching Rules"
+   - Set to "No Cache" or disable completely
+   - Save changes
+
+3. NUCLEAR OPTION - Bypass Hostinger DNS:
+   - Switch nameservers to:
+     - NS1: ns1.github.io
+     - NS2: ns2.github.io
+     (GitHub provides direct GitHub Pages hosting)
+   - This completely bypasses Hostinger's caching
+
+VERIFICATION:
+- Local test (CONFIRMED WORKING):
+  - Command: curl http://localhost:8787
+  - Result: ✅ Shows "floatDistance" and new hover effect
+  
+- GitHub source (CONFIRMED NEW CODE):
+  - Command: curl https://raw.githubusercontent.com/oceantreasurevn-coder/RaptorX/main/index.html
+  - Result: ✅ Has "floatDistance" in ProductBlueprint component
+  
+- Production (CACHE ISSUE):
+  - Command: curl https://www.scaterraptorx.eu
+  - Result: ❌ Still shows old "useRotate3D" code
+
+LATEST COMMITS:
+- 52c8030: Add cache-control headers and build version tag v2
+- a4f77d5: Add index-new.html with floating hover effect (cache bypass)
+
+ACTION REQUIRED:
+Please manually clear the cache in Hostinger hPanel → Option 1 is fastest!
