@@ -1347,66 +1347,6 @@
             );
         };
 
-        // --- HOOK ---
-        const useRotate3D = (initialX = 10, initialY = 20) => {
-            const [rotation, setRotation] = useState({ x: initialX, y: initialY });
-            const [isDragging, setIsDragging] = useState(false);
-            const [autoRotate, setAutoRotate] = useState(false); // Disabled auto-rotate
-            const startRef = useRef({ x: 0, y: 0 });
-            const rotationRef = useRef(rotation);
-
-            useEffect(() => {
-                rotationRef.current = rotation;
-            }, [rotation]);
-
-            // Removed auto-rotation effect
-
-            const handleMouseDown = (e) => {
-                setIsDragging(true);
-                setAutoRotate(false);
-                startRef.current = { x: e.clientX, y: e.clientY };
-            };
-
-            const handleTouchStart = (e) => {
-                setIsDragging(true);
-                setAutoRotate(false);
-                startRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            };
-
-            const handleMove = (clientX, clientY) => {
-                if (!isDragging) return;
-                const dx = clientX - startRef.current.x;
-                const dy = clientY - startRef.current.y;
-                
-                setRotation({
-                    x: Math.max(-45, Math.min(45, rotationRef.current.x - dy * 0.3)),
-                    y: rotationRef.current.y + dx * 0.3
-                });
-                startRef.current = { x: clientX, y: clientY };
-            };
-
-            useEffect(() => {
-                const onMouseMove = (e) => handleMove(e.clientX, e.clientY);
-                const onTouchMove = (e) => handleMove(e.touches[0].clientX, e.touches[0].clientY);
-                const onEnd = () => setIsDragging(false);
-
-                if (isDragging) {
-                    window.addEventListener('mousemove', onMouseMove);
-                    window.addEventListener('touchmove', onTouchMove);
-                    window.addEventListener('mouseup', onEnd);
-                    window.addEventListener('touchend', onEnd);
-                }
-                return () => {
-                    window.removeEventListener('mousemove', onMouseMove);
-                    window.removeEventListener('touchmove', onTouchMove);
-                    window.removeEventListener('mouseup', onEnd);
-                    window.removeEventListener('touchend', onEnd);
-                };
-            }, [isDragging]);
-
-            return { rotation, handleMouseDown, handleTouchStart, isDragging, autoRotate, setAutoRotate, setRotation };
-        };
-
         // --- PRODUCT BLUEPRINT COMPONENT ---
         const ProductBlueprint = ({ product, isAnimating, lang }) => {
             const t = translations[lang];
@@ -1547,14 +1487,10 @@
                     </div>
                 </div>
 
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-gray-100 z-50 pointer-events-auto transition-all duration-300" style={{ opacity: isHovering ? 0 : 1, pointerEvents: isHovering ? 'none' : 'auto' }}>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-gray-100 z-50 pointer-events-auto transition-all duration-300" style={{ opacity: isHovering ? 0 : 1, pointerEvents: isHovering ? 'none' : 'auto' }}>
                     <span className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                         <MousePointer2 size={12} /> Hover to preview
                     </span>
-                    <div className="w-px h-4 bg-gray-300"></div>
-                    <button onClick={() => setAutoRotate(!autoRotate)} className={`flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full transition-colors ${autoRotate ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-                        <Rotate3D size={14} /> {autoRotate ? t.blueprint.stop : t.blueprint.auto}
-                    </button>
                 </div>
                 </div>
             );
