@@ -2560,6 +2560,31 @@
         };
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
+        
+        // Force cache clear and load latest version
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'activated') {
+                            window.location.reload();
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Also clear old caches
+        if ('caches' in window) {
+            caches.keys().then(cacheNames => {
+                cacheNames.forEach(cacheName => {
+                    if (cacheName !== 'raptor-v2-floating-hover') {
+                        caches.delete(cacheName);
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
