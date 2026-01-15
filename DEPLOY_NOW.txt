@@ -1,0 +1,177 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                    DEPLOY NOW - QUICK GUIDE                  ║
+╚═══════════════════════════════════════════════════════════════╝
+
+YOUR WEBSITE IS READY! Follow these 6 steps and you're live in 45 minutes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 1: GitHub SSH Key (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Go to: https://github.com/settings/keys
+
+Click: "New SSH key"
+Type: "Render Deploy Key"
+Category: "Authentication Key"
+Key: Copy this:
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrSZNcu57hhHM6R5Rc3wSh5X6j5wnZJTcHiWtXYyBE2 oceantreasurevn@github.com
+
+Click: "Add SSH key"
+
+✅ DONE: Step 1
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 2: GitHub Pages (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Go to: https://github.com/oceantreasurevn-coder/RaptorX/settings/pages
+
+Set:
+- Source: Deploy from a branch
+- Branch: main
+- Folder: / (root)
+
+Custom domain: scaterraptorx.eu
+
+Check: ✅ Enforce HTTPS
+
+Click: Save
+
+Wait: 1-2 minutes
+
+✅ DONE: Step 2
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 3: Hostinger DNS - A Records (10 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Go to: https://www.hostinger.com/dashboard
+
+Domain > DNS
+
+Add 4 A Records:
+
+Name: @    Type: A    Value: 185.199.108.153
+Name: @    Type: A    Value: 185.199.109.153
+Name: @    Type: A    Value: 185.199.110.153
+Name: @    Type: A    Value: 185.199.111.153
+
+Wait: 15-30 minutes for DNS to propagate
+
+Test in terminal:
+  dig scaterraptorx.eu
+
+Should show: 185.199.108.153 (or one of the other IPs)
+
+✅ DONE: Step 3
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 4: Render Web Service (10 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Go to: https://dashboard.render.com/
+
+Click: New → Web Service
+
+Connect GitHub:
+- Select repo: RaptorX
+- Branch: main
+
+Configure:
+- Name: raptorx-api
+- Runtime: Node
+- Build Command: (leave empty)
+- Start Command: node server.js
+- Instance Type: Free or Starter
+
+Environment Variables:
+  AI_PROVIDER=openrouter
+  OPENROUTER_API_KEY=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
+  OPENROUTER_MODEL=openrouter/auto
+
+Click: Create Web Service
+
+Wait: 2-5 minutes for deployment
+
+When it says "Live", copy your Render URL:
+  Example: https://raptorx-api.onrender.com
+  Your URL: ___________________________
+
+✅ DONE: Step 4
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 5: Hostinger DNS - API CNAME (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Go back to: Hostinger Dashboard > Domain > DNS
+
+Add CNAME Record:
+
+Name: api
+Type: CNAME
+Value: [Your Render URL from Step 4]
+
+Example: raptorx-api.onrender.com
+
+Wait: 5-10 minutes for DNS to propagate
+
+✅ DONE: Step 5
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 6: Test (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test 1 - Website:
+  open https://scaterraptorx.eu
+  Should load chatbot interface
+
+Test 2 - API Health:
+  curl https://api.scaterraptorx.eu/api/health
+  Should return: {"status":"ok",...}
+
+Test 3 - Chat:
+  curl -X POST https://api.scaterraptorx.eu/api/chat \
+    -H "Content-Type: application/json" \
+    -d '{"messages":[{"role":"user","content":"Hi"}],"lang":"en"}'
+  Should return: {"reply":"...AI response..."}
+
+Or run automated test:
+  bash test-deployment.sh
+
+✅ DONE: Step 6
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎉 YOU'RE LIVE!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://scaterraptorx.eu
+API: https://api.scaterraptorx.eu
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Detailed guides:
+  - START_HERE.md
+  - DEPLOYMENT_GUIDE.md
+  - DEPLOYMENT_SUMMARY.md
+  - DEPLOYMENT_CHECKLIST.txt
+
+Run interactive setup:
+  bash QUICK_SETUP.sh
+
+Run tests:
+  bash test-deployment.sh
+
+
+Total time to live: ~45 minutes
+You've got this! 🚀
+
