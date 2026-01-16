@@ -792,7 +792,25 @@
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <!-- Fallback content if React fails to load -->
+        <div style="min-height: 100vh; background: black; color: white; display: flex; align-items: center; justify-content: center; font-family: monospace;">
+            <div style="text-align: center; max-width: 600px; padding: 2rem;">
+                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">RAPTOR [X]</div>
+                <div style="font-size: 1.5rem; margin-bottom: 2rem;">Street Skateboarding</div>
+                <p style="color: #ccc; margin-bottom: 2rem;">
+                    Loading the ultimate skateboarding experience...<br>
+                    If this message persists, please try refreshing the page.
+                </p>
+                <button onclick="window.location.reload()" style="background: yellow; color: black; padding: 1rem 2rem; border: none; font-weight: bold; cursor: pointer; border-radius: 0.5rem;">
+                    REFRESH PAGE
+                </button>
+                <div style="margin-top: 2rem; font-size: 0.8rem; color: #666;">
+                    RAPTOR [X] - Premium Skateboard Technology
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
