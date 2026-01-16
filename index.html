@@ -1512,7 +1512,7 @@
                     <div 
                     className={`relative w-[260px] sm:w-[300px] md:w-[400px] h-[420px] sm:h-[460px] md:h-[500px] transition-all duration-500 ease-out`}
                     style={{
-                        transform: `translateY(-${floatDistance}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${isHovering ? 1.06 : 1}) translateZ(${isHovering ? 120 : 0}px)`,
+                        transform: `translateY(-${floatDistance}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1) translateZ(${isHovering ? 120 : 0}px)`,
                         filter: isHovering ? 'drop-shadow(0 60px 120px rgba(0,0,0,0.3))' : 'drop-shadow(0 20px 40px rgba(0,0,0,0.1))',
                         transformStyle: 'preserve-3d',
                         willChange: 'transform, filter'
@@ -1544,8 +1544,10 @@
                                 decoding="async"
                                 className={`w-full h-auto object-contain transform transition-all duration-500 ${product.imgClass || ''}`}
                                 style={{ 
-                                    transform: 'rotateZ(-45deg) translateZ(0px) scale(' + (isHovering ? 1.06 : 1) + ')',
+                                    transform: 'rotateZ(-45deg) translateZ(0px) scale(1)',
                                     filter: 'brightness(1) contrast(1) saturate(1)',
+                                    animation: !isAnimating ? 'float-subtle 3s ease-in-out infinite' : 'none',
+                                    willChange: 'transform'
                                 }} 
                             />
                             <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform filter transition-all duration-500 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-20px) scale(' + (isHovering ? 1.04 : 1) + ')', opacity: isHovering ? 0.3 : 0, filter: 'brightness(' + (isHovering ? 1.1 : 0.5) + ')', backdropFilter: 'none' }} />
