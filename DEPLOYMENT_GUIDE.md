@@ -106,7 +106,7 @@ Should return: `185.199.108.153` (or one of the other IPs)
 5. **Environment Variables:**
    ```
    AI_PROVIDER=openrouter
-   OPENROUTER_API_KEY=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
+   OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY_HERE
    OPENROUTER_MODEL=openrouter/auto
    ```
 
