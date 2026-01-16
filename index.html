@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-<!-- RAPTOR [X] v2.0 - Floating Hover Effect Edition -->
-<!-- Last Updated: 2026-01-16T00:00:00Z -->
-<!-- Commit: 4d13ef5 -->
-<!-- CDN-Purge: Wed Jan 16 2026 -->
-<!-- Status: New hover effect deployed - old 360 rotation removed -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,51 +73,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
 
-    <!-- React & ReactDOM (Primary CDN: jsdelivr) -->
-    <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
     <!-- Babel for JSX -->
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
-
-    <!-- Fallback CDN (unpkg) if jsdelivr fails -->
-    <script>
-        window.ReactFallback = false;
-        setTimeout(() => {
-            if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
-                console.log('Primary CDN failed, loading fallback...');
-                window.ReactFallback = true;
-
-                // Load fallback scripts
-                const reactScript = document.createElement('script');
-                reactScript.src = 'https://unpkg.com/react@18/umd/react.production.min.js';
-                reactScript.crossOrigin = 'anonymous';
-
-                const reactDOMScript = document.createElement('script');
-                reactDOMScript.src = 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js';
-                reactDOMScript.crossOrigin = 'anonymous';
-
-                const babelScript = document.createElement('script');
-                babelScript.src = 'https://unpkg.com/@babel/standalone/babel.min.js';
-
-                document.head.appendChild(reactScript);
-                document.head.appendChild(reactDOMScript);
-                document.head.appendChild(babelScript);
-
-                // Retry React initialization after fallback loads
-                babelScript.onload = () => {
-                    setTimeout(() => {
-                        if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined') {
-                            console.log('Fallback CDN loaded successfully');
-                            const root = ReactDOM.createRoot(document.getElementById('root'));
-                            root.render(React.createElement('div', null, 'Loading RAPTOR [X]...'));
-                            setTimeout(() => window.location.reload(), 1000);
-                        }
-                    }, 2000);
-                };
-            }
-        }, 3000);
-    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
         body {
@@ -332,26 +288,6 @@
             animation: rotate-3d-space 10s ease-in-out infinite;
         }
 
-        /* Lightning Flash Animation */
-        @keyframes lightning-flash {
-            0% { opacity: 1; filter: drop-shadow(0 0 20px currentColor); }
-            50% { opacity: 0.3; filter: drop-shadow(0 0 5px currentColor); }
-            100% { opacity: 0; filter: drop-shadow(0 0 0px currentColor); }
-        }
-
-        /* 3D Glow Pulse */
-        @keyframes glow-pulse-3d {
-            0%, 100% { filter: drop-shadow(0 40px 80px rgba(0,0,0,0.2)); transform: scale(1); }
-            50% { filter: drop-shadow(0 50px 100px rgba(0,0,0,0.3)); transform: scale(1.02); }
-        }
-
-        /* Product entrance glow */
-        @keyframes product-entrance-glow {
-            0% { filter: drop-shadow(0 0 0px currentColor) brightness(0.8); opacity: 0; }
-            50% { filter: drop-shadow(0 0 30px currentColor) brightness(1.1); }
-            100% { filter: drop-shadow(0 0 0px currentColor) brightness(1); opacity: 1; }
-        }
-
         @keyframes success-pop {
             0% { transform: translateY(12px) scale(0.96); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
@@ -403,69 +339,6 @@
             text-align: center;
             text-shadow: 0 0 12px rgba(255,214,0,0.6);
             font-size: 0.95rem;
-        }
-
-        /* Product-Specific 3D Floating Animations */
-        @keyframes float-subtle {
-            0%, 100% { transform: translateY(0) rotateZ(0deg); }
-            50% { transform: translateY(-8px) rotateZ(2deg); }
-        }
-        .animate-float-subtle {
-            animation: float-subtle 3s ease-in-out infinite;
-        }
-
-        @keyframes float-spin {
-            0% { transform: translateY(0) rotateZ(-5deg); }
-            50% { transform: translateY(-12px) rotateZ(5deg); }
-            100% { transform: translateY(0) rotateZ(-5deg); }
-        }
-        .animate-float-spin {
-            animation: float-spin 4s ease-in-out infinite;
-        }
-
-        @keyframes float-bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            25% { transform: translateY(-10px) scale(1.02); }
-            75% { transform: translateY(-5px) scale(1.01); }
-        }
-        .animate-float-bounce {
-            animation: float-bounce 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
-        }
-
-        @keyframes float-pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.03); opacity: 0.95; }
-        }
-        .animate-float-pulse {
-            animation: float-pulse 2s ease-in-out infinite;
-        }
-
-        /* 3D Floating with depth effect - REMOVED: float-3d-depth (undo) */
-
-        /* Smooth product transition blur effect */
-        @keyframes blur-transition-in {
-            0% { filter: blur(12px); opacity: 0; }
-            100% { filter: blur(0); opacity: 1; }
-        }
-        @keyframes blur-transition-out {
-            0% { filter: blur(0); opacity: 1; }
-            100% { filter: blur(12px); opacity: 0; }
-        }
-        .animate-blur-in {
-            animation: blur-transition-in 0.6s ease-out forwards;
-        }
-        .animate-blur-out {
-            animation: blur-transition-out 0.6s ease-in forwards;
-        }
-
-        /* Glow pulse on product entrance */
-        @keyframes glow-pulse-enter {
-            0% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
-            50% { filter: drop-shadow(0 0 30px rgba(255,255,255,0.4)); }
-            100% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
-        }
-        .animate-glow-pulse-enter {
-            animation: glow-pulse-enter 0.8s ease-out forwards;
         }
 
         @keyframes chat-float {
@@ -804,24 +677,13 @@
             --eye-radius: 999px;
         }
         .chat-brand {
-            /* Graffiti-style brand for chatbot: black fill with stronger yellow outline */
-            font-family: 'Sedgwick Ave Display', cursive, sans-serif;
-            color: #000000; /* black fill */
-            -webkit-text-stroke: 2px rgba(255,214,0,0.6); /* thicker faint yellow border */
-            /* Fallback/thicker outline for non-supporting browsers using layered text-shadow */
-            text-shadow:
-                -2px 0 0 rgba(255,214,0,0.55),
-                2px 0 0 rgba(255,214,0,0.55),
-                0 -2px 0 rgba(255,214,0,0.55),
-                0 2px 0 rgba(255,214,0,0.55),
-                0 2px 6px rgba(255,214,0,0.18),
-                0 4px 8px rgba(0,0,0,0.45);
-            letter-spacing: 0.06em;
+            font-family: 'Sedgwick Ave Display', cursive;
+            color: #ffd400;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 4px 8px rgba(0,0,0,0.45);
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             font-size: 1.2rem;
             line-height: 1;
-            display: inline-block;
-            padding: 2px 6px;
         }
         
         /* Utility for 3D positioning */
@@ -831,85 +693,7 @@
     </style>
 </head>
 <body>
-    <div style="font-family: monospace; background: black; color: white; min-height: 100vh; padding: 2rem; text-align: center;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h1 style="font-size: 4rem; font-weight: bold; margin-bottom: 2rem;">
-                RAPTOR <span style="color: #fbbf24;">[X]</span>
-            </h1>
-
-            <h2 style="font-size: 2rem; margin-bottom: 2rem;">Street Skateboarding</h2>
-
-            <p style="font-size: 1.2rem; margin-bottom: 3rem; line-height: 1.6;">
-                The perfect fusion of ergonomic design and ultimate sensor technology.<br>
-                <strong>Pitch Black. Powerful. Premium.</strong>
-            </p>
-
-            <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem;">
-                <div style="background: white; color: black; padding: 1rem 2rem; border-radius: 0.5rem; font-weight: bold; text-transform: uppercase;">
-                    Pre-Order Now
-                </div>
-                <div style="border: 2px solid white; color: white; padding: 1rem 2rem; border-radius: 0.5rem; font-weight: bold; text-transform: uppercase;">
-                    Explore
-                </div>
-            </div>
-
-            <!-- Products Grid -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
-                <div style="background: #f9fafb; color: black; padding: 2rem; border-radius: 1rem;">
-                    <div style="width: 100%; height: 150px; background: #e5e7eb; border-radius: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: #6b7280;">
-                        Product Image
-                    </div>
-                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">RAPTOR [X]</h3>
-                    <p style="color: #6b7280; margin-bottom: 1rem;">MATTE BLACK</p>
-                    <span style="background: #fbbf24; color: black; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: bold;">BEST SELLER</span>
-                </div>
-
-                <div style="background: #f9fafb; color: black; padding: 2rem; border-radius: 1rem;">
-                    <div style="width: 100%; height: 150px; background: #e5e7eb; border-radius: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: #6b7280;">
-                        Product Image
-                    </div>
-                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">RAPTOR [X]</h3>
-                    <p style="color: #6b7280; margin-bottom: 1rem;">PURE WHITE</p>
-                    <span style="background: #374151; color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: bold;">LIMITED</span>
-                </div>
-
-                <div style="background: #f9fafb; color: black; padding: 2rem; border-radius: 1rem;">
-                    <div style="width: 100%; height: 150px; background: #e5e7eb; border-radius: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: #6b7280;">
-                        Product Image
-                    </div>
-                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">RAPTOR [X]</h3>
-                    <p style="color: #6b7280; margin-bottom: 1rem;">TITANIUM</p>
-                    <span style="background: #dc2626; color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: bold;">LIMITED FOR FRANCE</span>
-                </div>
-
-                <div style="background: #f9fafb; color: black; padding: 2rem; border-radius: 1rem;">
-                    <div style="width: 100%; height: 150px; background: #e5e7eb; border-radius: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: #6b7280;">
-                        Product Image
-                    </div>
-                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">RAPTOR [X]</h3>
-                    <p style="color: #6b7280; margin-bottom: 1rem;">GIRL EDITION</p>
-                    <span style="background: #ec4899; color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: bold;">SPECIAL GIFT</span>
-                </div>
-            </div>
-
-            <!-- Register Section -->
-            <div style="background: #1f2937; padding: 3rem; border-radius: 1rem; margin-bottom: 4rem;">
-                <h2 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem;">Ready to Dominate?</h2>
-                <p style="margin-bottom: 2rem; color: #d1d5db;">Limited slots available. Register today to be the first owner.</p>
-
-                <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: 0 auto;">
-                    <input type="email" placeholder="Enter your email address" style="padding: 1rem; background: #fbbf24; border: none; color: black; font-weight: bold; text-align: center;">
-                    <button style="padding: 1rem; background: white; color: black; border: none; font-weight: bold; text-transform: uppercase;">Get Invitation</button>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div style="border-top: 1px solid #374151; padding-top: 2rem; color: #6b7280;">
-                <p>© 2024 RAPTOR [X] - Premium Skateboard Technology</p>
-                <p>Designed for the future of street skateboarding.</p>
-            </div>
-        </div>
-    </div>
+    <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
@@ -1621,7 +1405,7 @@
                 },
             ];
 
-            const floatDistance = isHovering ? 30 : 0;
+            const floatDistance = isHovering ? 20 : 0;
             const tiltX = isHovering ? (mousePos.y - 0.5) * 8 : 0;
             const tiltY = isHovering ? (mousePos.x - 0.5) * -8 : 0;
 
@@ -1632,26 +1416,24 @@
                     onMouseMove={handleMouseMove}
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}
-                    style={{ perspective: '1200px' }}
                 >
                 <div 
                     className="relative w-full h-full flex items-center justify-center perspective-1000"
                 >
                     <div 
-                    className={`relative w-[260px] sm:w-[300px] md:w-[400px] h-[420px] sm:h-[460px] md:h-[500px] transition-all duration-500 ease-out`}
+                    className={`relative w-[260px] sm:w-[300px] md:w-[400px] h-[420px] sm:h-[460px] md:h-[500px] transition-all duration-300 ease-out`}
                     style={{
-                        transform: `translateY(-${floatDistance}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${isHovering ? 1.06 : 1}) translateZ(${isHovering ? 120 : 0}px)`,
-                        filter: isHovering ? 'drop-shadow(0 60px 120px rgba(0,0,0,0.3))' : 'drop-shadow(0 20px 40px rgba(0,0,0,0.1))',
-                        transformStyle: 'preserve-3d',
-                        willChange: 'transform, filter'
+                        transform: `translateY(-${floatDistance}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
+                        filter: isHovering ? 'drop-shadow(0 30px 60px rgba(0,0,0,0.4))' : 'drop-shadow(0 10px 30px rgba(0,0,0,0.2))'
                     }}
                     >
                     <div className={`w-full h-full transition-all duration-1000 ease-out ${
                         isAnimating
-                        ? 'scale-50 opacity-0 blur-2xl rotate-y-45 translate-z-minus-20 -rotate-12'
-                        : 'scale-100 opacity-100 blur-0 rotate-y-0 translate-z-0 rotate-0'
-                    }`} style={{ transformStyle: 'preserve-3d', transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
+                        ? 'scale-75 opacity-0 blur-md rotate-y-12 translate-z-minus-20'
+                        : 'scale-100 opacity-100 blur-0 rotate-y-0 translate-z-0'
+                    }`}>
                         <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="absolute bottom-20 w-[60%] h-12 bg-black/30 blur-3xl rounded-full transition-all duration-300" style={{ opacity: isHovering ? 0.6 : 0.4 }}></div>
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <div className="relative w-[320px] md:w-[420px] h-[200px] opacity-70" style={{ transform: 'rotateZ(-45deg) translateZ(-8px)' }}>
                                     <div className="absolute left-10 right-10 top-1/2 h-[2px] border-t border-dashed border-neutral-700/40"></div>
@@ -1665,87 +1447,24 @@
                                     <div className="absolute right-[14%] top-[50%] w-4 md:w-5 h-4 md:h-5 bg-gradient-to-br from-neutral-100 to-neutral-500 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.35)]"></div>
                                 </div>
                             </div>
-                            <div className="w-full h-auto relative">
-                                <div style={{ transform: 'rotateZ(-45deg) translateZ(0px)', willChange: 'transform' }} className="w-full h-full">
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        loading="lazy"
-                                        decoding="async"
-                                        className={`w-full h-auto object-contain transform transition-transform duration-500 ${product.imgClass || ''}`}
-                                        style={{
-                                            transform: 'translateY(0) scale(' + (isHovering ? 1.06 : 1) + ') translateZ(0)',
-                                            filter: 'none',
-                                            animation: !isAnimating ? 'float-subtle 3s ease-in-out infinite' : 'none',
-                                            willChange: 'transform, opacity',
-                                            backfaceVisibility: 'hidden',
-                                            WebkitBackfaceVisibility: 'hidden',
-                                            imageRendering: 'auto'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform transition-all duration-500 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-20px) scale(' + (isHovering ? 1.04 : 1) + ')', opacity: isHovering ? 0.3 : 0, filter: 'none', backdropFilter: 'none', willChange: 'transform, opacity' }} />
-                            {/* 3D Circular Base */}
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 pointer-events-none" style={{
-                              transform: 'translateZ(-80px) perspective(1000px) rotateX(75deg)',
-                            }}>
-                              <div className="relative w-full h-full" style={{
-                                background: `radial-gradient(ellipse 200px 80px at 50% 40%, ${accentPrimary}40 0%, ${accentPrimary}20 30%, transparent 70%)`,
-                                borderRadius: '50%',
-                                boxShadow: `0 30px 60px ${accentPrimary}30, inset 0 -10px 30px ${accentPrimary}20`,
-                                filter: `drop-shadow(0 40px 80px ${accentPrimary}25)`,
-                                animation: isHovering ? `glow-pulse-3d 2s ease-in-out infinite` : 'none'
-                              }}>
-                                {/* Lightning strikes on hover */}
-                                {isHovering && (
-                                  <>
-                                    <div className="absolute left-[20%] bottom-1/3 w-1 h-16 pointer-events-none" style={{
-                                      background: `linear-gradient(180deg, ${accentSecondary}ff 0%, ${accentSecondary}80 50%, transparent 100%)`,
-                                      filter: `drop-shadow(0 0 8px ${accentSecondary})`,
-                                      animation: `lightning-flash 0.1s ease-out, lightning-flash 0.1s ease-out 0.2s, lightning-flash 0.1s ease-out 0.4s`,
-                                      boxShadow: `0 0 20px ${accentSecondary}, 0 0 40px ${accentSecondary}80`
-                                    }}></div>
-                                    <div className="absolute right-[25%] bottom-1/4 w-1 h-20 pointer-events-none" style={{
-                                      background: `linear-gradient(180deg, ${accentSecondary}ff 0%, ${accentSecondary}80 50%, transparent 100%)`,
-                                      filter: `drop-shadow(0 0 8px ${accentSecondary})`,
-                                      animation: `lightning-flash 0.1s ease-out 0.15s, lightning-flash 0.1s ease-out 0.35s`,
-                                      boxShadow: `0 0 20px ${accentSecondary}, 0 0 40px ${accentSecondary}80`
-                                    }}></div>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                            {/* 3D Floating depth layers */}
-                            {isHovering && (
-                              <>
-                                <div className="absolute inset-0 pointer-events-none transition-all duration-700" style={{
-                                  background: 'radial-gradient(ellipse 1000px 800px at 50% 45%, rgba(255,255,255,0.08) 0%, transparent 65%)',
-                                  mixBlendMode: 'soft-light',
-                                  transform: 'translateZ(100px) translateY(-20px)',
-                                  animation: 'float-pulse 2s ease-in-out infinite'
-                                }}></div>
-                                <div className="absolute inset-0 pointer-events-none transition-all duration-700" style={{
-                                  background: 'radial-gradient(ellipse 700px 500px at 50% 50%, rgba(0,0,0,0.03) 0%, transparent 75%)',
-                                  mixBlendMode: 'multiply',
-                                  transform: 'translateZ(-60px) translateY(15px)',
-                                  animation: 'float-subtle 3s ease-in-out infinite'
-                                }}></div>
-                                <div className="absolute inset-0 pointer-events-none transition-all duration-700" style={{
-                                  background: 'radial-gradient(ellipse 500px 300px at 50% 55%, rgba(255,255,255,0.04) 0%, transparent 80%)',
-                                  mixBlendMode: 'screen',
-                                  transform: 'translateZ(50px)',
-                                  animation: 'float-bounce 2.5s ease-in-out infinite'
-                                }}></div>
-                              </>
-                            )}
-
+                            <img 
+                                src={product.image} 
+                                alt={product.name}
+                                loading="lazy"
+                                decoding="async"
+                                className={`w-full h-auto object-contain transform transition-transform duration-300 ${product.imgClass || ''}`}
+                                style={{ 
+                                    transform: 'rotateZ(-45deg) translateZ(0px) scale(' + (isHovering ? 1.08 : 1) + ')',
+                                }} 
+                            />
+                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform filter brightness-50 transition-all duration-300 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-4px) scale(' + (isHovering ? 1.08 : 1) + ')', opacity: isHovering ? 0.35 : 0.5 }} />
+                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-30 transform filter brightness-0 transition-all duration-300 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-8px) scale(' + (isHovering ? 1.08 : 1) + ')', opacity: isHovering ? 0.2 : 0.3 }} />
                         </div>
 
                         {parts.map((part) => (
                             <div key={part.id} className="absolute inset-0 pointer-events-none">
-                                <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-white rounded-full border-[3px] z-10 transition-all duration-300" style={{ transform: `translate(${part.anchor.x}px, ${part.anchor.y}px)`, borderColor: accentPrimary, boxShadow: `0 0 24px ${accentSecondary}ff, 0 0 48px ${accentSecondary}60, inset 0 0 12px rgba(255,255,255,0.6)`, opacity: isHovering ? 1 : 0.7 }}>
-                                    <div className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: accentSecondary, opacity: isHovering ? 1 : 0.5, boxShadow: `0 0 20px ${accentSecondary}ff` }}></div>
+                                <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-white rounded-full border-[3px] z-10 shadow-lg transition-all duration-300" style={{ transform: `translate(${part.anchor.x}px, ${part.anchor.y}px)`, borderColor: accentPrimary, boxShadow: `0 0 12px ${accentSecondary}80`, opacity: isHovering ? 1 : 0.7 }}>
+                                    <div className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: accentSecondary, opacity: isHovering ? 0.9 : 0.6 }}></div>
                                 </div>
                                 <div className="absolute top-1/2 left-1/2 w-[2px] bg-neutral-900 transition-all duration-300" style={{
                                     height: Math.sqrt(Math.pow(part.pos.x - part.anchor.x, 2) + Math.pow(part.pos.y - part.anchor.y, 2)),
@@ -1754,7 +1473,7 @@
                                     opacity: isHovering ? 0.8 : 0.5
                                 }}></div>
                                 <div className="absolute top-1/2 left-1/2 w-72 pointer-events-auto transition-all duration-300" style={{ transform: `translate(${part.pos.x - 144}px, ${part.pos.y - 40}px)` }}>
-                                    <div className="bg-white rounded-sm shadow-[0_10px_40px_rgba(0,0,0,0.2)] flex group transition-all duration-300 border-2" style={{ borderColor: accentPrimary, boxShadow: `0 10px 40px rgba(0,0,0,0.2), 0 0 15px ${accentSecondary}30`, opacity: isHovering ? 1 : 0.8 }}>
+                                    <div className="bg-white rounded-sm shadow-[0_10px_40px_rgba(0,0,0,0.2)] flex group hover:scale-105 transition-all duration-300 border-2" style={{ borderColor: accentPrimary, boxShadow: `0 10px 40px rgba(0,0,0,0.2), 0 0 15px ${accentSecondary}30`, opacity: isHovering ? 1 : 0.8 }}>
                                         <div className="w-16 flex items-center justify-center text-white shrink-0" style={labelGradient ? { backgroundImage: labelGradient } : { backgroundColor: accentPrimary }}>
                                             {part.icon}
                                         </div>
@@ -2265,7 +1984,7 @@
                 price: "$32",
                 badge: { en: "GIRL'S FAVORITE", fr: "PRÉFÉRÉE DES FILLES" },
                 badgeTone: "bg-pink-500 text-white",
-                imageClass: "scale-[1.22] md:scale-[1.3]",
+                imageClass: "scale-[1.22] md:scale-[1.3] group-hover:scale-[1.3] md:group-hover:scale-[1.36]",
                 description: { en: "Playful baby-raptor deck art on breathable cotton. Easy daily fit with a clean front-back story.", fr: "Illustration baby-raptor sur coton respirant. Coupe facile au quotidien, visuel propre recto-verso." }
             },
             {
@@ -2276,7 +1995,7 @@
                 price: "$68",
                 badge: { en: "NEW DROP", fr: "NOUVEAUTÉ" },
                 badgeTone: "bg-sky-300 text-black",
-                imageClass: "scale-[1.2] md:scale-[1.28]",
+                imageClass: "scale-[1.2] md:scale-[1.28] group-hover:scale-[1.28] md:group-hover:scale-[1.34]",
                 description: { en: "Cozy fleece pullover with egg crest front and dino backprint. Warm, soft, and session-ready.", fr: "Pull polaire cosy avec écusson oeuf devant et print dino au dos. Chaud, doux, prêt pour les sessions." }
             },
             {
@@ -2287,7 +2006,7 @@
                 price: "$74",
                 badge: { en: "CORE CLASSIC", fr: "CLASSIQUE" },
                 badgeTone: "bg-black text-white",
-                imageClass: "scale-[0.96] md:scale-[0.98]",
+                imageClass: "scale-[0.96] md:scale-[0.98] group-hover:scale-[1.0] md:group-hover:scale-[1.02]",
                 description: { en: "Minimal chest crest on a heavyweight gray hoodie. Built for night rides and clean fits.", fr: "Crest minimal sur hoodie gris épais. Parfait pour les sessions de nuit et les fits clean." }
             },
             {
@@ -2296,7 +2015,7 @@
                 sub: { en: "Front Crest + Back Claw", fr: "Crest avant + griffes dos" },
                 image: "gear/10.png",
                 price: "$36",
-                imageClass: "scale-[1.2] md:scale-[1.28]",
+                imageClass: "scale-[1.2] md:scale-[1.28] group-hover:scale-[1.28] md:group-hover:scale-[1.34]",
                 description: { en: "Stealth black tee with claw-strike backprint. Smooth hand feel, durable seams, all-day comfort.", fr: "T-shirt noir stealth avec griffes au dos. Toucher doux, coutures solides, confort toute la journée." }
             },
             {
@@ -2307,7 +2026,7 @@
                 price: "$88",
                 badge: { en: "BEST SELLER", fr: "MEILLEURE VENTE" },
                 badgeTone: "bg-yellow-300 text-black",
-                imageClass: "scale-[1.22] md:scale-[1.3]",
+                imageClass: "scale-[1.22] md:scale-[1.3] group-hover:scale-[1.3] md:group-hover:scale-[1.36]",
                 description: { en: "Zip-up layer with oversized back mark and contrast drawcords. Easy on, easy off between runs.", fr: "Zip avec logo dos oversized et cordons contrastés. Facile à enfiler entre deux runs." }
             },
             {
@@ -2318,7 +2037,7 @@
                 price: "$49",
                 badge: { en: "BUNDLE DEAL", fr: "OFFRE PACK" },
                 badgeTone: "bg-emerald-300 text-black",
-                imageClass: "scale-[1.18] md:scale-[1.24]",
+                imageClass: "scale-[1.18] md:scale-[1.24] group-hover:scale-[1.24] md:group-hover:scale-[1.3]",
                 description: { en: "Matching carry kit: insulated tumbler and shock-ready phone case with the Raptor mark.", fr: "Kit assorti : tumbler isolé et coque résistante aux chocs avec le logo Raptor." }
             }
         ];
@@ -2548,7 +2267,7 @@
                             <div className="relative w-full max-w-7xl mx-auto grid md:grid-cols-3 gap-8 items-center">
                                 <div className="col-span-1 space-y-6 order-2 md:order-1 relative z-20">
                                     <div className="overflow-hidden">
-                                        <span className={`inline-block px-4 py-1 text-xs font-black uppercase tracking-widest mb-4 transition-all duration-500 ease-out transform ${isAnimating ? 'translate-x-[-120%] opacity-0 blur-sm' : 'translate-x-0 opacity-100 blur-0'} ${activeProduct.badgeClass || ''}`} style={activeBadgeStyle}>
+                                        <span className={`inline-block px-4 py-1 text-xs font-black uppercase tracking-widest mb-4 transition-all duration-500 ease-out transform ${isAnimating ? 'translate-x-[-100%] opacity-0' : 'translate-x-0 opacity-100'} ${activeProduct.badgeClass || ''}`} style={activeBadgeStyle}>
                                             {activeProduct.badgeTextClass ? (
                                                 <span className={activeProduct.badgeTextClass}>{activeBadge}</span>
                                             ) : (
@@ -2556,8 +2275,8 @@
                                             )}
                                         </span>
                                     </div>
-                                    <div className="overflow-hidden relative"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 ease-out delay-50 transform ${isAnimating ? 'translate-y-24 opacity-0 blur-sm scale-95' : 'translate-y-0 opacity-100 blur-0 scale-100'} ${activeProduct.theme.textClass}`} style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}>{activeProduct.name}</h3></div>
-                                    <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 ease-out delay-100 transform ${isAnimating ? 'translate-y-12 opacity-0 blur-sm' : 'translate-y-0 opacity-100 blur-0'}`} style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}>{activeSub}</p></div>
+                                    <div className="overflow-hidden"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeProduct.theme.textClass}`}>{activeProduct.name}</h3></div>
+                                    <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`}>{activeSub}</p></div>
                                     <div className="flex gap-4 pt-8">
                                         <button onClick={handlePrev} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronLeft size={24} /></button>
                                         <button onClick={handleNext} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronRight size={24} /></button>
@@ -2617,7 +2336,26 @@
                                                 <div className="absolute inset-6 rounded-3xl border border-white/70 opacity-60"></div>
                                                 <div className="absolute inset-12 rounded-3xl border border-black/10 opacity-70"></div>
                                                 <div className="absolute inset-x-10 bottom-6 h-6 bg-black/10 blur-xl rounded-full"></div>
-                                                <!-- Removed duplicate blurred image layers to prevent blur-on-hover -->
+                                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                    <img
+                                                        src={item.image}
+                                                        alt=""
+                                                        aria-hidden="true"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className={`w-full h-full object-contain opacity-20 blur-[2px] translate-x-3 translate-y-3 ${item.imageClass || ''}`}
+                                                    />
+                                                </div>
+                                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                    <img
+                                                        src={item.image}
+                                                        alt=""
+                                                        aria-hidden="true"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className={`w-full h-full object-contain opacity-10 blur-[6px] translate-x-6 translate-y-6 ${item.imageClass || ''}`}
+                                                    />
+                                                </div>
                                                 <img
                                                     src={item.image}
                                                     alt={gearName}
@@ -2822,31 +2560,6 @@
         };
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
-        
-        // Force cache clear and load latest version
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                reg.addEventListener('updatefound', () => {
-                    const newWorker = reg.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'activated') {
-                            window.location.reload();
-                        }
-                    });
-                });
-            });
-        }
-        
-        // Also clear old caches
-        if ('caches' in window) {
-            caches.keys().then(cacheNames => {
-                cacheNames.forEach(cacheName => {
-                    if (cacheName !== 'raptor-v2-floating-hover') {
-                        caches.delete(cacheName);
-                    }
-                });
-            });
-        }
     </script>
 </body>
 </html>
