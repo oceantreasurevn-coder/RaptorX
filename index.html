@@ -1546,15 +1546,18 @@
                                         decoding="async"
                                         className={`w-full h-auto object-contain transform transition-transform duration-500 ${product.imgClass || ''}`}
                                         style={{
-                                            transform: 'translateY(0) scale(' + (isHovering ? 1.06 : 1) + ')',
-                                            filter: 'brightness(1) contrast(1) saturate(1)',
+                                            transform: 'translateY(0) scale(' + (isHovering ? 1.06 : 1) + ') translateZ(0)',
+                                            filter: 'none',
                                             animation: !isAnimating ? 'float-subtle 3s ease-in-out infinite' : 'none',
-                                            willChange: 'transform'
+                                            willChange: 'transform, opacity',
+                                            backfaceVisibility: 'hidden',
+                                            WebkitBackfaceVisibility: 'hidden',
+                                            imageRendering: 'auto'
                                         }}
                                     />
                                 </div>
                             </div>
-                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform filter transition-all duration-500 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-20px) scale(' + (isHovering ? 1.04 : 1) + ')', opacity: isHovering ? 0.3 : 0, filter: 'brightness(' + (isHovering ? 1.1 : 0.5) + ')', backdropFilter: 'none' }} />
+                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform transition-all duration-500 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-20px) scale(' + (isHovering ? 1.04 : 1) + ')', opacity: isHovering ? 0.3 : 0, filter: 'none', backdropFilter: 'none', willChange: 'transform, opacity' }} />
                             {/* 3D Circular Base */}
                             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 pointer-events-none" style={{
                               transform: 'translateZ(-80px) perspective(1000px) rotateX(75deg)',
