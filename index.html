@@ -2100,8 +2100,7 @@
                                             </div>
                                         </div>
                                     </RevealOnScroll>
-                                    );
-                                })}
+                                ))}
                             </div>
                         </div>
                     </section>
@@ -2440,65 +2439,65 @@
                                 `
                             }} />
 
-                            <script dangerouslySetInnerHTML={{
-                                __html: \`
-                                (function(){
-                                  // FAQ toggle
-                                  const faqContainer = document.getElementById('rxFaq');
-                                  if (faqContainer) {
-                                    faqContainer.addEventListener('click', (e) => {
-                                      const btn = e.target.closest('.rx-q');
-                                      if (!btn) return;
-                                      const qa = btn.closest('.rx-qa');
-                                      if (!qa) return;
-                                      qa.classList.toggle('open');
-                                    });
-                                  }
+                                                        <script dangerouslySetInnerHTML={{
+                                                                __html: `
+                                                                (function(){
+                                                                    // FAQ toggle
+                                                                    const faqContainer = document.getElementById('rxFaq');
+                                                                    if (faqContainer) {
+                                                                        faqContainer.addEventListener('click', (e) => {
+                                                                            const btn = e.target.closest('.rx-q');
+                                                                            if (!btn) return;
+                                                                            const qa = btn.closest('.rx-qa');
+                                                                            if (!qa) return;
+                                                                            qa.classList.toggle('open');
+                                                                        });
+                                                                    }
 
-                                  // Add to calendar .ics
-                                  const calBtn = document.getElementById('rxAddToCalendar');
-                                  if (calBtn) {
-                                    calBtn.addEventListener('click', () => {
-                                      const ics = [
-                                        'BEGIN:VCALENDAR',
-                                        'VERSION:2.0',
-                                        'PRODID:-//RAPTORX//FranceInvasion//EN',
-                                        'CALSCALE:GREGORIAN',
-                                        'METHOD:PUBLISH',
-                                        'BEGIN:VEVENT',
-                                        'UID:raptorx-france-invasion-2026@raptorx',
-                                        'DTSTAMP:20260101T000000Z',
-                                        'SUMMARY:RAPTOR[X] FRANCE INVASION (Paris → Lyon)',
-                                        'DESCRIPTION:Official tour: 25–30 JAN. Sessions, setup clinics, street art, pop-up streetwear, community rides.',
-                                        'LOCATION:Paris & Lyon, France',
-                                        'DTSTART:20260125T070000Z',
-                                        'DTEND:20260130T180000Z',
-                                        'END:VEVENT',
-                                        'END:VCALENDAR'
-                                      ].join('\\r\\n');
+                                                                    // Add to calendar .ics
+                                                                    const calBtn = document.getElementById('rxAddToCalendar');
+                                                                    if (calBtn) {
+                                                                        calBtn.addEventListener('click', () => {
+                                                                            const ics = [
+                                                                                'BEGIN:VCALENDAR',
+                                                                                'VERSION:2.0',
+                                                                                'PRODID:-//RAPTORX//FranceInvasion//EN',
+                                                                                'CALSCALE:GREGORIAN',
+                                                                                'METHOD:PUBLISH',
+                                                                                'BEGIN:VEVENT',
+                                                                                'UID:raptorx-france-invasion-2026@raptorx',
+                                                                                'DTSTAMP:20260101T000000Z',
+                                                                                'SUMMARY:RAPTOR[X] FRANCE INVASION (Paris → Lyon)',
+                                                                                'DESCRIPTION:Official tour: 25–30 JAN. Sessions, setup clinics, street art, pop-up streetwear, community rides.',
+                                                                                'LOCATION:Paris & Lyon, France',
+                                                                                'DTSTART:20260125T070000Z',
+                                                                                'DTEND:20260130T180000Z',
+                                                                                'END:VEVENT',
+                                                                                'END:VCALENDAR'
+                                                                            ].join('\\r\\n');
 
-                                      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-                                      const url = URL.createObjectURL(blob);
-                                      const link = document.createElement('a');
-                                      link.href = url;
-                                      link.download = 'RAPTORX_France_Invasion.ics';
-                                      document.body.appendChild(link);
-                                      link.click();
-                                      link.remove();
-                                      setTimeout(() => URL.revokeObjectURL(url), 100);
+                                                                            const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+                                                                            const url = URL.createObjectURL(blob);
+                                                                            const link = document.createElement('a');
+                                                                            link.href = url;
+                                                                            link.download = 'RAPTORX_France_Invasion.ics';
+                                                                            document.body.appendChild(link);
+                                                                            link.click();
+                                                                            link.remove();
+                                                                            setTimeout(() => URL.revokeObjectURL(url), 100);
 
-                                      // GA4 tracking (if gtag available)
-                                      if (typeof gtag !== 'undefined') {
-                                        gtag('event', 'add_to_calendar', {
-                                          event_category: 'engagement',
-                                          event_label: 'RAPTORX_France_Invasion'
-                                        });
-                                      }
-                                    });
-                                  }
-                                })();
-                                \`
-                            }} />
+                                                                            // GA4 tracking (if gtag available)
+                                                                            if (typeof gtag !== 'undefined') {
+                                                                                gtag('event', 'add_to_calendar', {
+                                                                                    event_category: 'engagement',
+                                                                                    event_label: 'RAPTORX_France_Invasion'
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                })();
+                                                                `
+                                                        }} />
                         </div>
                     </section>
 
