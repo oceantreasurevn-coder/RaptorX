@@ -401,17 +401,7 @@
             animation: float-pulse 2s ease-in-out infinite;
         }
 
-        /* 3D Floating with depth effect */
-        @keyframes float-3d-depth {
-            0% { transform: translateY(0) translateZ(0) rotateX(0); }
-            33% { transform: translateY(-15px) translateZ(30px) rotateX(5deg); }
-            66% { transform: translateY(-10px) translateZ(20px) rotateX(-3deg); }
-            100% { transform: translateY(0) translateZ(0) rotateX(0); }
-        }
-        .animate-float-3d-depth {
-            animation: float-3d-depth 3.5s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
-            transform-style: preserve-3d;
-        }
+        /* 3D Floating with depth effect - REMOVED: float-3d-depth (undo) */
 
         /* Smooth product transition blur effect */
         @keyframes blur-transition-in {
@@ -1556,7 +1546,6 @@
                                 style={{ 
                                     transform: 'rotateZ(-45deg) translateZ(0px) scale(' + (isHovering ? 1.06 : 1) + ')',
                                     filter: 'brightness(1) contrast(1) saturate(1)',
-                                    animation: !isAnimating ? 'float-3d-depth 3.5s cubic-bezier(0.34, 1.56, 0.64, 1) infinite' : 'none'
                                 }} 
                             />
                             <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform filter transition-all duration-500 ${product.imgClass || ''}`} style={{ transform: 'rotateZ(-45deg) translateZ(-20px) scale(' + (isHovering ? 1.04 : 1) + ')', opacity: isHovering ? 0.3 : 0, filter: 'brightness(' + (isHovering ? 1.1 : 0.5) + ')', backdropFilter: 'none' }} />
