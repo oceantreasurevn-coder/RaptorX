@@ -831,7 +831,49 @@
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <!-- Emergency fallback if React completely fails -->
+        <noscript>
+            <div style="min-height: 100vh; background: black; color: white; display: flex; align-items: center; justify-content: center; font-family: monospace; text-align: center; padding: 2rem;">
+                <div>
+                    <h1 style="font-size: 3rem; margin-bottom: 1rem;">RAPTOR [X]</h1>
+                    <p style="margin-bottom: 2rem;">Street Skateboarding</p>
+                    <p>Please enable JavaScript to view this website.</p>
+                </div>
+            </div>
+        </noscript>
+    </div>
+
+    <script>
+        // Basic debugging
+        console.log('RAPTOR [X] - Script starting...');
+
+        // Check if required globals exist
+        window.checkReactLoading = function() {
+            console.log('React available:', typeof React);
+            console.log('ReactDOM available:', typeof ReactDOM);
+            console.log('Babel available:', typeof Babel);
+
+            if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+                console.error('React libraries not loaded!');
+                document.getElementById('root').innerHTML = `
+                    <div style="min-height: 100vh; background: black; color: white; display: flex; align-items: center; justify-content: center; font-family: monospace; text-align: center; padding: 2rem;">
+                        <div>
+                            <h1 style="font-size: 3rem; margin-bottom: 1rem;">RAPTOR [X]</h1>
+                            <p style="margin-bottom: 2rem;">Street Skateboarding</p>
+                            <p style="color: #ff6b6b;">Loading failed. Please refresh the page.</p>
+                            <button onclick="window.location.reload()" style="background: #fbbf24; color: black; padding: 1rem 2rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer; margin-top: 1rem;">REFRESH PAGE</button>
+                        </div>
+                    </div>
+                `;
+                return false;
+            }
+            return true;
+        };
+
+        // Check after a delay
+        setTimeout(window.checkReactLoading, 5000);
+    </script>
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
