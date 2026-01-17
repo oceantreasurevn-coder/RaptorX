@@ -133,6 +133,11 @@
             touch-action: manipulation;
         }
 
+        .collection-switch--prev {
+            right: auto;
+            left: 14px;
+        }
+
         .collection-switch:hover {
             opacity: 1;
             background: rgba(255, 255, 255, 0.7);
@@ -158,11 +163,13 @@
         .blueprint-tag-title {
             font-size: 0.85rem;
             line-height: 1.1;
+            word-break: break-word;
         }
 
         .blueprint-tag-desc {
             font-size: 0.75rem;
             line-height: 1.2;
+            word-break: break-word;
         }
 
         @media (max-width: 410px) {
@@ -225,28 +232,32 @@
                 opacity: 0.65;
             }
 
+            .collection-switch--prev {
+                left: 10px;
+            }
+
             .product-blueprint-stage {
                 overflow: visible;
             }
 
             .blueprint-tag {
-                width: min(70vw, 220px);
+                width: min(68vw, 210px);
             }
 
             .blueprint-tag-icon {
-                width: 38px;
+                width: 34px;
             }
 
             .blueprint-tag-body {
-                padding: 8px;
+                padding: 6px 8px;
             }
 
             .blueprint-tag-title {
-                font-size: 0.68rem;
+                font-size: 0.62rem;
             }
 
             .blueprint-tag-desc {
-                font-size: 0.6rem;
+                font-size: 0.56rem;
             }
         }
 
@@ -286,6 +297,11 @@
 
             .mobile-layout header {
                 min-height: 95svh;
+            }
+
+            .mobile-layout .hero-image {
+                object-fit: cover;
+                transform: scale(1.06);
             }
 
             .mobile-layout .hero-badge {
@@ -427,6 +443,30 @@
 
             .mobile-layout .chat-launcher {
                 box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            #root {
+                width: 420px;
+                min-width: 420px;
+                max-width: 420px;
+                height: 1105px;
+                min-height: 1105px;
+                max-height: 1105px;
+                overflow-y: auto;
+                overflow-x: hidden;
             }
         }
 
@@ -2580,7 +2620,7 @@
 
                     <header className="relative w-full min-h-[100svh] md:h-screen overflow-hidden bg-black flex items-center justify-center">
                         <div className="absolute inset-0 w-full h-full z-0 flex items-center justify-center">
-                            <img src="https://janeportforlio.my.canva.site/ljmu/_assets/media/ec46a9ab0a64ca9b7e665d37f2805c10.jpg" alt={t.hero.alt} className="w-full h-full object-contain opacity-60 animate-slow-zoom" loading="eager" decoding="async" fetchpriority="high" />
+                            <img src="https://janeportforlio.my.canva.site/ljmu/_assets/media/ec46a9ab0a64ca9b7e665d37f2805c10.jpg" alt={t.hero.alt} className="w-full h-full object-contain opacity-60 animate-slow-zoom hero-image" loading="eager" decoding="async" fetchpriority="high" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent"></div>
                         </div>
@@ -2649,6 +2689,9 @@
                                     </div>
                                 </div>
                                 <div className="col-span-1 md:col-span-2 h-[420px] sm:h-[520px] md:h-[600px] order-1 md:order-2 float-wobble collection-stage">
+                                    <button type="button" onClick={handlePrev} className="collection-switch collection-switch--prev" aria-label="Previous product">
+                                        <ChevronLeft size={18} />
+                                    </button>
                                     <button type="button" onClick={handleNext} className="collection-switch" aria-label="Next product">
                                         <ChevronRight size={18} />
                                     </button>
