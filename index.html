@@ -449,7 +449,6 @@
         @media (max-width: 768px) {
             html, body {
                 width: 100%;
-                height: 100%;
             }
 
             body {
@@ -462,11 +461,20 @@
                 width: 420px;
                 min-width: 420px;
                 max-width: 420px;
-                height: 1105px;
-                min-height: 1105px;
-                max-height: 1105px;
-                overflow-y: auto;
+                height: auto;
+                min-height: 100%;
+                max-height: none;
+                overflow-y: visible;
                 overflow-x: hidden;
+                margin: 0 auto;
+                position: relative;
+            }
+        }
+
+        @media (max-width: 420px) {
+            #root {
+                transform: scale(calc(100vw / 420));
+                transform-origin: top center;
             }
         }
 
