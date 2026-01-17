@@ -1815,7 +1815,12 @@
                     .map((item) => `${item.name} — ${localizeValue(item.sub)} (${localizeValue(item.badge)})`)
                     .join("; ");
                 const productImages = products
-                    .map((item) => `${item.name} (${localizeValue(item.sub)}): ${item.image}`)
+                    .map((item) => {
+                        const sub = localizeValue(item.sub);
+                        const badge = localizeValue(item.badge);
+                        const tags = ["deck", sub, badge].filter(Boolean).join(" | ");
+                        return `${item.name} (${sub}): ${item.image} [tags: ${tags}]`;
+                    })
                     .join("\n");
                 const gearSummary = gear
                     .map((item) => `${localizeValue(item.name)}: ${localizeValue(item.sub)} — ${item.price}. ${localizeValue(item.description)}`)
