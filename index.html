@@ -453,9 +453,7 @@
             }
 
             body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
+                display: block;
             }
 
             #root {
@@ -469,6 +467,11 @@
                 overflow-x: hidden;
                 margin: 0 auto;
                 position: relative;
+            }
+
+            #register,
+            #register form {
+                pointer-events: auto;
             }
         }
 
@@ -720,12 +723,12 @@
 
         /* Space Rotation */
         @keyframes rotate-3d-space {
-            0% { transform: perspective(1000px) rotateY(0deg) rotateX(8deg) translateZ(0); }
-            50% { transform: perspective(1000px) rotateY(20deg) rotateX(-8deg) translateZ(20px); }
-            100% { transform: perspective(1000px) rotateY(0deg) rotateX(8deg) translateZ(0); }
+            0% { transform: perspective(1000px) rotateY(0deg) rotateX(10deg) translateZ(0); }
+            50% { transform: perspective(1000px) rotateY(26deg) rotateX(-10deg) translateZ(30px); }
+            100% { transform: perspective(1000px) rotateY(0deg) rotateX(10deg) translateZ(0); }
         }
         .animate-rotate-3d-space {
-            animation: rotate-3d-space 2.5s ease-in-out infinite;
+            animation: rotate-3d-space 3s ease-in-out infinite;
         }
 
         @keyframes success-pop {
