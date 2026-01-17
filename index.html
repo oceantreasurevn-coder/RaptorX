@@ -906,6 +906,15 @@
         .chat-message li {
             margin: 4px 0;
         }
+        .chat-message .chat-inline-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: #ffffff;
+            margin: 8px 0;
+        }
         
         /* Utility for 3D positioning */
         .preserve-3d { transform-style: preserve-3d; }
@@ -1514,7 +1523,32 @@
                 if (typeof value === "string") return value;
                 return value?.[lang] || value?.en || "";
             };
-            const siteContext = useMemo(() => {
+            const getPageText = () => {
+                if (typeof document === "undefined") return "";
+                const root = document.querySelector("#root");
+                const text = root?.innerText || document.body?.innerText || "";
+                return text.replace(/\s+/g, " ").trim();
+            };
+
+            const getPageImages = () => {
+                if (typeof document === "undefined") return [];
+                const origin = window.location.origin;
+                return Array.from(document.querySelectorAll("img"))
+                    .map((img) => {
+                        const src = img.currentSrc || img.getAttribute("src") || "";
+                        if (!src || src.startsWith("data:")) return null;
+                        let url = src;
+                        try {
+                            url = new URL(src, origin).toString();
+                        } catch (error) {
+                            url = src;
+                        }
+                        return { alt: (img.getAttribute("alt") || "").trim(), src: url };
+                    })
+                    .filter(Boolean);
+            };
+
+            const buildSiteContext = () => {
                 const productSummary = products
                     .map((item) => `${item.name} — ${localizeValue(item.sub)} (${localizeValue(item.badge)})`)
                     .join("; ");
@@ -1524,13 +1558,22 @@
                 const scheduleSummary = t.schedule
                     .map((day) => `${day.date}: ${day.events.map((event) => `${event.time} ${event.title}`).join(", ")}`)
                     .join(" | ");
+                const pageText = getPageText();
+                const images = getPageImages()
+                    .map((image) => `${image.alt || "Image"} — ${image.src}`)
+                    .join("\n");
                 return [
+                    "PAGE TEXT:",
+                    pageText || "No page text available.",
+                    "IMAGES:",
+                    images || "No images available.",
+                    "STRUCTURED DATA:",
                     "Brand: RAPTOR [X]",
                     `Collection products: ${productSummary}`,
                     `Gear catalog: ${gearSummary}`,
                     `Event timeline: ${scheduleSummary}`
                 ].join("\n");
-            }, [lang]);
+            };
             const apiBase = useMemo(() => {
                 if (typeof window === "undefined") return "";
                 const metaBase = document.querySelector('meta[name="raptor-api-base"]')?.getAttribute("content");
@@ -1733,6 +1776,7 @@
                     .slice(-12);
 
                 try {
+                    const siteContext = buildSiteContext();
                     const data = await fetchWithRetry(chatApiUrl, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -1798,6 +1842,7 @@
                 if (lines.length === 0) return null;
                 const items = [];
                 let listItems = [];
+                const imageRegex = /(https?:\/\/[^\s)]+?\.(?:png|jpe?g|webp|gif|svg)|\/event\/[^\s)]+?\.(?:png|jpe?g|webp|gif|svg))/gi;
 
                 const renderInline = (content) => {
                     const segments = content.split(/\*\*(.+?)\*\*/g);
@@ -1809,13 +1854,38 @@
                     });
                 };
 
+                const extractImageUrls = (line) => {
+                    const matches = line.match(imageRegex);
+                    return matches ? Array.from(new Set(matches)) : [];
+                };
+
+                const stripImageUrls = (line) => line.replace(imageRegex, "").replace(/\s{2,}/g, " ").trim();
+
+                const renderImages = (urls, keyPrefix) => urls.map((url, idx) => (
+                    <img
+                        key={`${keyPrefix}-img-${idx}`}
+                        src={url}
+                        alt="RAPTOR [X] visual"
+                        loading="lazy"
+                        decoding="async"
+                        className="chat-inline-image"
+                    />
+                ));
+
                 const flushList = () => {
                     if (listItems.length) {
                         items.push(
                             <ul key={`list-${items.length}`}>
-                                {listItems.map((item, idx) => (
-                                    <li key={`li-${items.length}-${idx}`}>🛹 {renderInline(item)}</li>
-                                ))}
+                                {listItems.map((item, idx) => {
+                                    const urls = extractImageUrls(item);
+                                    const textOnly = stripImageUrls(item);
+                                    return (
+                                        <li key={`li-${items.length}-${idx}`}>
+                                            {textOnly ? <span>🛹 {renderInline(textOnly)}</span> : <span>🛹</span>}
+                                            {urls.length ? <div>{renderImages(urls, `li-${items.length}-${idx}`)}</div> : null}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         );
                         listItems = [];
@@ -1838,9 +1908,18 @@
                         );
                     } else {
                         flushList();
-                        items.push(
-                            <p key={`p-${index}`}>{renderInline(line)}</p>
-                        );
+                        const urls = extractImageUrls(line);
+                        const textOnly = stripImageUrls(line);
+                        if (textOnly) {
+                            items.push(
+                                <p key={`p-${index}`}>{renderInline(textOnly)}</p>
+                            );
+                        }
+                        if (urls.length) {
+                            items.push(
+                                <div key={`img-${index}`}>{renderImages(urls, `p-${index}`)}</div>
+                            );
+                        }
                     }
                 });
                 flushList();
