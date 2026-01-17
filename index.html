@@ -1178,7 +1178,32 @@
             border-radius: 14px;
             border: 1px solid rgba(0,0,0,0.08);
             background: #ffffff;
-            margin: 8px 0;
+            margin: 0;
+        }
+        .chat-message .chat-image-card {
+            margin: 8px 0 10px;
+        }
+        .chat-message .chat-image-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffd400;
+            color: #111111;
+            font-weight: 800;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 6px 10px;
+            border-radius: 10px;
+            margin-top: 6px;
+        }
+        .chat-message .chat-image-tag {
+            background: #111111;
+            color: #ffd400;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
         }
         
         /* Utility for 3D positioning */
@@ -2140,15 +2165,35 @@
 
                 const stripImageUrls = (line) => line.replace(imageRegex, "").replace(/\s{2,}/g, " ").trim();
 
+                const getImageLabel = (url) => {
+                    const raw = (url || "").split("/").pop() || "";
+                    const base = decodeURIComponent(raw).replace(/\.[^.]+$/, "");
+                    const label = base.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim();
+                    return label || "RAPTOR [X]";
+                };
+
+                const getImageTag = (url) => {
+                    const value = (url || "").toLowerCase();
+                    if (value.includes("/event/")) return "Event";
+                    if (value.includes("gear/")) return "Gear";
+                    if (value.includes("canva.site")) return "Deck";
+                    return "Product";
+                };
+
                 const renderImages = (urls, keyPrefix) => urls.map((url, idx) => (
-                    <img
-                        key={`${keyPrefix}-img-${idx}`}
-                        src={url}
-                        alt="RAPTOR [X] visual"
-                        loading="lazy"
-                        decoding="async"
-                        className="chat-inline-image"
-                    />
+                    <div key={`${keyPrefix}-img-${idx}`} className="chat-image-card">
+                        <img
+                            src={url}
+                            alt={getImageLabel(url)}
+                            loading="lazy"
+                            decoding="async"
+                            className="chat-inline-image"
+                        />
+                        <div className="chat-image-bar">
+                            <span className="chat-image-tag">{getImageTag(url)}</span>
+                            <span>{getImageLabel(url)}</span>
+                        </div>
+                    </div>
                 ));
 
                 const flushList = () => {
