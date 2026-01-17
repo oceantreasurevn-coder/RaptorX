@@ -1,6 +1,0 @@
-.DS_Store
-Rebuild trigger - Thu Jan 15 23:20:29 +07 2026
-
-# Local env files (do NOT commit)
-.env
-.env.local

@@ -81,12 +81,43 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #000;
             color: #fff;
             overflow-x: hidden;
             cursor: none;
+        }
+
+        #root {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        img, video, canvas, svg, iframe {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .custom-cursor {
+                display: none !important;
+            }
         }
 
         .font-graffiti {
@@ -107,6 +138,41 @@
         }
         .rotate-y-360 {
             transform: rotateY(360deg);
+        }
+
+        @keyframes spin-space {
+            0% {
+                transform: translateZ(-30px) rotateY(0deg) rotateX(6deg);
+                opacity: 0.55;
+            }
+            100% {
+                transform: translateZ(0) rotateY(360deg) rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin-space-counter {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(-360deg); }
+        }
+
+        .spin-space {
+            animation: spin-space 0.58s cubic-bezier(0.18, 0.85, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .spin-space-inner {
+            animation: spin-space-counter 0.58s cubic-bezier(0.18, 0.85, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes float-wobble {
+            0%, 100% { transform: translateY(0) rotate(-0.6deg); }
+            50% { transform: translateY(-6px) rotate(0.6deg); }
+        }
+
+        .float-wobble {
+            animation: float-wobble 4.8s ease-in-out infinite;
         }
         .rotate-y-0 {
             transform: rotateY(0deg);
@@ -211,6 +277,27 @@
             60% { clip: rect(10px, 9999px, 70px, 0); }
             80% { clip: rect(80px, 9999px, 20px, 0); }
             100% { clip: rect(60px, 9999px, 50px, 0); }
+        }
+
+        @media (max-width: 900px) {
+            body {
+                display: flex;
+                justify-content: center;
+                padding: 0 16px;
+            }
+
+            #root {
+                width: 410px;
+                min-width: 410px;
+                min-height: 1105px;
+                margin: 0 auto;
+            }
+
+            .product-blueprint-board {
+                width: 410px;
+                max-width: 410px;
+                height: 520px;
+            }
         }
 
         /* Marquee Animation */
@@ -678,8 +765,8 @@
         }
         .chat-brand {
             font-family: 'Sedgwick Ave Display', cursive;
-            color: #ffd400;
-            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 4px 8px rgba(0,0,0,0.45);
+            color: #000000;
+            text-shadow: none;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             font-size: 1.2rem;
@@ -913,35 +1000,49 @@
         const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeO7w14EwzrwlTRuU1VWPFFKL_3-p6Moo8ySis3rfshZPc_jg/viewform?embedded=true";
         const GOOGLE_FORM_ACTION_URL = GOOGLE_FORM_URL.replace("viewform?embedded=true", "formResponse");
         const GOOGLE_FORM_FIELDS = {
-            email: "",
-            ride_frequency: "entry.2092238618",
-            setup_type: "entry.1556369182",
-            deck_replace: "entry.1226124600",
-            shopping_channel: "entry.1461203638",
-            purchase_driver: "entry.2047783657",
-            buy_frequency: "entry.1482528636",
-            favorite_accessories: "entry.1145490362"
+            event_date: "entry.2092238618",
+            event_city: "entry.1556369182",
+            entrant_name_dob: "entry.1226124600",
+            guardian_name: "entry.1461203638",
+            entrant_age_sex: "entry.2047783657",
+            guest_names: "entry.1482528636",
+            experience: "entry.1145490362",
+            board_types: "entry.1452731896",
+            phone: "entry.652036710",
+            email: "entry.1527478809",
+            address: "entry.1329828399",
+            favorite_pros: ""
         };
         const GOOGLE_FORM_READY = !GOOGLE_FORM_URL.includes("REPLACE_WITH_FORM_ID") && Object.values(GOOGLE_FORM_FIELDS).every((value) => !value || !value.includes("REPLACE_"));
 
         const registerSurvey = {
             en: [
-                { id: "ride-frequency", name: "ride_frequency", type: "single", question: "Skate frequency per week", options: ["0-1 days", "2-3 days", "4-5 days", "6+ days"] },
-                { id: "setup-type", name: "setup_type", type: "single", question: "Setup preference", options: ["Complete", "Custom", "Mix of both"] },
-                { id: "deck-replace", name: "deck_replace", type: "single", question: "Deck replacement cycle", options: ["Every 1-2 months", "3-6 months", "6-12 months", "When it breaks"] },
-                { id: "shopping-channel", name: "shopping_channel", type: "single", question: "Where you buy gear most", options: ["Local skateshop", "Brand website", "Online marketplace", "Event pop-up"] },
-                { id: "purchase-driver", name: "purchase_driver", type: "single", question: "Top purchase driver", options: ["Durability", "Price", "Graphics/Style", "Pro collabs", "Limited drops"] },
-                { id: "buy-frequency", name: "buy_frequency", type: "single", question: "Gear buying frequency", options: ["Monthly", "Every 2-3 months", "Twice a year", "Only when needed"] },
-                { id: "favorite-accessories", name: "favorite_accessories", type: "multi", question: "Favorite accessories", options: ["Grip tape", "Wheels", "Bearings", "Trucks", "Apparel"] }
+                { id: "event-date", name: "event_date", type: "date", question: "Event date you want to attend" },
+                { id: "event-city", name: "event_city", type: "multi", question: "Event location (cities) you want to attend", options: ["Paris", "Lyon"] },
+                { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Main entrant full name and date of birth", placeholder: "Full name, DD/MM/YYYY" },
+                { id: "guardian-name", name: "guardian_name", type: "text", question: "Parent/guardian name (if main entrant is under 18)", placeholder: "Full name" },
+                { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Main entrant age and sex", placeholder: "Age, sex" },
+                { id: "guest-names", name: "guest_names", type: "textarea", question: "Names of up to two guests (18+)", placeholder: "Guest 1, Guest 2" },
+                { id: "experience", name: "experience", type: "single", question: "Skateboarding experience", options: ["Beginner", "Intermediate", "Advanced", "Pro"] },
+                { id: "board-types", name: "board_types", type: "multi", question: "Types of skateboards owned", options: ["Street", "Cruiser", "Longboard", "Freestyle", "Downhill", "Electric", "Other"] },
+                { id: "favorite-pros", name: "favorite_pros", type: "text", question: "Favorite professional skateboarders", placeholder: "Names" },
+                { id: "phone", name: "phone", type: "tel", question: "Phone number (work/home/mobile + preferred method)", placeholder: "+33 ... (preferred contact)" },
+                { id: "email", name: "email", type: "email", question: "Email address of the main entrant", placeholder: "name@email.com" },
+                { id: "address", name: "address", type: "textarea", question: "Home address of main entrant", placeholder: "Street, City, Postal code, Country" }
             ],
             fr: [
-                { id: "ride-frequency", name: "ride_frequency", type: "single", question: "Fréquence de ride par semaine", options: [{ label: "0-1 jour", value: "0-1 days" }, { label: "2-3 jours", value: "2-3 days" }, { label: "4-5 jours", value: "4-5 days" }, { label: "6+ jours", value: "6+ days" }] },
-                { id: "setup-type", name: "setup_type", type: "single", question: "Préférence de setup", options: [{ label: "Complet", value: "Complete" }, { label: "Sur mesure", value: "Custom" }, { label: "Les deux", value: "Mix of both" }] },
-                { id: "deck-replace", name: "deck_replace", type: "single", question: "Cycle de remplacement du deck", options: [{ label: "Tous les 1-2 mois", value: "Every 1-2 months" }, { label: "3-6 mois", value: "3-6 months" }, { label: "6-12 mois", value: "6-12 months" }, { label: "Quand il casse", value: "When it breaks" }] },
-                { id: "shopping-channel", name: "shopping_channel", type: "single", question: "Où achètes-tu le plus", options: [{ label: "Skateshop local", value: "Local skateshop" }, { label: "Site de marque", value: "Brand website" }, { label: "Marketplace en ligne", value: "Online marketplace" }, { label: "Pop-up événement", value: "Event pop-up" }] },
-                { id: "purchase-driver", name: "purchase_driver", type: "single", question: "Facteur d'achat principal", options: [{ label: "Durabilité", value: "Durability" }, { label: "Prix", value: "Price" }, { label: "Graphisme/Style", value: "Graphics/Style" }, { label: "Collabs pro", value: "Pro collabs" }, { label: "Drops limités", value: "Limited drops" }] },
-                { id: "buy-frequency", name: "buy_frequency", type: "single", question: "Fréquence d'achat gear", options: [{ label: "Chaque mois", value: "Monthly" }, { label: "Tous les 2-3 mois", value: "Every 2-3 months" }, { label: "Deux fois par an", value: "Twice a year" }, { label: "Quand besoin", value: "Only when needed" }] },
-                { id: "favorite-accessories", name: "favorite_accessories", type: "multi", question: "Accessoires préférés", options: [{ label: "Grip", value: "Grip tape" }, { label: "Roues", value: "Wheels" }, { label: "Roulements", value: "Bearings" }, { label: "Trucks", value: "Trucks" }, { label: "Vêtements", value: "Apparel" }] }
+                { id: "event-date", name: "event_date", type: "date", question: "Date de l'événement souhaitée" },
+                { id: "event-city", name: "event_city", type: "multi", question: "Ville(s) de l'événement souhaitée(s)", options: [{ label: "Paris", value: "Paris" }, { label: "Lyon", value: "Lyon" }] },
+                { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Nom complet et date de naissance du participant principal", placeholder: "Nom complet, JJ/MM/AAAA" },
+                { id: "guardian-name", name: "guardian_name", type: "text", question: "Nom du parent/tuteur (si moins de 18 ans)", placeholder: "Nom complet" },
+                { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Âge et sexe du participant principal", placeholder: "Âge, sexe" },
+                { id: "guest-names", name: "guest_names", type: "textarea", question: "Noms de jusqu'à deux invités (18+)", placeholder: "Invité 1, Invité 2" },
+                { id: "experience", name: "experience", type: "single", question: "Expérience en skateboard", options: [{ label: "Débutant", value: "Beginner" }, { label: "Intermédiaire", value: "Intermediate" }, { label: "Avancé", value: "Advanced" }, { label: "Pro", value: "Pro" }] },
+                { id: "board-types", name: "board_types", type: "multi", question: "Types de skateboards possédés", options: [{ label: "Street", value: "Street" }, { label: "Cruiser", value: "Cruiser" }, { label: "Longboard", value: "Longboard" }, { label: "Freestyle", value: "Freestyle" }, { label: "Downhill", value: "Downhill" }, { label: "Électrique", value: "Electric" }, { label: "Autre", value: "Other" }] },
+                { id: "favorite-pros", name: "favorite_pros", type: "text", question: "Skateurs professionnels favoris", placeholder: "Noms" },
+                { id: "phone", name: "phone", type: "tel", question: "Numéro de téléphone (pro/domicile/mobile + méthode préférée)", placeholder: "+33 ... (contact préféré)" },
+                { id: "email", name: "email", type: "email", question: "Adresse email du participant principal", placeholder: "nom@email.com" },
+                { id: "address", name: "address", type: "textarea", question: "Adresse postale du participant principal", placeholder: "Rue, Ville, Code postal, Pays" }
             ]
         };
 
@@ -1016,6 +1117,7 @@
             const labelGradient = product.theme.labelGradient;
             const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
             const [isHovering, setIsHovering] = React.useState(false);
+            const [isMobileLayout, setIsMobileLayout] = React.useState(false);
             const containerRef = React.useRef(null);
 
             const handleMouseMove = (e) => {
@@ -1062,9 +1164,10 @@
                 },
             ];
 
-            const floatDistance = isHovering ? 20 : 0;
-            const tiltX = isHovering ? (mousePos.y - 0.5) * 8 : 0;
-            const tiltY = isHovering ? (mousePos.x - 0.5) * -8 : 0;
+            const floatDistance = isHovering ? 28 : 0;
+            const tiltX = isHovering ? (mousePos.y - 0.5) * 12 : 0;
+            const tiltY = isHovering ? (mousePos.x - 0.5) * -12 : 0;
+            const wobbleZ = Math.sin(floatOffset * 1.4) * 1.6;
 
             // Add floating animation state
             const [floatOffset, setFloatOffset] = React.useState(0);
@@ -1074,6 +1177,21 @@
                 }, 50);
                 return () => clearInterval(interval);
             }, []);
+
+            React.useEffect(() => {
+                if (typeof window === 'undefined') return;
+                const updateLayout = () => setIsMobileLayout(window.innerWidth <= 900);
+                updateLayout();
+                window.addEventListener('resize', updateLayout);
+                return () => window.removeEventListener('resize', updateLayout);
+            }, []);
+
+            const mobileLayout = {
+                deck: { anchor: { x: -20, y: -90 }, pos: { x: 0, y: -190 } },
+                trucks: { anchor: { x: 30, y: -20 }, pos: { x: 0, y: -70 } },
+                wheels: { anchor: { x: 40, y: 40 }, pos: { x: 0, y: 80 } },
+                grip: { anchor: { x: -30, y: 90 }, pos: { x: 0, y: 190 } }
+            };
 
             return (
                 <div
@@ -1086,11 +1204,13 @@
                 <div
                     className="relative w-full h-full flex items-center justify-center perspective-1000"
                 >
+                    <div className={`${isAnimating ? 'spin-space' : ''}`}>
                     <div
-                    className={`relative w-[260px] sm:w-[300px] md:w-[400px] h-[420px] sm:h-[460px] md:h-[500px] transition-all duration-1000 ease-out`}
+                    className={`product-blueprint-board relative w-[260px] sm:w-[300px] md:w-[400px] h-[420px] sm:h-[460px] md:h-[500px] transition-all duration-1000 ease-out will-change-transform ${isAnimating ? 'spin-space-inner' : ''}`}
                     style={{
-                        transform: `translateY(${Math.sin(floatOffset) * 8 - floatDistance}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
-                        filter: isHovering ? 'drop-shadow(0 40px 80px rgba(0,0,0,0.5)) brightness(1.2)' : 'drop-shadow(0 20px 40px rgba(0,0,0,0.3)) brightness(1.1)'
+                        transform: `translateY(${Math.sin(floatOffset) * 10 - floatDistance}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) rotateZ(${wobbleZ}deg) translateZ(${isHovering ? 18 : 0}px)`,
+                        filter: isHovering ? 'drop-shadow(0 30px 70px rgba(0,0,0,0.32))' : 'drop-shadow(0 16px 36px rgba(0,0,0,0.2))',
+                        transition: 'transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 900ms cubic-bezier(0.2, 0.7, 0.2, 1)'
                     }}
                     >
                     <div className={`w-full h-full transition-all duration-1000 ease-out ${
@@ -1098,8 +1218,8 @@
                         ? 'scale-75 opacity-0 blur-md rotate-y-12 translate-z-minus-20'
                         : 'scale-100 opacity-100 blur-0 rotate-y-0 translate-z-0'
                     }`}>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="absolute bottom-20 w-[60%] h-12 bg-black/30 blur-3xl rounded-full transition-all duration-300" style={{ opacity: isHovering ? 0.8 : 0.6 }}></div>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="absolute bottom-20 w-[60%] h-10 bg-black/20 blur-2xl rounded-full transition-all duration-300" style={{ opacity: isHovering ? 0.55 : 0.4 }}></div>
                             {/* Floating particles */}
                             <div className="absolute inset-0 pointer-events-none">
                                 <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-yellow-400 rounded-full opacity-60 animate-pulse" style={{ animationDelay: '0s', transform: `translateY(${Math.sin(floatOffset * 2) * 4}px)` }}></div>
@@ -1127,26 +1247,30 @@
                                 decoding="async"
                                 className={`w-full h-auto object-contain transform transition-all duration-700 ${product.imgClass || ''}`}
                                 style={{
-                                    transform: `rotateZ(-45deg) translateZ(0px) scale(${isHovering ? 1.12 : 1.05})`,
-                                    filter: 'brightness(1.1) contrast(1.05)'
+                                    transform: `rotateZ(-45deg) translateZ(0px) scale(${isHovering ? 1.06 : 1.02})`,
+                                    filter: 'contrast(1.05)'
                                 }}
                             />
-                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-50 transform filter brightness-50 transition-all duration-700 ${product.imgClass || ''}`} style={{ transform: `rotateZ(-45deg) translateZ(-4px) scale(${isHovering ? 1.12 : 1.05})`, opacity: isHovering ? 0.4 : 0.5, filter: 'brightness(1.1) blur(1px)' }} />
-                            <img src={product.image} alt="" loading="lazy" decoding="async" className={`absolute inset-0 w-full h-full object-contain opacity-30 transform filter brightness-20 transition-all duration-700 ${product.imgClass || ''}`} style={{ transform: `rotateZ(-45deg) translateZ(-8px) scale(${isHovering ? 1.12 : 1.05})`, opacity: isHovering ? 0.2 : 0.3, filter: 'brightness(1.2) blur(2px)' }} />
                         </div>
 
-                        {parts.map((part) => (
+                        {parts.map((part) => {
+                            const layout = isMobileLayout ? mobileLayout[part.id] : null;
+                            const anchorX = layout ? layout.anchor.x : part.anchor.x;
+                            const anchorY = layout ? layout.anchor.y : part.anchor.y;
+                            const posX = layout ? layout.pos.x : part.pos.x;
+                            const posY = layout ? layout.pos.y : part.pos.y;
+                            return (
                             <div key={part.id} className="absolute inset-0 pointer-events-none">
-                                <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-white rounded-full border-[3px] z-10 shadow-lg transition-all duration-300" style={{ transform: `translate(${part.anchor.x}px, ${part.anchor.y}px)`, borderColor: accentPrimary, boxShadow: `0 0 12px ${accentSecondary}80`, opacity: isHovering ? 1 : 0.7 }}>
+                                <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-white rounded-full border-[3px] z-10 shadow-lg transition-all duration-300" style={{ transform: `translate(${anchorX}px, ${anchorY}px)`, borderColor: accentPrimary, boxShadow: `0 0 12px ${accentSecondary}80`, opacity: isHovering ? 1 : 0.7 }}>
                                     <div className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: accentSecondary, opacity: isHovering ? 0.9 : 0.6 }}></div>
                                 </div>
                                 <div className="absolute top-1/2 left-1/2 w-[2px] bg-neutral-900 transition-all duration-300" style={{
-                                    height: Math.sqrt(Math.pow(part.pos.x - part.anchor.x, 2) + Math.pow(part.pos.y - part.anchor.y, 2)),
-                                    transform: `translate(${part.anchor.x}px, ${part.anchor.y}px) rotateZ(${-90 + (Math.atan2(part.pos.y - part.anchor.y, part.pos.x - part.anchor.x) * 180 / Math.PI)}deg)`,
+                                    height: Math.sqrt(Math.pow(posX - anchorX, 2) + Math.pow(posY - anchorY, 2)),
+                                    transform: `translate(${anchorX}px, ${anchorY}px) rotateZ(${-90 + (Math.atan2(posY - anchorY, posX - anchorX) * 180 / Math.PI)}deg)`,
                                     transformOrigin: '0 0',
                                     opacity: isHovering ? 0.8 : 0.5
                                 }}></div>
-                                <div className="absolute top-1/2 left-1/2 w-72 pointer-events-auto transition-all duration-300" style={{ transform: `translate(${part.pos.x - 144}px, ${part.pos.y - 40}px)` }}>
+                                <div className="absolute top-1/2 left-1/2 w-64 sm:w-72 pointer-events-auto transition-all duration-300" style={{ transform: `translate(${posX - 128}px, ${posY - 40}px)` }}>
                                     <div className="bg-white rounded-sm shadow-[0_10px_40px_rgba(0,0,0,0.2)] flex group hover:scale-105 transition-all duration-300 border-2" style={{ borderColor: accentPrimary, boxShadow: `0 10px 40px rgba(0,0,0,0.2), 0 0 15px ${accentSecondary}30`, opacity: isHovering ? 1 : 0.8 }}>
                                         <div className="w-16 flex items-center justify-center text-white shrink-0" style={labelGradient ? { backgroundImage: labelGradient } : { backgroundColor: accentPrimary }}>
                                             {part.icon}
@@ -1160,7 +1284,9 @@
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        );
+                        })}
+                    </div>
                     </div>
                     </div>
                 </div>
@@ -1508,6 +1634,19 @@
 
             const activeExpression = isCursorNear ? "happy" : robotMood;
 
+            const renderChatBrand = (text) => {
+                if (typeof text !== "string") return text;
+                const pattern = /(RAPTOR\s*\[X\]|Raptor\s*\[X\]|Raptor\[X\])/g;
+                const isBrandToken = /^(RAPTOR\s*\[X\]|Raptor\s*\[X\]|Raptor\[X\])$/;
+                const parts = text.split(pattern);
+                return parts.map((part, index) => {
+                    if (isBrandToken.test(part)) {
+                        return <span key={`brand-${index}`} className="chat-brand">{part}</span>;
+                    }
+                    return <React.Fragment key={`text-${index}`}>{part}</React.Fragment>;
+                });
+            };
+
             return (
                 <div className="fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3">
                     {isOpen && showOfflineBanner && chatStatus.state === "offline" && (
@@ -1543,7 +1682,7 @@
                                 {messages.map((message, index) => (
                                     <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                         <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
-                                            {message.content}
+                                            {renderChatBrand(message.content)}
                                         </div>
                                     </div>
                                 ))}
@@ -2003,7 +2142,7 @@
                                         <button onClick={handleNext} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronRight size={24} /></button>
                                     </div>
                                 </div>
-                                <div className="col-span-1 md:col-span-2 h-[420px] sm:h-[520px] md:h-[600px] order-1 md:order-2">
+                                <div className="col-span-1 md:col-span-2 h-[420px] sm:h-[520px] md:h-[600px] order-1 md:order-2 float-wobble">
                                     <ProductBlueprint product={activeProduct} isAnimating={isAnimating} lang={lang} />
                                 </div>
                             </div>
@@ -2013,7 +2152,7 @@
                                     return (
                                     <div key={item.id} onClick={() => { if (index !== activeIndex && !isAnimating) { setIsAnimating(true); setTimeout(() => { setActiveIndex(index); setIsAnimating(false); }, 700); } }} className={`cursor-pointer group text-center transition-all duration-300 ${activeIndex === index ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-100'}`}>
                                         <div className={`h-20 sm:h-24 md:h-28 rounded-xl mb-4 flex items-center justify-center p-4 bg-gray-50 border transition-all duration-300 ${activeIndex === index ? 'border-black shadow-lg bg-white' : 'border-transparent'}`}>
-                                            <img src={item.image} className={`w-full h-full object-contain ${item.imgClass || ''}`} alt={productSub} loading="lazy" decoding="async" />
+                                            <img src={item.image} className={`w-full h-full object-contain float-wobble ${item.imgClass || ''}`} alt={productSub} loading="lazy" decoding="async" />
                                         </div>
                                         <p className={`text-[10px] font-bold uppercase tracking-wider ${item.theme.textClass}`}>{productSub}</p>
                                     </div>
@@ -2100,7 +2239,8 @@
                                             </div>
                                         </div>
                                     </RevealOnScroll>
-                                ))}
+                                );
+                            })}
                             </div>
                         </div>
                     </section>
@@ -2168,276 +2308,271 @@
 
                     <section id="blog" className="py-20 md:py-32 bg-black text-white overflow-hidden relative">
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                            <style>
-                            :root{
-                              --rx-bg:#0a0a0a;
-                              --rx-card:#141414;
-                              --rx-card2:#1b1b1b;
-                              --rx-text:#f2f2f2;
-                              --rx-muted:#b9b9b9;
-                              --rx-line:#2a2a2a;
-                              --rx-accent:#f2c200;
-                              --rx-accent2:#ffd54a;
-                              --rx-radius:18px;
-                            }
+                                                        <style>{`
+                                                        :root{
+                                                            --rx-bg:#ffffff;
+                                                            --rx-card:#ffffff;
+                                                            --rx-card2:#ffffff;
+                                                            --rx-text:#0b0b0b;
+                                                            --rx-muted:#4b5563;
+                                                            --rx-line:#000000;
+                                                            --rx-accent:#f2c200;
+                                                            --rx-accent2:#ffd54a;
+                                                            --rx-radius:18px;
+                                                        }
 
                             .rx-wrap{max-width:1200px;margin:0 auto;padding:0 16px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--rx-text);}
-                            .rx-shell{background:var(--rx-bg);border-radius:calc(var(--rx-radius) + 6px);border:1px solid var(--rx-line);box-shadow:0 14px 40px rgba(0,0,0,.45);overflow:hidden}
-                            .rx-hero{padding:40px;background:
-                              radial-gradient(900px 420px at 15% 0%, rgba(242,194,0,.16), transparent 60%),
-                              radial-gradient(700px 360px at 85% 10%, rgba(255,213,74,.10), transparent 55%),
-                              linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-                            }
+                                                        .rx-shell{background:var(--rx-bg);border-radius:calc(var(--rx-radius) + 6px);border:1px solid var(--rx-line);box-shadow:0 12px 30px rgba(0,0,0,.12);overflow:hidden;font-family:'Sedgwick Ave Display', cursive;color:var(--rx-text)}
+                                                        .rx-hero{padding:40px;background:#ffffff;}
                             .rx-hero img{max-width:100%;height:auto;margin:16px 0;border-radius:12px}
                             .rx-kicker{display:inline-flex;gap:10px;align-items:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rx-accent);font-weight:700}
-                            .rx-h1{margin:14px 0 16px;font-size:clamp(28px,6vw,48px);line-height:1.1;font-weight:900}
-                            .rx-sub{margin:0 0 14px;font-size:16px;line-height:1.65;color:var(--rx-muted)}
+                            .rx-h1{margin:14px 0 20px;font-size:clamp(44px,8vw,78px);line-height:1.08;font-weight:900;text-align:center}
+                            .rx-sub{margin:0 0 18px;font-size:18px;line-height:1.75;color:var(--rx-muted);font-family:'Aptos Display', 'Segoe UI', sans-serif}
                             .rx-badges{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
-                            .rx-badge{font-size:12px;color:var(--rx-muted);border:1px solid var(--rx-line);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.02)}
+                            .rx-badge{font-size:12px;color:var(--rx-muted);border:1px solid var(--rx-line);padding:6px 10px;border-radius:999px;background:#ffffff;font-family:'Aptos Display', 'Segoe UI', sans-serif}
                             .rx-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
-                            .rx-btn{appearance:none;border:1px solid var(--rx-line);background:rgba(255,255,255,.04);color:var(--rx-text);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;display:inline-flex;gap:8px;align-items:center;text-decoration:none;transition:all .12s ease}
-                            .rx-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.06);border-color:#3a3a3a}
+                            .rx-btn{appearance:none;border:1px solid var(--rx-line);background:#ffffff;color:var(--rx-text);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;display:inline-flex;gap:8px;align-items:center;text-decoration:none;transition:all .12s ease;font-family:'Aptos Display', 'Segoe UI', sans-serif}
+                            .rx-btn:hover{transform:translateY(-1px);background:#ffffff;border-color:#000000}
                             .rx-btn.primary{background:linear-gradient(90deg, var(--rx-accent), var(--rx-accent2));border-color:rgba(242,194,0,.55);color:#101010}
                             .rx-btn.primary:hover{filter:saturate(1.03) brightness(1.1)}
-                            .rx-note{margin-top:12px;color:var(--rx-muted);font-size:12px;line-height:1.55}
+                            .rx-note{margin-top:12px;color:var(--rx-muted);font-size:12px;line-height:1.55;font-family:'Aptos Display', 'Segoe UI', sans-serif}
 
-                            .rx-body{padding:32px 40px;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));}
+                            .rx-body{padding:32px 40px;background:linear-gradient(180deg, rgba(0,0,0,.01), rgba(0,0,0,0));}
                             .rx-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px}
                             @media (max-width:960px){.rx-grid{grid-template-columns:1fr}}
 
-                            .rx-box{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--rx-line);border-radius:var(--rx-radius);padding:20px}
-                            .rx-title{margin:0 0 12px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--rx-accent);font-weight:900}
-                            .rx-prose h2{margin:20px 0 12px;font-size:20px;font-weight:900;color:var(--rx-text)}
-                            .rx-prose p{margin:0 0 14px;color:var(--rx-muted);line-height:1.75;font-size:15px}
+                            .rx-box{background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));border:1px solid var(--rx-line);border-radius:var(--rx-radius);padding:20px}
+                            .rx-title{margin:0 0 16px;font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--rx-accent);font-weight:900}
+                            .rx-prose h2{margin:22px 0 14px;font-size:30px;font-weight:900;color:var(--rx-text)}
+                            .rx-prose p{margin:0 0 18px;color:var(--rx-muted);line-height:1.85;font-size:18px;font-family:'Aptos Display', 'Segoe UI', sans-serif}
                             .rx-prose strong{color:var(--rx-accent);font-weight:900}
 
                             .rx-timeline{display:grid;gap:12px}
-                            .rx-step{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start;border:1px solid var(--rx-line);border-radius:14px;background:rgba(0,0,0,.22);padding:14px;transition:all .12s ease}
-                            .rx-step:hover{background:rgba(0,0,0,.35);border-color:rgba(242,194,0,.55)}
-                            .rx-date{font-weight:900;font-size:15px;letter-spacing:.05em;color:var(--rx-accent)}
-                            .rx-city{font-size:12px;color:var(--rx-muted);margin-top:3px;letter-spacing:.05em}
-                            .rx-step h4{margin:0;font-size:16px;color:var(--rx-text);font-weight:800}
-                            .rx-step p{margin:6px 0 0;color:var(--rx-muted);font-size:13px;line-height:1.5}
+                            .rx-step{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start;border:1px solid var(--rx-line);border-radius:14px;background:#ffffff;padding:14px;transition:all .12s ease}
+                            .rx-step:hover{background:#ffffff;border-color:#000000}
+                            .rx-date{font-weight:900;font-size:17px;letter-spacing:.05em;color:var(--rx-accent)}
+                            .rx-city{font-size:13px;color:var(--rx-muted);margin-top:3px;letter-spacing:.05em}
+                            .rx-step h4{margin:0;font-size:21px;color:var(--rx-text);font-weight:800}
+                            .rx-step p{margin:6px 0 0;color:var(--rx-muted);font-size:15px;line-height:1.75;font-family:'Aptos Display', 'Segoe UI', sans-serif}
 
                             .rx-partners{display:grid;gap:12px}
-                            .rx-partner{display:flex;justify-content:space-between;gap:14px;align-items:center;border:1px solid var(--rx-line);border-radius:14px;background:rgba(0,0,0,.22);padding:14px;transition:all .12s ease}
-                            .rx-partner:hover{background:rgba(0,0,0,.35);border-color:rgba(242,194,0,.55)}
-                            .rx-partner b{display:block;font-size:15px;color:var(--rx-text);font-weight:900}
-                            .rx-partner span{display:block;font-size:12px;color:var(--rx-muted);margin-top:4px}
+                            .rx-partner{display:flex;justify-content:space-between;gap:14px;align-items:center;border:1px solid var(--rx-line);border-radius:14px;background:#ffffff;padding:14px;transition:all .12s ease}
+                            .rx-partner:hover{background:#ffffff;border-color:#000000}
+                            .rx-partner b{display:block;font-size:20px;color:var(--rx-text);font-weight:900}
+                            .rx-partner span{display:block;font-size:14px;color:var(--rx-muted);margin-top:4px;font-family:'Aptos Display', 'Segoe UI', sans-serif}
 
                             .rx-faq{display:grid;gap:12px}
-                            .rx-qa{border:1px solid var(--rx-line);border-radius:14px;background:rgba(0,0,0,.22);overflow:hidden;transition:all .12s ease}
-                            .rx-qa:hover{border-color:rgba(242,194,0,.55)}
-                            .rx-q{width:100%;text-align:left;background:transparent;border:0;color:var(--rx-text);padding:14px;cursor:pointer;font-weight:800;display:flex;justify-content:space-between;gap:12px;font-size:15px;transition:color .12s ease}
+                            .rx-qa{border:1px solid var(--rx-line);border-radius:14px;background:#ffffff;overflow:hidden;transition:all .12s ease}
+                            .rx-qa:hover{border-color:#000000}
+                            .rx-q{width:100%;text-align:left;background:transparent;border:0;color:var(--rx-text);padding:14px;cursor:pointer;font-weight:800;display:flex;justify-content:space-between;gap:12px;font-size:19px;transition:color .12s ease}
                             .rx-q:hover{color:var(--rx-accent)}
-                            .rx-a{display:none;padding:0 14px 14px;color:var(--rx-muted);font-size:14px;line-height:1.65}
+                            .rx-a{display:block;padding:0 14px 14px;color:var(--rx-muted);font-size:16px;line-height:1.85;font-family:'Aptos Display', 'Segoe UI', sans-serif}
                             .rx-qa.open .rx-a{display:block}
                             .rx-chevron{color:var(--rx-accent);opacity:.95;transition:transform .12s ease}
                             .rx-qa.open .rx-chevron{transform:rotate(180deg)}
 
-                            .rx-footer{padding:18px 40px;border-top:1px solid var(--rx-line);background:rgba(0,0,0,.25);text-align:center}
-                            .rx-mini{color:var(--rx-muted);font-size:12px;line-height:1.6}
+                            .rx-footer{padding:18px 40px;border-top:1px solid var(--rx-line);background:#ffffff;text-align:center}
+                            .rx-mini{color:var(--rx-muted);font-size:14px;line-height:1.8;font-family:'Aptos Display', 'Segoe UI', sans-serif}
                             .rx-link{color:var(--rx-accent);text-decoration:none;border-bottom:1px solid rgba(242,194,0,.55);transition:all .12s ease}
                             .rx-link:hover{border-bottom-color:var(--rx-accent);color:var(--rx-accent2)}
-                            </style>
+                            `}</style>
 
-                            <div dangerouslySetInnerHTML={{
-                                __html: `
-                                <section class="rx-wrap">
-                                  <article class="rx-shell" aria-label="RAPTOR[X] France Invasion Event">
-                                    <header class="rx-hero">
-                                      <div class="rx-kicker">◆ RAPTOR[X] • FRANCE INVASION ◆</div>
-                                      <h1 class="rx-h1">UK Skateboard Tour<br/>Paris → Lyon (25–30 JAN)</h1>
-                                      <p class="rx-sub">
-                                        Official tour launch: sessions, setup clinics, street art collabs, pop-up streetwear + community rides.
-                                        Join us across Paris (République, Bercy, Palais de Tokyo, Le Marais, Canal Saint-Martin) before finals in Lyon.
-                                      </p>
-                                      <img src="event/Gemini_Generated_Image_o8k0rdo8k0rdo8k0.png" alt="France Invasion Event Hero" style="margin: 20px 0; border-radius: 12px; max-height: 360px; object-fit: cover;"/>
-                                      <div class="rx-badges">
-                                        <span class="rx-badge">▸ Skateboard Launch</span>
-                                        <span class="rx-badge">▸ Paris Takeover</span>
-                                        <span class="rx-badge">▸ 25–30 JAN</span>
-                                        <span class="rx-badge">▸ Free Entry (Mods)</span>
-                                      </div>
-                                      <div class="rx-actions">
-                                        <a class="rx-btn primary" href="#register">✦ RSVP Now</a>
-                                        <a class="rx-btn" href="#schedule">✦ Schedule</a>
-                                        <a class="rx-btn" href="#products">✦ Shop Decks</a>
-                                        <button class="rx-btn" id="rxAddToCalendar">✦ Add to Calendar</button>
-                                      </div>
-                                      <div class="rx-note">Pro Tip: Use UTM links (utm_source/medium/campaign) to track partner conversions in GA4.</div>
-                                    </header>
+                                                        <div dangerouslySetInnerHTML={{
+                                                                __html: `
+                                                                <section class="rx-wrap">
+                                                                    <article class="rx-shell" aria-label="RAPTOR[X] France Invasion 2026 Official Guide">
+                                                                        <header class="rx-hero">
+                                                                            <div class="rx-kicker">◆ RAPTOR[X] • FRANCE INVASION 2026 ◆</div>
+                                                                            <h1 class="rx-h1">RAPTOR[X] France Invasion 2026<br/>Paris → Lyon Skateboard Tour</h1>
+                                                                            <p class="rx-sub">
+                                                                                Official RAPTOR[X] brand event guide for the France Invasion 2026 tour — the Paris‑to‑Lyon skateboard showcase led by RaptorX. From Parisian plazas to Lyon’s legendary 25, discover the spots, tech, and schedule for Jan 25–30.
+                                                                            </p>
+                                                                            <img src="event/BLUE.png" alt="UKscaterraptorX Skater at Republique Paris" style="margin: 22px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
+                                                                            <div class="rx-badges">
+                                                                                <span class="rx-badge">▸ Paris → Lyon</span>
+                                                                                <span class="rx-badge">▸ 25–30 JAN 2026</span>
+                                                                                <span class="rx-badge">▸ Titanium Decks</span>
+                                                                                <span class="rx-badge">▸ Official Event Guide</span>
+                                                                            </div>
+                                                                            <div class="rx-actions">
+                                                                                <a class="rx-btn primary" href="#register">✦ RSVP Now</a>
+                                                                                <a class="rx-btn" href="#schedule">✦ Schedule</a>
+                                                                                <a class="rx-btn" href="#products">✦ Shop Decks</a>
+                                                                                <button class="rx-btn" id="rxAddToCalendar">✦ Add to Calendar</button>
+                                                                            </div>
+                                                                        </header>
 
-                                    <div class="rx-body">
-                                      <div class="rx-grid">
-                                        <section class="rx-box rx-prose">
-                                          <div class="rx-title">Why France Invasion?</div>
-                                          <h2>British Precision Meets Parisian Spirit</h2>
-                                          <p>From <strong>London</strong> to <strong>Paris</strong>, RAPTOR[X] launches <strong>France Invasion</strong>: a short, sharp, authentic tour. For <strong>six days (25–30 JAN)</strong>, we connect UK innovation with French skate culture through a <strong>Paris skateboard launch</strong> and final in <strong>Lyon</strong>.</p>
+                                                                        <div class="rx-body">
+                                                                            <div class="rx-grid">
+                                                                                <section class="rx-box rx-prose">
+                                                                                    <div class="rx-title">Event Overview</div>
+                                                                                    <p>From the smooth marble of <strong>Palais de Tokyo (Le Dôme)</strong> to Lyon’s historic street spots, France is a global skateboarding mecca. This January 25–30, <strong>RAPTOR[X] France Invasion 2026</strong> connects London precision with French street culture through a Paris‑to‑Lyon skateboard tour. <strong>RaptorX</strong> (stylized RAPTOR[X]) anchors the Paris‑to‑Lyon skateboarding events with a focus on street performance. Whether you’re local or visiting, this guide covers the key spots, gear, and the official daily schedule: check‑in and reveal at <strong>Place de la République</strong>, a <strong>Best Trick Qualifiers</strong> opener, <strong>Setup Clinic</strong> and <strong>Sensor Workshop</strong> at Bercy, <strong>Palais de Tokyo</strong> meetups, and a Lyon finals day.</p>
 
-                                          <h2>From Desk to Deck: Founder's Story</h2>
-                                          <p><strong>Alex Thompson</strong> built RAPTOR[X] on a simple contrast: the rigour of a London career and the freedom of sessions. Mission: design gear for street skating without losing authentic scene DNA.</p>
+                                                                                    <h2>Official Brand Story — RaptorX (UK)</h2>
+                                                                                    <p><strong>RaptorX</strong> is a UK skate brand—born in Britain and built for the streets. The France Invasion 2026 tour turns that origin into a living story: UK‑forged design meets Paris and Lyon terrain, and every session proves the boards where it matters most. From the first check‑in to the final ride, RaptorX puts performance in motion through setup clinics, sensor workshops, and community sessions that inspire the next generation of street skaters.</p>
 
-                                          <h2>Titanium Decks: Built for Real Conditions</h2>
-                                          <p><strong>Titanium construction</strong> emphasizes durability and consistency against real impacts and surfaces. The tour showcases setup clinics, custom configs, and hands-on optimization. Tech-friendly. Rider-focused.</p>
+                                                                                    <h2>Signature Tour — The RaptorX (UK) Route</h2>
+                                                                                    <p>This signature tour is the definitive RaptorX path across France: daily meetups, a night session at Bercy, a street art collab and film crew shoot at Palais de Tokyo, a community cruise at Canal Saint‑Martin—then a Lyon finale with finals, awards, and a closing city ride. It’s an inspiring, repeatable route that spotlights how a UK brand can lead a European street‑skate narrative.</p>
 
-                                          <h2>Concentrated Tour: Paris to Launch, Lyon to Crown</h2>
-                                          <p>Paris (25–29 JAN) drives the launch, tests, collabs, and community rides. Lyon (30 JAN) caps the invasion with finals + awards, anchoring momentum in the local scene.</p>
+                                                                                    <h2>01. Iconic Tour Stops & Skate Spots</h2>
+                                                                                    <p>Paris opens the tour with covered, rain‑safe sessions at <strong>Bercy Skatepark</strong>, a <strong>Night Session</strong>, and the granite heart of the scene at <strong>Place de la République</strong>. The route continues through <strong>Palais de Tokyo Plaza</strong> for the street art collab and film crew shoot, plus a community cruise at <strong>Canal Saint‑Martin</strong>. Lyon closes the tour with finals, awards, and a closing city ride at <strong>Hôtel de Ville</strong>.</p>
+                                                                                    <img src="event/Skater%20at%20Republique%20Paris.png" alt="Bercy Skatepark Paris session guide" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: cover;"/>
+                                                                                    <img src="event/Skater%20at%20Republique%20Paris1.png" alt="Lyon 25 stairs skateboarding landmark" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: cover;"/>
 
-                                          <div style="height:16px;"></div>
-                                          <div class="rx-title">Official Tour Timeline</div>
+                                                                                    <h2>02. Tech Check: RAPTOR[X] <a class="rx-link" href="#products">Titanium Decks</a> — UKscaterraptorX</h2>
+                                                                                    <p>Street skating in Paris is tough on traditional maple. During the <strong>Setup Labs (Jan 26 at Bercy)</strong>, RAPTOR[X] showcases <strong>titanium construction</strong> for consistent pop on rougher surfaces like the Parisian pavés. The focus: durability, pop retention, and real‑world street performance.</p>
+                                                                                    <ul style="margin:0 0 18px 18px;color:var(--rx-muted);line-height:1.85;font-size:17px;font-family:'Aptos Display', 'Segoe UI', sans-serif;">
+                                                                                        <li><strong>Durability:</strong> Up to 3× life span versus standard maple.</li>
+                                                                                        <li><strong>Pop Retention:</strong> Stiffer response for higher ollies.</li>
+                                                                                        <li><strong>Setup Labs:</strong> Hands‑on tuning for trucks, wheels, and deck geometry.</li>
+                                                                                    </ul>
 
-                                          <div class="rx-timeline" id="rxTimeline">
-                                            <div class="rx-step">
-                                              <div>
-                                                <div class="rx-date">25 JAN</div>
-                                                <div class="rx-city">PARIS</div>
-                                              </div>
-                                              <div>
-                                                <h4>▸ Place de la République</h4>
-                                                <p>Check-in & Welcome Session 🎯</p>
-                                              </div>
-                                            </div>
+                                                                                    <h2>03. Official Tour Schedule</h2>
+                                                                                    <p>Follow the official <strong>France Invasion 2026</strong> schedule: 25–29 JAN in Paris with check‑in, the RAPTOR [X] reveal, best‑trick qualifiers, <strong>Setup Clinic / Sensor Workshop</strong>, street art collab, film crew shoot, partner day at Le Marais, gear lab custom bar, and the Canal Saint‑Martin community cruise. 30 JAN concludes in Lyon with finals, awards, and the closing jam & city ride.</p>
 
-                                            <div class="rx-step">
-                                              <div>
-                                                <div class="rx-date">26 JAN</div>
-                                                <div class="rx-city">PARIS</div>
-                                              </div>
-                                              <div>
-                                                <h4>▸ Bercy Skatepark</h4>
-                                                <p>Tech Lab: Setup Clinics ⚡</p>
-                                              </div>
-                                            </div>
+                                                                                      <img src="event/Gemini_Generated_Image_o8k0rdo8k0rdo8k0.png" alt="RAPTOR[X] France Invasion community skate session" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
 
-                                            <div class="rx-step">
-                                              <div>
-                                                <div class="rx-date">27 JAN</div>
-                                                <div class="rx-city">PARIS</div>
-                                              </div>
-                                              <div>
-                                                <h4>▸ Palais de Tokyo Plaza</h4>
-                                                <p>Street Art Collaboration 🏆</p>
-                                              </div>
-                                            </div>
+                                                                                      <div style="height:16px;"></div>
+                                                                                      <div class="rx-title">Tour Timeline</div>
 
-                                            <div class="rx-step">
-                                              <div>
-                                                <div class="rx-date">28 JAN</div>
-                                                <div class="rx-city">PARIS</div>
-                                              </div>
-                                              <div>
-                                                <h4>▸ Le Marais Pop-Up Shop</h4>
-                                                <p>Gear Lab & Custom Bar</p>
-                                              </div>
-                                            </div>
+                                                                                      <div class="rx-timeline" id="rxTimeline">
+                                                                                        <div class="rx-step">
+                                                                                            <div>
+                                                                                                <div class="rx-date">25 JAN</div>
+                                                                                                <div class="rx-city">PARIS</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4>▸ Daily Schedule Highlights</h4>
+                                                                                                <p>12:00 Check-in: Place de la Republique • 15:00 RAPTOR [X] Reveal • 17:00 Best Trick Qualifiers</p>
+                                                                                            </div>
+                                                                                        </div>
 
-                                            <div class="rx-step">
-                                              <div>
-                                                <div class="rx-date">29 JAN</div>
-                                                <div class="rx-city">PARIS</div>
-                                              </div>
-                                              <div>
-                                                <h4>▸ Canal Saint-Martin</h4>
-                                                <p>Community Cruise & Session</p>
-                                              </div>
-                                            </div>
+                                                                                        <div class="rx-step">
+                                                                                            <div>
+                                                                                                <div class="rx-date">26 JAN</div>
+                                                                                                <div class="rx-city">PARIS</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4>▸ Daily Schedule Highlights</h4>
+                                                                                                <p>13:00 Tech Lab: Setup Clinic • 16:00 Sensor Workshop • 19:00 Night Session: Bercy Skatepark</p>
+                                                                                            </div>
+                                                                                        </div>
 
-                                            <div class="rx-step">
-                                              <div>
-                                                <div class="rx-date">30 JAN</div>
-                                                <div class="rx-city">LYON</div>
-                                              </div>
-                                              <div>
-                                                <h4>▸ Hôtel de Ville Lyon</h4>
-                                                <p>Finals, Awards & Closing</p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </section>
+                                                                                        <div class="rx-step">
+                                                                                            <div>
+                                                                                                <div class="rx-date">27 JAN</div>
+                                                                                                <div class="rx-city">PARIS</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4>▸ Daily Schedule Highlights</h4>
+                                                                                                <p>17:00 Palais de Tokyo Plaza Meet • 19:00 Street Art Collab • 20:30 Film Crew Shoot</p>
+                                                                                            </div>
+                                                                                        </div>
 
-                                        <aside class="rx-box">
-                                          <div class="rx-title">Featured Partners</div>
+                                                                                        <div class="rx-step">
+                                                                                            <div>
+                                                                                                <div class="rx-date">28 JAN</div>
+                                                                                                <div class="rx-city">PARIS</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4>▸ Daily Schedule Highlights</h4>
+                                                                                                <p>13:00 Partner Day: Le Marais Pop-up • 16:00 Streetwear Drops & Fit Sessions • 19:00 Gear Lab Custom Bar</p>
+                                                                                            </div>
+                                                                                        </div>
 
-                                          <div class="rx-partners">
-                                            <div class="rx-partner">
-                                              <div>
-                                                <b>Nozbone</b>
-                                                <span>Paris skateshop • Retail + Activation</span>
-                                              </div>
-                                              <a class="rx-btn" href="#products" style="font-size:12px">Visit</a>
-                                            </div>
+                                                                                        <div class="rx-step">
+                                                                                            <div>
+                                                                                                <div class="rx-date">29 JAN</div>
+                                                                                                <div class="rx-city">PARIS</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4>▸ Daily Schedule Highlights</h4>
+                                                                                                <p>16:00 Community Cruise: Canal Saint-Martin • 20:00 Paris Edit Premiere</p>
+                                                                                            </div>
+                                                                                        </div>
 
-                                            <div class="rx-partner">
-                                              <div>
-                                                <b>Dayoff</b>
-                                                <span>Paris skatewear • Street collabs</span>
-                                              </div>
-                                              <a class="rx-btn" href="#gear" style="font-size:12px">Visit</a>
-                                            </div>
+                                                                                        <div class="rx-step">
+                                                                                            <div>
+                                                                                                <div class="rx-date">30 JAN</div>
+                                                                                                <div class="rx-city">LYON</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4>▸ Daily Schedule Highlights</h4>
+                                                                                                <p>14:00 Finals: Best Trick • 17:00 Awards Ceremony • 19:00 Closing Jam & City Ride</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
 
-                                            <div class="rx-partner">
-                                              <div>
-                                                <b>Starcow</b>
-                                                <span>Skate × streetwear • Broad audience</span>
-                                              </div>
-                                              <a class="rx-btn" href="#gear" style="font-size:12px">Visit</a>
-                                            </div>
+                                                                                    <div style="height:12px;"></div>
+                                                                                      <p>Ready to join? RSVP early for clinics and contest entry. Use <strong>#RaptorFranceInvasion</strong> to share your clips.</p>
+                                                                                </section>
 
-                                            <div class="rx-partner">
-                                              <div>
-                                                <b>Citadium</b>
-                                                <span>Retail streetwear • Pop-up capsule</span>
-                                              </div>
-                                              <a class="rx-btn" href="#gear" style="font-size:12px">Visit</a>
-                                            </div>
+                                                                                <aside class="rx-box">
+                                                                                    <div class="rx-title">Event Essentials</div>
 
-                                            <div class="rx-partner">
-                                              <div>
-                                                <b>WallStreet Skateshop</b>
-                                                <span>Lyon • Local takeover</span>
-                                              </div>
-                                              <a class="rx-btn" href="#products" style="font-size:12px">Visit</a>
-                                            </div>
-                                          </div>
+                                                                                    <div class="rx-partners">
+                                                                                        <div class="rx-partner">
+                                                                                            <div>
+                                                                                                <b>Date</b>
+                                                                                                <span>25–30 January 2026</span>
+                                                                                            </div>
+                                                                                            <a class="rx-btn" href="#schedule" style="font-size:12px">View</a>
+                                                                                        </div>
 
-                                          <div style="height:16px;"></div>
-                                          <div class="rx-title">FAQ</div>
+                                                                                        <div class="rx-partner">
+                                                                                            <div>
+                                                                                                <b>Cities</b>
+                                                                                                <span>Paris • Lyon</span>
+                                                                                            </div>
+                                                                                            <a class="rx-btn" href="#products" style="font-size:12px">Gear</a>
+                                                                                        </div>
 
-                                          <div class="rx-faq" id="rxFaq">
-                                            <div class="rx-qa">
-                                              <button class="rx-q" type="button">Is entry free? <span class="rx-chevron">▾</span></button>
-                                              <div class="rx-a">Sessions vary: some are open, others RSVP-only. Check the schedule for specific access details.</div>
-                                            </div>
+                                                                                        <div class="rx-partner">
+                                                                                            <div>
+                                                                                                <b>Key Spots</b>
+                                                                                                <span>République, Bercy, Palais de Tokyo, Hôtel de Ville</span>
+                                                                                            </div>
+                                                                                            <a class="rx-btn" href="#schedule" style="font-size:12px">Route</a>
+                                                                                        </div>
+                                                                                    </div>
 
-                                            <div class="rx-qa">
-                                              <button class="rx-q" type="button">Can I test decks on-site? <span class="rx-chevron">▾</span></button>
-                                              <div class="rx-a">Yes. The tour includes setup clinics, test sessions, and hands-on optimization. Bring your own or demo ours.</div>
-                                            </div>
+                                                                                    <div style="height:16px;"></div>
+                                                                                    <div class="rx-title">FAQ</div>
 
-                                            <div class="rx-qa">
-                                              <button class="rx-q" type="button">How do I get partner updates? <span class="rx-chevron">▾</span></button>
-                                              <div class="rx-a">RSVP to join the mailing list. Partner kit includes tracked links, QR codes, and live schedule updates.</div>
-                                            </div>
+                                                                                    <div class="rx-faq" id="rxFaq">
+                                                                                        <div class="rx-qa">
+                                                                                            <button class="rx-q" type="button">Is entry free? <span class="rx-chevron">▾</span></button>
+                                                                                            <div class="rx-a">Community sessions are open access. Clinics and contest slots may require RSVP due to limited capacity. Reserve early and bring confirmation if required.</div>
+                                                                                        </div>
 
-                                            <div class="rx-qa">
-                                              <button class="rx-q" type="button">What's the best way to share? <span class="rx-chevron">▾</span></button>
-                                              <div class="rx-a">Use UTM links (utm_source, utm_medium, utm_campaign) in GA4 to track conversions and audience source.</div>
-                                            </div>
-                                          </div>
-                                        </aside>
-                                      </div>
-                                    </div>
+                                                                                        <div class="rx-qa">
+                                                                                            <button class="rx-q" type="button">Can I test decks on-site? <span class="rx-chevron">▾</span></button>
+                                                                                            <div class="rx-a">Yes. Demo decks are available during Setup Labs. Bring your own board for comparisons and wear protective gear for higher‑speed testing.</div>
+                                                                                        </div>
 
-                                    <footer class="rx-footer">
-                                      <div class="rx-mini">
-                                        Partners: Track your impact with UTM-tagged links. Questions? <a class="rx-link" href="#register">RSVP here</a> or check the <a class="rx-link" href="#schedule">Partner Kit</a>.
-                                      </div>
-                                    </footer>
-                                  </article>
-                                </section>
-                                `
-                            }} />
+                                                                                        <div class="rx-qa">
+                                                                                            <button class="rx-q" type="button">What should I bring? <span class="rx-chevron">▾</span></button>
+                                                                                            <div class="rx-a">Your board, helmet, and a valid ID if you plan to join restricted sessions. Warm layers are recommended for outdoor Paris spots.</div>
+                                                                                        </div>
+
+                                                                                        <div class="rx-qa">
+                                                                                            <button class="rx-q" type="button">How do I share updates? <span class="rx-chevron">▾</span></button>
+                                                                                            <div class="rx-a">Use <strong>#RaptorFranceInvasion</strong> and UTM‑tagged links to track city‑by‑city engagement.</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </aside>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <footer class="rx-footer">
+                                                                            <div class="rx-mini">
+                                                                                Ready to join the invasion? <a class="rx-link" href="#register">RSVP here</a> or check the <a class="rx-link" href="#schedule">official schedule</a> for updates.
+                                                                            </div>
+                                                                        </footer>
+                                                                    </article>
+                                                                </section>
+                                                                `
+                                                        }} />
 
                                                         <script dangerouslySetInnerHTML={{
                                                                 __html: `
@@ -2521,28 +2656,44 @@
                                             {registerSurvey[lang].map((item) => (
                                                 <fieldset key={item.id} className="space-y-3">
                                                     <legend className="text-sm font-bold text-white">{item.question}</legend>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {item.options.map((option, optionIndex) => {
-                                                            const inputType = item.type === "multi" ? "checkbox" : "radio";
-                                                            const inputName = item.name;
-                                                            const inputId = `${inputName}-${optionIndex}`;
-                                                            const optionLabel = typeof option === "string" ? option : option.label;
-                                                            const optionValue = typeof option === "string" ? option : option.value;
-                                                            return (
-                                                                <label key={inputId} htmlFor={inputId} className="cursor-pointer">
-                                                                    <input id={inputId} type={inputType} name={inputName} value={optionValue} className="peer sr-only" />
-                                                                    <span className="inline-flex items-center px-3 py-2 rounded-full border border-white/20 text-[11px] font-bold uppercase tracking-wide text-gray-300 transition hover:border-white/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black">
-                                                                        {optionLabel}
-                                                                    </span>
-                                                                </label>
-                                                            );
-                                                        })}
-                                                    </div>
+                                                    {item.type === "single" || item.type === "multi" ? (
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {item.options.map((option, optionIndex) => {
+                                                                const inputType = item.type === "multi" ? "checkbox" : "radio";
+                                                                const inputName = item.name;
+                                                                const inputId = `${inputName}-${optionIndex}`;
+                                                                const optionLabel = typeof option === "string" ? option : option.label;
+                                                                const optionValue = typeof option === "string" ? option : option.value;
+                                                                return (
+                                                                    <label key={inputId} htmlFor={inputId} className="cursor-pointer">
+                                                                        <input id={inputId} type={inputType} name={inputName} value={optionValue} className="peer sr-only" />
+                                                                        <span className="inline-flex items-center px-3 py-2 rounded-full border border-white/20 text-[11px] font-bold uppercase tracking-wide text-gray-300 transition hover:border-white/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black">
+                                                                            {optionLabel}
+                                                                        </span>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    ) : item.type === "textarea" ? (
+                                                        <textarea
+                                                            name={item.name}
+                                                            placeholder={item.placeholder || ""}
+                                                            rows={3}
+                                                            className="w-full rounded-2xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-yellow-400 focus:outline-none"
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type={item.type || "text"}
+                                                            name={item.name}
+                                                            placeholder={item.placeholder || ""}
+                                                            className="w-full rounded-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-yellow-400 focus:outline-none"
+                                                        />
+                                                    )}
                                                 </fieldset>
                                             ))}
                                         </div>
                                     </div>
-                                    <button type="submit" className="w-full px-10 py-4 bg-white text-black font-black text-xl uppercase tracking-widest hover:bg-gray-200 transition-colors font-graffiti">{t.register.button}</button>
+                                    <button type="submit" className="w-full px-10 py-4 bg-yellow-400 text-black font-black text-xl uppercase tracking-widest hover:bg-yellow-300 transition-colors font-graffiti">{t.register.button}</button>
                                 </form>
                             </RevealOnScroll>
                         </div>
@@ -2597,8 +2748,41 @@
                 </div>
             );
         };
+        class ErrorBoundary extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false };
+            }
+
+            static getDerivedStateFromError() {
+                return { hasError: true };
+            }
+
+            componentDidCatch(error, info) {
+                console.error('App render error:', error, info);
+            }
+
+            render() {
+                if (this.state.hasError) {
+                    return (
+                        <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+                            <div className="max-w-md text-center">
+                                <h1 className="text-3xl font-black font-graffiti uppercase mb-4">Raptor[X]</h1>
+                                <p className="text-gray-400 text-sm">The page is temporarily unavailable. Please refresh or try again in a moment.</p>
+                            </div>
+                        </div>
+                    );
+                }
+                return this.props.children;
+            }
+        }
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(
+            <ErrorBoundary>
+                <App />
+            </ErrorBoundary>
+        );
     </script>
 </body>
 </html>

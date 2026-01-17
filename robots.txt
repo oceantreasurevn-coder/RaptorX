@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://scaterraptorx.eu/sitemap.xml
+Sitemap: https://oceantreasurevn-coder.github.io/LJMU/sitemap.xml

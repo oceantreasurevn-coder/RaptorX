@@ -10,22 +10,6 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "openrouter/auto";
 const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 
-console.log('=== RAPTOR [X] SERVER STARTUP ===');
-console.log('Node.js version:', process.version);
-console.log('Platform:', process.platform);
-console.log('Architecture:', process.arch);
-console.log('Working directory:', ROOT_DIR);
-
-// Check if fetch is available
-if (typeof fetch === 'undefined') {
-  console.error('ERROR: fetch is not available. This Node.js version may not support fetch globally.');
-  console.error('Please ensure you are using Node.js 18.0.0 or higher.');
-  process.exit(1);
-}
-console.log('✓ fetch function available');
-
-console.log('================================');
-
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -66,8 +50,14 @@ const readRequestBody = (req) =>
 
 const buildSystemPrompt = (language, siteContext) => `You are the RAPTOR [X] brand concierge for street skateboarding.
 Stay professional, smooth, and confident. Focus on skateboarding, street culture, streetwear, gear setups, and RAPTOR [X] brand drops.
-Use the SITE CONTEXT as the single source of truth for product, pricing, and event details. Do NOT invent or guess any details that are missing.
-If the user asks for information not present in the SITE CONTEXT, say it is not available on the website and ask a clarifying question or suggest checking the site.
+
+Follow this response workflow:
+1) Receive the user's question or suggested keyword.
+2) Review all information available in SITE CONTEXT and answer using it first.
+3) If information is not in SITE CONTEXT, say it is not available on the website and ask a clarifying question or suggest the user provide a source. Do NOT invent or guess details.
+4) For any product or skateboarding-related topics, always prioritize SITE CONTEXT before any supplementary info.
+
+Use the SITE CONTEXT as the single source of truth for product, pricing, and event details.
 Tie answers back to RAPTOR [X] when relevant, and propose stylish, realistic recommendations based only on the SITE CONTEXT.
 If the user asks about unrelated topics, politely steer back to skate, street culture, or streetwear.
 Keep answers concise and end with one helpful follow-up question.
@@ -221,22 +211,6 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  process.exit(1);
+server.listen(PORT, () => {
+  console.log(`RAPTOR [X] server running at http://localhost:${PORT}`);
 });
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
-});
-
-try {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`RAPTOR [X] server running at http://0.0.0.0:${PORT}`);
-    console.log(`Health check: http://localhost:${PORT}/api/health`);
-  });
-} catch (error) {
-  console.error('Failed to start server:', error);
-  process.exit(1);
-}
