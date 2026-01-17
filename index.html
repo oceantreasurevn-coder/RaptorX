@@ -89,6 +89,7 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
+            overscroll-behavior-x: none;
         }
 
         body {
@@ -103,6 +104,96 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
+            overscroll-behavior-x: none;
+        }
+
+        .collection-stage {
+            position: relative;
+        }
+
+        .collection-switch {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            color: #111;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+            opacity: 0.7;
+        }
+
+        .collection-switch:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 410px) {
+            .collection-grid {
+                gap: 16px;
+            }
+
+            .collection-panel {
+                text-align: center;
+            }
+
+            .collection-title {
+                font-size: 2.2rem;
+                line-height: 1.05;
+            }
+
+            .collection-subtitle {
+                font-size: 0.8rem;
+                letter-spacing: 0.2em;
+            }
+
+            .collection-badge {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+
+            .collection-nav {
+                justify-content: center;
+                padding-top: 16px;
+            }
+
+            .collection-stage {
+                height: 320px;
+            }
+
+            .product-blueprint-board {
+                width: min(78vw, 240px);
+                height: min(120vw, 340px);
+            }
+
+            .collection-thumbs {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .collection-thumb {
+                height: 64px;
+            }
+
+            .collection-thumb-label {
+                font-size: 9px;
+                letter-spacing: 0.18em;
+            }
+
+            .collection-switch {
+                width: 38px;
+                height: 38px;
+                top: 10px;
+                right: 10px;
+                opacity: 0.65;
+            }
         }
 
         img, video, canvas, svg, iframe {
@@ -2233,10 +2324,10 @@
                                     <div className="h-[1px] w-full md:w-1/2 bg-neutral-200 mb-4 md:mb-2"></div>
                                 </div>
                             </RevealOnScroll>
-                            <div className="relative w-full max-w-7xl mx-auto grid md:grid-cols-3 gap-8 items-center">
-                                <div className="col-span-1 space-y-6 order-2 md:order-1 relative z-20">
+                            <div className="relative w-full max-w-7xl mx-auto grid md:grid-cols-3 gap-8 items-center collection-grid">
+                                <div className="col-span-1 space-y-6 order-2 md:order-1 relative z-20 text-center md:text-left collection-panel">
                                     <div className="overflow-hidden">
-                                        <span className={`inline-block px-4 py-1 text-xs font-black uppercase tracking-widest mb-4 transition-all duration-500 ease-out transform ${isAnimating ? 'translate-x-[-100%] opacity-0' : 'translate-x-0 opacity-100'} ${activeProduct.badgeClass || ''}`} style={activeBadgeStyle}>
+                                        <span className={`inline-block px-4 py-1 text-xs font-black uppercase tracking-widest mb-4 transition-all duration-500 ease-out transform collection-badge ${isAnimating ? 'translate-x-[-100%] opacity-0' : 'translate-x-0 opacity-100'} ${activeProduct.badgeClass || ''}`} style={activeBadgeStyle}>
                                             {activeProduct.badgeTextClass ? (
                                                 <span className={activeProduct.badgeTextClass}>{activeBadge}</span>
                                             ) : (
@@ -2244,26 +2335,29 @@
                                             )}
                                         </span>
                                     </div>
-                                    <div className="overflow-hidden"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeProduct.theme.textClass}`}>{activeProduct.name}</h3></div>
-                                    <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`}>{activeSub}</p></div>
-                                    <div className="flex gap-4 pt-8">
+                                    <div className="overflow-hidden"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform collection-title ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeProduct.theme.textClass}`}>{activeProduct.name}</h3></div>
+                                    <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform collection-subtitle ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`}>{activeSub}</p></div>
+                                    <div className="flex gap-4 pt-8 collection-nav">
                                         <button onClick={handlePrev} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronLeft size={24} /></button>
                                         <button onClick={handleNext} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronRight size={24} /></button>
                                     </div>
                                 </div>
-                                <div className="col-span-1 md:col-span-2 h-[420px] sm:h-[520px] md:h-[600px] order-1 md:order-2 float-wobble">
+                                <div className="col-span-1 md:col-span-2 h-[420px] sm:h-[520px] md:h-[600px] order-1 md:order-2 float-wobble collection-stage">
+                                    <button type="button" onClick={handleNext} className="collection-switch" aria-label="Next product">
+                                        <ChevronRight size={18} />
+                                    </button>
                                     <ProductBlueprint product={activeProduct} isAnimating={isAnimating} lang={lang} />
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-10 border-t border-gray-100">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-10 border-t border-gray-100 collection-thumbs">
                                 {products.map((item, index) => {
                                     const productSub = getLocalized(item.sub);
                                     return (
                                     <div key={item.id} onClick={() => { if (index !== activeIndex && !isAnimating) { setIsAnimating(true); setTimeout(() => { setActiveIndex(index); setIsAnimating(false); }, 700); } }} className={`cursor-pointer group text-center transition-all duration-300 ${activeIndex === index ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-100'}`}>
-                                        <div className={`h-20 sm:h-24 md:h-28 rounded-xl mb-4 flex items-center justify-center p-4 bg-gray-50 border transition-all duration-300 ${activeIndex === index ? 'border-black shadow-lg bg-white' : 'border-transparent'}`}>
+                                        <div className={`h-20 sm:h-24 md:h-28 rounded-xl mb-4 flex items-center justify-center p-4 bg-gray-50 border transition-all duration-300 collection-thumb ${activeIndex === index ? 'border-black shadow-lg bg-white' : 'border-transparent'}`}>
                                             <img src={item.image} className={`w-full h-full object-contain float-wobble ${item.imgClass || ''}`} alt={productSub} loading="lazy" decoding="async" />
                                         </div>
-                                        <p className={`text-[10px] font-bold uppercase tracking-wider ${item.theme.textClass}`}>{productSub}</p>
+                                        <p className={`text-[10px] font-bold uppercase tracking-wider collection-thumb-label ${item.theme.textClass}`}>{productSub}</p>
                                     </div>
                                     );
                                 })}
