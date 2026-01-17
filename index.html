@@ -2165,23 +2165,21 @@
 
                 const stripImageUrls = (line) => line.replace(imageRegex, "").replace(/\s{2,}/g, " ").trim();
 
-                const stripNumbers = (value) => value.replace(/\d+/g, "").replace(/\s+/g, " ").trim();
-
                 const getImageLabel = (url) => {
                     const normalizedUrl = (url || "").toLowerCase();
                     const productMatch = products.find((item) => normalizedUrl.includes((item.image || "").toLowerCase()));
                     if (productMatch) {
                         const subLabel = localizeValue(productMatch.sub);
-                        return stripNumbers(`${productMatch.name} ${subLabel}`.trim()) || "RAPTOR [X]";
+                        return `Raptor[X] ${subLabel}`.trim();
                     }
                     const gearMatch = gear.find((item) => normalizedUrl.includes((item.image || "").toLowerCase()));
                     if (gearMatch) {
-                        return stripNumbers(localizeValue(gearMatch.name)) || "RAPTOR [X]";
+                        return `[Gear] ${localizeValue(gearMatch.name)}`.trim();
                     }
                     const raw = (url || "").split("/").pop() || "";
                     const base = decodeURIComponent(raw).replace(/\.[^.]+$/, "");
                     const label = base.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim();
-                    return stripNumbers(label || "RAPTOR [X]");
+                    return label || "Raptor[X]";
                 };
 
                 const getImageTag = (url) => {
