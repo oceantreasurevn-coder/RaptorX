@@ -772,6 +772,23 @@
             font-size: 1.2rem;
             line-height: 1;
         }
+        .chat-message {
+            line-height: 1.6;
+        }
+        .chat-message p {
+            margin: 0 0 8px;
+        }
+        .chat-message p:last-child {
+            margin-bottom: 0;
+        }
+        .chat-message ul {
+            margin: 6px 0 8px 18px;
+            padding: 0;
+            list-style: disc;
+        }
+        .chat-message li {
+            margin: 4px 0;
+        }
         
         /* Utility for 3D positioning */
         .preserve-3d { transform-style: preserve-3d; }
@@ -1658,6 +1675,41 @@
                 });
             };
 
+            const renderChatMessage = (text) => {
+                if (typeof text !== "string") return text;
+                const lines = text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+                if (lines.length === 0) return null;
+                const items = [];
+                let listItems = [];
+
+                const flushList = () => {
+                    if (listItems.length) {
+                        items.push(
+                            <ul key={`list-${items.length}`}>
+                                {listItems.map((item, idx) => (
+                                    <li key={`li-${items.length}-${idx}`}>{renderChatBrand(item)}</li>
+                                ))}
+                            </ul>
+                        );
+                        listItems = [];
+                    }
+                };
+
+                lines.forEach((line, index) => {
+                    const isBullet = /^[-•]\s+/.test(line);
+                    if (isBullet) {
+                        listItems.push(line.replace(/^[-•]\s+/, ""));
+                    } else {
+                        flushList();
+                        items.push(
+                            <p key={`p-${index}`}>{renderChatBrand(line)}</p>
+                        );
+                    }
+                });
+                flushList();
+                return items;
+            };
+
             return (
                 <div className="fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3">
                     {isOpen && showOfflineBanner && chatStatus.state === "offline" && (
@@ -1692,8 +1744,8 @@
                             <div ref={messagesRef} className="max-h-[340px] sm:max-h-[420px] overflow-y-auto px-4 py-4 space-y-3 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]">
                                 {messages.map((message, index) => (
                                     <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
-                                            {renderChatBrand(message.content)}
+                                        <div className={`chat-message max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
+                                            {message.role === 'user' ? renderChatBrand(message.content) : renderChatMessage(message.content)}
                                         </div>
                                     </div>
                                 ))}
