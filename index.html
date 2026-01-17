@@ -12,7 +12,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <!-- Build: 2026-01-15-floating-hover-v2 -->
-    <meta name="raptor-api-base" content="https://api.scaterraptorx.eu">
+    <meta name="raptor-api-base" content="https://raptorx-api.onrender.com">
     <link rel="canonical" href="https://scaterraptorx.eu/">
     <link rel="icon" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
@@ -1416,6 +1416,12 @@
                 const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
                 try {
                     return await fetch(url, { ...options, signal: controller.signal });
+                } catch (error) {
+                    const message = (error?.message || "").toLowerCase();
+                    if (error?.name === "AbortError" || message.includes("aborted") || message.includes("timeout")) {
+                        throw new Error("Request timed out. Please try again.");
+                    }
+                    throw error;
                 } finally {
                     clearTimeout(timeoutId);
                 }
@@ -1461,6 +1467,10 @@
                         return data;
                     } catch (error) {
                         lastError = error;
+                        const message = (error?.message || "").toLowerCase();
+                        if (message.includes("timed out") || message.includes("aborted")) {
+                            break;
+                        }
                         if (attempt < attempts - 1) {
                             await sleep(500 * Math.pow(2, attempt));
                         }
@@ -1567,6 +1577,7 @@
             const getChatErrorMessage = (error) => {
                 const rawMessage = error?.message || "";
                 const normalized = rawMessage.toLowerCase();
+                if (normalized.includes("timed out") || normalized.includes("aborted")) return "Request timed out. Please try again.";
                 const isNetworkError = normalized.includes("failed to fetch") || normalized.includes("network") || normalized.includes("offline");
                 if (isNetworkError || !rawMessage) return t.chat.error;
                 return rawMessage;
@@ -2387,7 +2398,7 @@
                                                                             <p class="rx-sub">
                                                                                 Official RAPTOR[X] brand event guide for the France Invasion 2026 tour — the Paris‑to‑Lyon skateboard showcase led by RaptorX. From Parisian plazas to Lyon’s legendary 25, discover the spots, tech, and schedule for Jan 25–30.
                                                                             </p>
-                                                                            <img src="event/BLUE.png" alt="UKscaterraptorX Skater at Republique Paris" style="margin: 22px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
+                                                                            <img src="event/Skater%20at%20Republique%20Paris%202.png" alt="uksacterraptorx skater at republique paris" style="margin: 22px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
                                                                             <div class="rx-badges">
                                                                                 <span class="rx-badge">▸ Paris → Lyon</span>
                                                                                 <span class="rx-badge">▸ 25–30 JAN 2026</span>
@@ -2430,7 +2441,7 @@
                                                                                     <h2>03. Official Tour Schedule</h2>
                                                                                     <p>Follow the official <strong>France Invasion 2026</strong> schedule: 25–29 JAN in Paris with check‑in, the RAPTOR [X] reveal, best‑trick qualifiers, <strong>Setup Clinic / Sensor Workshop</strong>, street art collab, film crew shoot, partner day at Le Marais, gear lab custom bar, and the Canal Saint‑Martin community cruise. 30 JAN concludes in Lyon with finals, awards, and the closing jam & city ride.</p>
 
-                                                                                      <img src="event/Gemini_Generated_Image_o8k0rdo8k0rdo8k0.png" alt="RAPTOR[X] France Invasion community skate session" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
+                                                                                      <img src="event/Titanium%20Decks.png" alt="raptor[x] france invasion community skate session" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
 
                                                                                       <div style="height:16px;"></div>
                                                                                       <div class="rx-title">Tour Timeline</div>
