@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=420, initial-scale=1.0">
     <meta name="description" content="RAPTOR [X] is a premium street skateboarding brand blending ergonomic design, sensor-ready tech, limited-edition decks, gear, and Paris 2026 events.">
     <meta name="keywords" content="RAPTOR X, street skateboarding, skateboards, skateboard gear, streetwear, limited edition decks, Paris skate event 2026, titanium trucks, 101A wheels">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -472,12 +472,6 @@
             }
         }
 
-        @media (max-width: 420px) {
-            #root {
-                transform: scale(calc(100vw / 420));
-                transform-origin: top center;
-            }
-        }
 
         .font-graffiti {
             font-family: 'Sedgwick Ave Display', cursive;
@@ -1820,9 +1814,15 @@
                 const productSummary = products
                     .map((item) => `${item.name} — ${localizeValue(item.sub)} (${localizeValue(item.badge)})`)
                     .join("; ");
+                const productImages = products
+                    .map((item) => `${item.name} (${localizeValue(item.sub)}): ${item.image}`)
+                    .join("\n");
                 const gearSummary = gear
                     .map((item) => `${localizeValue(item.name)}: ${localizeValue(item.sub)} — ${item.price}. ${localizeValue(item.description)}`)
                     .join("; ");
+                const gearImages = gear
+                    .map((item) => `${localizeValue(item.name)}: ${item.image}`)
+                    .join("\n");
                 const scheduleSummary = t.schedule
                     .map((day) => `${day.date}: ${day.events.map((event) => `${event.time} ${event.title}`).join(", ")}`)
                     .join(" | ");
@@ -1835,6 +1835,10 @@
                     pageText || "No page text available.",
                     "IMAGES:",
                     images || "No images available.",
+                    "PRODUCT IMAGE MAP:",
+                    productImages || "No product images available.",
+                    "GEAR IMAGE MAP:",
+                    gearImages || "No gear images available.",
                     "STRUCTURED DATA:",
                     "Brand: RAPTOR [X]",
                     `Collection products: ${productSummary}`,
@@ -2523,6 +2527,15 @@
                 const timer = setTimeout(() => setShowSuccess(false), 5000);
                 return () => clearTimeout(timer);
             }, [showSuccess]);
+
+            useEffect(() => {
+                const intervalId = setInterval(() => {
+                    if (!isAnimating) {
+                        handleNext();
+                    }
+                }, 1000);
+                return () => clearInterval(intervalId);
+            }, [isAnimating]);
 
             const handleNext = () => {
                 if (isAnimating) return;
