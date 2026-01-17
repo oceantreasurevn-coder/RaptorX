@@ -725,7 +725,7 @@
             100% { transform: perspective(1000px) rotateY(0deg) rotateX(5deg); }
         }
         .animate-rotate-3d-space {
-            animation: rotate-3d-space 10s ease-in-out infinite;
+            animation: rotate-3d-space 5s ease-in-out infinite;
         }
 
         @keyframes success-pop {
@@ -2533,7 +2533,7 @@
                     if (!isAnimating) {
                         handleNext();
                     }
-                }, 1000);
+                }, 3000);
                 return () => clearInterval(intervalId);
             }, [isAnimating]);
 
