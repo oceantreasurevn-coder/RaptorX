@@ -720,12 +720,12 @@
 
         /* Space Rotation */
         @keyframes rotate-3d-space {
-            0% { transform: perspective(1000px) rotateY(0deg) rotateX(5deg); }
-            50% { transform: perspective(1000px) rotateY(10deg) rotateX(-5deg); }
-            100% { transform: perspective(1000px) rotateY(0deg) rotateX(5deg); }
+            0% { transform: perspective(1000px) rotateY(0deg) rotateX(8deg) translateZ(0); }
+            50% { transform: perspective(1000px) rotateY(20deg) rotateX(-8deg) translateZ(20px); }
+            100% { transform: perspective(1000px) rotateY(0deg) rotateX(8deg) translateZ(0); }
         }
         .animate-rotate-3d-space {
-            animation: rotate-3d-space 5s ease-in-out infinite;
+            animation: rotate-3d-space 2.5s ease-in-out infinite;
         }
 
         @keyframes success-pop {
@@ -2115,6 +2115,10 @@
                 const items = [];
                 let listItems = [];
                 const imageRegex = /(https?:\/\/[^\s)]+?\.(?:png|jpe?g|webp|gif|svg)|\/event\/[^\s)]+?\.(?:png|jpe?g|webp|gif|svg))/gi;
+                const imageLineRegex = /^image:\s*/i;
+
+                const imageLines = lines.filter((line) => imageLineRegex.test(line));
+                const contentLines = lines.filter((line) => !imageLineRegex.test(line));
 
                 const renderInline = (content) => {
                     const segments = content.split(/\*\*(.+?)\*\*/g);
@@ -2164,7 +2168,17 @@
                     }
                 };
 
-                lines.forEach((line, index) => {
+                imageLines.forEach((line, index) => {
+                    const cleaned = line.replace(imageLineRegex, "").trim();
+                    const urls = extractImageUrls(cleaned);
+                    if (urls.length) {
+                        items.push(
+                            <div key={`img-top-${index}`}>{renderImages(urls, `top-${index}`)}</div>
+                        );
+                    }
+                });
+
+                contentLines.forEach((line, index) => {
                     const isBullet = /^[-•]\s+/.test(line);
                     const isDivider = /^[-_]{3,}$/.test(line);
                     const isHeading = /^(\d+\.|[A-Z][A-Z\s]+:)/.test(line);
