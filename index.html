@@ -781,6 +781,32 @@
         .chat-message p:last-child {
             margin-bottom: 0;
         }
+        .chat-message strong {
+            font-weight: 800;
+            color: #111111;
+        }
+        .chat-message .chat-highlight {
+            background: #fff6b3;
+            border-radius: 6px;
+            padding: 0 4px;
+            font-weight: 800;
+        }
+        .chat-message .chat-heading {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #111111;
+            margin: 6px 0 8px;
+        }
+        .chat-message .chat-divider {
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+            margin: 8px 0 10px;
+        }
         .chat-message ul {
             margin: 6px 0 8px 18px;
             padding: 0;
@@ -1682,12 +1708,22 @@
                 const items = [];
                 let listItems = [];
 
+                const renderInline = (content) => {
+                    const segments = content.split(/\*\*(.+?)\*\*/g);
+                    return segments.map((segment, idx) => {
+                        if (idx % 2 === 1) {
+                            return <strong key={`b-${idx}`} className="chat-highlight">{renderChatBrand(segment)}</strong>;
+                        }
+                        return <React.Fragment key={`t-${idx}`}>{renderChatBrand(segment)}</React.Fragment>;
+                    });
+                };
+
                 const flushList = () => {
                     if (listItems.length) {
                         items.push(
                             <ul key={`list-${items.length}`}>
                                 {listItems.map((item, idx) => (
-                                    <li key={`li-${items.length}-${idx}`}>{renderChatBrand(item)}</li>
+                                    <li key={`li-${items.length}-${idx}`}>🛹 {renderInline(item)}</li>
                                 ))}
                             </ul>
                         );
@@ -1697,12 +1733,22 @@
 
                 lines.forEach((line, index) => {
                     const isBullet = /^[-•]\s+/.test(line);
+                    const isDivider = /^[-_]{3,}$/.test(line);
+                    const isHeading = /^(\d+\.|[A-Z][A-Z\s]+:)/.test(line);
                     if (isBullet) {
                         listItems.push(line.replace(/^[-•]\s+/, ""));
+                    } else if (isDivider) {
+                        flushList();
+                        items.push(<div key={`div-${index}`} className="chat-divider" />);
+                    } else if (isHeading) {
+                        flushList();
+                        items.push(
+                            <div key={`h-${index}`} className="chat-heading">🏁 {renderInline(line.replace(/:$/, ""))}</div>
+                        );
                     } else {
                         flushList();
                         items.push(
-                            <p key={`p-${index}`}>{renderChatBrand(line)}</p>
+                            <p key={`p-${index}`}>{renderInline(line)}</p>
                         );
                     }
                 });
