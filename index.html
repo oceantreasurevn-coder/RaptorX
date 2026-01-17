@@ -2165,11 +2165,23 @@
 
                 const stripImageUrls = (line) => line.replace(imageRegex, "").replace(/\s{2,}/g, " ").trim();
 
+                const stripNumbers = (value) => value.replace(/\d+/g, "").replace(/\s+/g, " ").trim();
+
                 const getImageLabel = (url) => {
+                    const normalizedUrl = (url || "").toLowerCase();
+                    const productMatch = products.find((item) => normalizedUrl.includes((item.image || "").toLowerCase()));
+                    if (productMatch) {
+                        const subLabel = localizeValue(productMatch.sub);
+                        return stripNumbers(`${productMatch.name} ${subLabel}`.trim()) || "RAPTOR [X]";
+                    }
+                    const gearMatch = gear.find((item) => normalizedUrl.includes((item.image || "").toLowerCase()));
+                    if (gearMatch) {
+                        return stripNumbers(localizeValue(gearMatch.name)) || "RAPTOR [X]";
+                    }
                     const raw = (url || "").split("/").pop() || "";
                     const base = decodeURIComponent(raw).replace(/\.[^.]+$/, "");
                     const label = base.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim();
-                    return label || "RAPTOR [X]";
+                    return stripNumbers(label || "RAPTOR [X]");
                 };
 
                 const getImageTag = (url) => {
@@ -2191,7 +2203,7 @@
                         />
                         <div className="chat-image-bar">
                             <span className="chat-image-tag">{getImageTag(url)}</span>
-                            <span>{getImageLabel(url)}</span>
+                            <span>{`Hình ảnh sản phẩm - ${getImageLabel(url)}`}</span>
                         </div>
                     </div>
                 ));
