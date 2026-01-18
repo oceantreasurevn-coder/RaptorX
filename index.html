@@ -1287,6 +1287,8 @@
         const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconBase>;
         const Star = (props) => <IconBase {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></IconBase>;
         const Zap = (props) => <IconBase {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconBase>;
+        const Droplet = (props) => <IconBase {...props}><path d="M12 2.5l.6.74C15.87 7.27 19 11.63 19 15.32A7 7 0 0 1 12 22a7 7 0 0 1-7-6.68c0-3.69 3.13-8.05 6.4-12.08z"/></IconBase>;
+        const Scale = (props) => <IconBase {...props}><path d="M12 3v18"/><path d="M3 7h18"/><path d="m5 7-2 5h4l-2-5Z"/><path d="m19 7-2 5h4l-2-5Z"/><path d="M8 17h8"/></IconBase>;
         const ChevronDown = (props) => <IconBase {...props}><path d="m6 9 6 6 6-6"/></IconBase>;
         const ChevronLeft = (props) => <IconBase {...props}><path d="m15 18-6-6 6-6"/></IconBase>;
         const ChevronRight = (props) => <IconBase {...props}><path d="m9 18 6-6-6-6"/></IconBase>;
@@ -1334,16 +1336,15 @@
                 gear: { title: "Gear", sub: "Essential Accessories for the Ultimate Skate Experience", cta: "Add to Cart" },
                 blog: { title: "Blog & Events", sub: "Latest News, Stories & Community Highlights" },
                 blueprint: {
-                    title: "Blueprints",
-                    sub: "Detailed Structure & Tech",
+                    title: "Under The Hood",
+                    sub: "Carbon-Spine Architecture",
                     drag: "Drag to Rotate",
                     auto: "Auto Spin",
                     stop: "Stop",
                     parts: {
-                        deck: { label: "7-Ply Maple", desc: "7-layer Canadian maple" },
-                        trucks: { label: "Titanium Alloys", desc: "Ultra-light titanium trucks" },
-                        wheels: { label: "Pro Urethane", desc: "101A Hardness wheels" },
-                        grip: { label: "Nano Grip", desc: "Nano-tech grip tape" }
+                        deck: { label: "Kinetic Energy Return", desc: "The carbon layer stores energy on landing and releases it on pop. Higher ollies, less effort." },
+                        trucks: { label: "Moisture Lock", desc: "Hydrophobic epoxy resin seals the plies, preventing the UK damp from killing your board." },
+                        wheels: { label: "Featherweight Strength", desc: "15% lighter than standard 7-ply decks without sacrificing breaking strength." }
                     }
                 },
                 marquee2: "NEXT LEVEL PERFORMANCE // PRECISION ENGINEERED //",
@@ -1408,16 +1409,15 @@
                 gear: { title: "Équipement", sub: "Accessoires Essentiels pour l'Expérience Skate Ultime", cta: "Ajouter au panier" },
                 blog: { title: "Blog & Événements", sub: "Dernières Nouvelles, Histoires & Temps Forts Communautaires" },
                 blueprint: {
-                    title: "Plans",
-                    sub: "Structure Détaillée & Tech",
+                    title: "Sous le capot",
+                    sub: "Architecture à épine dorsale en carbone",
                     drag: "Glisser pour tourner",
                     auto: "Rotation Auto",
                     stop: "Arrêt",
                     parts: {
-                        deck: { label: "Érable 7 plis", desc: "Érable canadien à 7 couches" },
-                        trucks: { label: "Alliages titane", desc: "Trucks titane ultra-légers" },
-                        wheels: { label: "Uréthane pro", desc: "Roues dureté 101A" },
-                        grip: { label: "Nano grip", desc: "Grip tape nano-technologique" }
+                        deck: { label: "Retour d'énergie cinétique", desc: "La couche carbone stocke l'énergie à l'atterrissage et la libère au pop. Ollies plus hauts, moins d'effort." },
+                        trucks: { label: "Verrouillage anti-humidité", desc: "La résine époxy hydrophobe scelle les plis et empêche l'humidité UK d'abîmer la planche." },
+                        wheels: { label: "Résistance ultralégère", desc: "15% plus léger qu'un deck 7 plis standard sans sacrifier la résistance." }
                     }
                 },
                 marquee2: "PERFORMANCE DE NIVEAU SUPÉRIEUR // INGÉNIERIE DE PRÉCISION //",
@@ -1618,7 +1618,7 @@
                 id: 'deck', 
                 label: partContent.deck.label, 
                 desc: partContent.deck.desc, 
-                icon: <Layers size={16} />,
+                icon: <Zap size={16} />,
                 anchor: { x: -40, y: -120, z: 10 }, 
                 pos: { x: -180, y: -160, z: 50 },   
                 },
@@ -1626,7 +1626,7 @@
                 id: 'trucks', 
                 label: partContent.trucks.label, 
                 desc: partContent.trucks.desc, 
-                icon: <Hammer size={16} />,
+                icon: <Droplet size={16} />,
                 anchor: { x: 50, y: 50, z: 20 }, 
                 pos: { x: 200, y: 0, z: 80 },
                 },
@@ -1634,17 +1634,9 @@
                 id: 'wheels', 
                 label: partContent.wheels.label, 
                 desc: partContent.wheels.desc, 
-                icon: <Disc size={16} />,
+                icon: <Scale size={16} />,
                 anchor: { x: 80, y: 100, z: 20 }, 
                 pos: { x: 200, y: 160, z: 20 },
-                },
-                { 
-                id: 'grip', 
-                label: partContent.grip.label, 
-                desc: partContent.grip.desc, 
-                icon: <CircleDot size={16} />,
-                anchor: { x: -10, y: 0, z: 5 }, 
-                pos: { x: -220, y: 60, z: 120 },
                 },
             ];
 
