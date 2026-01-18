@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=420, initial-scale=1.0">
     <meta name="description" content="RAPTOR [X] is a premium street skateboarding brand blending ergonomic design, sensor-ready tech, limited-edition decks, gear, and Paris 2026 events.">
     <meta name="keywords" content="RAPTOR X, street skateboarding, skateboards, skateboard gear, streetwear, limited edition decks, Paris skate event 2026, titanium trucks, 101A wheels">
-                        image: "https://janeportforlio.my.canva.site/ljmu/_assets/media/34e8ea85e73bc80883121127c99b0f8c.png",
-                        badgeTextClass: "text-transparent bg-clip-text bg-gradient-to-r from-[#6b0f1a] via-[#4b1b2a] to-[#0b1f3a]",
-                        badgeStyle: {
-                            backgroundImage: "linear-gradient(135deg, #f7f3f6, #eef2f8)",
-                            border: "1px solid #0b1f3a",
-                            boxShadow: "0 0 20px rgba(11, 31, 58, 0.25)"
-                        },
-                        theme: {
-                            accent: "#6b0f1a",
-                            accentSecondary: "#0b1f3a",
-                            labelGradient: "linear-gradient(135deg, #6b0f1a, #0b1f3a)",
-                            textClass: "text-transparent bg-clip-text bg-gradient-to-r from-[#6b0f1a] via-[#4b1b2a] to-[#0b1f3a] drop-shadow-sm"
-                        }
     <meta property="og:title" content="RAPTOR [X] - Street Skateboarding">
     <meta property="og:description" content="Premium decks, streetwear gear, and the RAPTOR [X] Paris Tour 2026. Built for street skaters who live the culture.">
     <meta property="og:url" content="https://scaterraptorx.eu/">
@@ -1603,9 +1590,15 @@
         // --- PRODUCT BLUEPRINT COMPONENT ---
         const ProductBlueprint = ({ product, isAnimating, lang }) => {
             const t = translations[lang];
-            const accentPrimary = product.theme.accent;
-            const accentSecondary = product.theme.accentSecondary || product.theme.accent;
-            const labelGradient = product.theme.labelGradient;
+            const theme = product.theme || {
+                accent: "#111111",
+                accentSecondary: "#333333",
+                labelGradient: "linear-gradient(135deg, #111111, #333333)",
+                textClass: "text-black drop-shadow-lg"
+            };
+            const accentPrimary = theme.accent;
+            const accentSecondary = theme.accentSecondary || theme.accent;
+            const labelGradient = theme.labelGradient;
             const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
             const [isHovering, setIsHovering] = React.useState(false);
             const [isMobileLayout, setIsMobileLayout] = React.useState(false);
@@ -1731,17 +1724,23 @@
                                     <div className="absolute right-[14%] top-[50%] w-4 md:w-5 h-4 md:h-5 bg-gradient-to-br from-neutral-100 to-neutral-500 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.35)]"></div>
                                 </div>
                             </div>
-                            <img
-                                src={product.image}
-                                alt={product.name}
-                                loading="lazy"
-                                decoding="async"
-                                className={`w-full h-auto object-contain transform transition-all duration-700 ${product.imgClass || ''}`}
-                                style={{
-                                    transform: `rotateZ(-45deg) translateZ(0px) scale(${isHovering ? 1.06 : 1.02})`,
-                                    filter: 'contrast(1.05)'
-                                }}
-                            />
+                            {product.image ? (
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className={`w-full h-auto object-contain transform transition-all duration-700 ${product.imgClass || ''}`}
+                                    style={{
+                                        transform: `rotateZ(-45deg) translateZ(0px) scale(${isHovering ? 1.06 : 1.02})`,
+                                        filter: 'contrast(1.05)'
+                                    }}
+                                />
+                            ) : (
+                                <div className="w-full h-[220px] flex items-center justify-center text-neutral-300 text-xl font-black uppercase tracking-[0.3em]">
+                                    RAPTOR [X]
+                                </div>
+                            )}
                         </div>
 
                         {parts.map((part) => {
@@ -2444,7 +2443,7 @@
             id: 3,
             name: "RAPTOR [X]",
             sub: { en: "TITANIUM", fr: "TITANE" },
-            badge: { en: "LIMITED FOR FRANCE", fr: "LIMITÉ POUR LA FRANCE" },
+            badge: { en: "LIMITED FOR UK", fr: "LIMITÉ POUR LE UK" },
             image: "https://janeportforlio.my.canva.site/ljmu/_assets/media/34e8ea85e73bc80883121127c99b0f8c.png",
             badgeTextClass: "text-transparent bg-clip-text bg-gradient-to-r from-[#6b0f1a] via-[#4b1b2a] to-[#0b1f3a]",
             badgeStyle: {
@@ -2718,12 +2717,17 @@
             };
 
             const activeProduct = products[activeIndex];
+            const fallbackTheme = {
+                accent: "#111111",
+                textClass: "text-black drop-shadow-lg"
+            };
+            const activeTheme = activeProduct.theme || fallbackTheme;
             const activeBadge = getLocalized(activeProduct.badge);
             const activeSub = getLocalized(activeProduct.sub);
             const activeBadgeStyle = activeProduct.badgeStyle || {
-                backgroundColor: activeProduct.theme.accent,
+                backgroundColor: activeTheme.accent,
                 color: "white",
-                boxShadow: `0 0 20px ${activeProduct.theme.accent}40`
+                boxShadow: `0 0 20px ${activeTheme.accent}40`
             };
 
             return (
@@ -2835,7 +2839,7 @@
                                             )}
                                         </span>
                                     </div>
-                                    <div className="overflow-hidden"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform collection-title ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeProduct.theme.textClass}`}>{activeProduct.name}</h3></div>
+                                    <div className="overflow-hidden"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform collection-title ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeTheme.textClass}`}>{activeProduct.name}</h3></div>
                                     <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform collection-subtitle ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`}>{activeSub}</p></div>
                                     <div className="flex gap-4 pt-8 collection-nav">
                                         <button onClick={handlePrev} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronLeft size={24} /></button>
@@ -2858,9 +2862,13 @@
                                     return (
                                     <div key={item.id} onClick={() => { if (index !== activeIndex && !isAnimating) { setIsAnimating(true); setTimeout(() => { setActiveIndex(index); setIsAnimating(false); }, 700); } }} className={`cursor-pointer group text-center transition-all duration-300 ${activeIndex === index ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-100'}`}>
                                         <div className={`h-20 sm:h-24 md:h-28 rounded-xl mb-4 flex items-center justify-center p-4 bg-gray-50 border transition-all duration-300 collection-thumb ${activeIndex === index ? 'border-black shadow-lg bg-white' : 'border-transparent'}`}>
-                                            <img src={item.image} className={`w-full h-full object-contain float-wobble ${item.imgClass || ''}`} alt={productSub} loading="lazy" decoding="async" />
+                                            {item.image ? (
+                                                <img src={item.image} className={`w-full h-full object-contain float-wobble ${item.imgClass || ''}`} alt={productSub} loading="lazy" decoding="async" />
+                                            ) : (
+                                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400">RAPTOR [X]</span>
+                                            )}
                                         </div>
-                                        <p className={`text-[10px] font-bold uppercase tracking-wider collection-thumb-label ${item.theme.textClass}`}>{productSub}</p>
+                                        <p className={`text-[10px] font-bold uppercase tracking-wider collection-thumb-label ${item.theme?.textClass || fallbackTheme.textClass}`}>{productSub}</p>
                                     </div>
                                     );
                                 })}
