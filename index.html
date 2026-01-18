@@ -2003,8 +2003,11 @@
                 if (hostname === "localhost" || hostname === "127.0.0.1") return origin;
                 return `https://api.${hostname}`;
             }, []);
-            const chatApiUrl = apiBase ? `${apiBase}/api/chat` : "/api/chat";
-            const healthApiUrl = apiBase ? `${apiBase}/api/health` : "/api/health";
+            const fallbackApiBase = "https://raptorx-api.onrender.com";
+            const apiBases = [apiBase, fallbackApiBase].filter(Boolean).filter((value, index, array) => array.indexOf(value) === index);
+            const buildApiUrl = (base, path) => (base ? `${base}${path}` : path);
+            const chatApiUrls = apiBases.length ? apiBases.map((base) => buildApiUrl(base, "/api/chat")) : ["/api/chat"];
+            const healthApiUrls = apiBases.length ? apiBases.map((base) => buildApiUrl(base, "/api/health")) : ["/api/health"];
 
             const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
             const fetchWithTimeout = async (url, options, timeoutMs = 8000) => {
@@ -2023,16 +2026,19 @@
                 }
             };
             const checkHealth = async () => {
-                try {
-                    const response = await fetchWithTimeout(healthApiUrl, { method: "GET" }, 4000);
-                    const data = await response.json().catch(() => ({}));
-                    if (!response.ok) {
-                        throw new Error(data.error || "Health check failed.");
+                for (const url of healthApiUrls) {
+                    try {
+                        const response = await fetchWithTimeout(url, { method: "GET" }, 4000);
+                        const data = await response.json().catch(() => ({}));
+                        if (!response.ok) {
+                            throw new Error(data.error || "Health check failed.");
+                        }
+                        return data;
+                    } catch (error) {
+                        continue;
                     }
-                    return data;
-                } catch (error) {
-                    return null;
                 }
+                return null;
             };
             const updateStatusFromHealth = (health) => {
                 if (health && health.status === "ok") {
@@ -2052,23 +2058,26 @@
                 return health;
             };
             const fetchWithRetry = async (url, options, attempts = 3) => {
+                const urls = Array.isArray(url) ? url : [url];
                 let lastError = null;
-                for (let attempt = 0; attempt < attempts; attempt += 1) {
-                    try {
-                        const response = await fetchWithTimeout(url, options, 10000);
-                        const data = await response.json().catch(() => ({}));
-                        if (!response.ok) {
-                            throw new Error(data.error || "Chat request failed.");
-                        }
-                        return data;
-                    } catch (error) {
-                        lastError = error;
-                        const message = (error?.message || "").toLowerCase();
-                        if (message.includes("timed out") || message.includes("aborted")) {
-                            break;
-                        }
-                        if (attempt < attempts - 1) {
-                            await sleep(500 * Math.pow(2, attempt));
+                for (const currentUrl of urls) {
+                    for (let attempt = 0; attempt < attempts; attempt += 1) {
+                        try {
+                            const response = await fetchWithTimeout(currentUrl, options, 10000);
+                            const data = await response.json().catch(() => ({}));
+                            if (!response.ok) {
+                                throw new Error(data.error || "Chat request failed.");
+                            }
+                            return data;
+                        } catch (error) {
+                            lastError = error;
+                            const message = (error?.message || "").toLowerCase();
+                            if (message.includes("timed out") || message.includes("aborted")) {
+                                break;
+                            }
+                            if (attempt < attempts - 1) {
+                                await sleep(500 * Math.pow(2, attempt));
+                            }
                         }
                     }
                 }
@@ -2196,7 +2205,7 @@
 
                 try {
                     const siteContext = buildSiteContext();
-                    const data = await fetchWithRetry(chatApiUrl, {
+                    const data = await fetchWithRetry(chatApiUrls, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ messages: history, lang, siteContext })
