@@ -1220,12 +1220,33 @@
             font-weight: 900;
             font-variation-settings: "wght" 900;
             text-shadow:
+                1px 0 0 #000000,
+                -1px 0 0 #000000,
+                0 1px 0 #000000,
+                0 -1px 0 #000000,
                 2px 2px 0 #000000,
                 4px 4px 0 rgba(0, 0, 0, 0.75),
                 6px 6px 0 rgba(0, 0, 0, 0.45);
         }
         .register-overlay {
             pointer-events: none;
+        }
+        .register-form {
+            position: relative;
+            z-index: 2;
+        }
+        .register-form,
+        .register-form * {
+            pointer-events: auto;
+        }
+        .register-option-label {
+            touch-action: manipulation;
+        }
+        .register-option {
+            transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+        }
+        .register-option:active {
+            transform: scale(0.98);
         }
         
         /* Utility for 3D positioning */
@@ -3330,9 +3351,9 @@
                                                                 const optionLabel = typeof option === "string" ? option : option.label;
                                                                 const optionValue = typeof option === "string" ? option : option.value;
                                                                 return (
-                                                                    <label key={inputId} htmlFor={inputId} className="cursor-pointer">
+                                                                    <label key={inputId} htmlFor={inputId} className="cursor-pointer register-option-label">
                                                                         <input id={inputId} type={inputType} name={inputName} value={optionValue} className="peer sr-only" />
-                                                                        <span className="inline-flex items-center px-3 py-2 rounded-full border border-white/20 text-[11px] font-bold uppercase tracking-wide text-gray-300 transition hover:border-white/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black">
+                                                                        <span className="inline-flex items-center px-3 py-2 rounded-full border border-white/20 text-[11px] font-bold uppercase tracking-wide text-gray-300 transition hover:border-white/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black register-option">
                                                                             {optionLabel}
                                                                         </span>
                                                                     </label>
