@@ -2989,7 +2989,7 @@
                                 {t.schedule.map((day, i) => (
                                     <RevealOnScroll key={i} delay={i * 150} className="border-r border-b border-gray-300 bg-white hover:bg-neutral-50 transition duration-300 p-6 sm:p-10 h-full group schedule-card">
                                         <div className="flex items-baseline gap-2 mb-10">
-                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-yellow-400 transition-colors duration-500 font-graffiti">{day.date}</span>
+                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-gray-800 transition-colors duration-500 font-graffiti">{day.date}</span>
                                         </div>
                                         <div className="space-y-8">
                                             {day.events.map((event, j) => (
@@ -3149,12 +3149,58 @@
 
                                                                                     <img src="/event/Titanium%20Deck.png" alt="RaptorX tour community session" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
 
-                                                                                    <h2>Our Partners: Connecting the Community</h2>
-                                                                                    <p>The <strong>Scaters RaptorX Launch UK</strong> is powered by the shops that keep the scene alive: Slam City Skates, Fifty Fifty Store, and Black Sheep Store.</p>
+                                                                                    <!-- SECTION: PARTNERS -->
+                                                                                    <section>
+                                                                                        <h2>Our Partners: Fueling the UK Skate Scene</h2>
+                                                                                        <p>
+                                                                                            The <strong>Scaters RaptorX Launch UK</strong> is more than just a tour; it's a collaboration with the pillars of our community. We have selected <strong class="text-black">Slam City Skates</strong>, <strong class="text-black">Fifty Fifty Store</strong>, and <strong class="text-black">Black Sheep Store</strong> as our <em>exclusive launch partners</em>.
+                                                                                        </p>
+                                                                                        <p class="mt-2 text-sm text-gray-500">
+                                                                                            These legendary <strong>UK skate shops</strong> don't just sell gear; they keep the culture alive. By partnering with them, we ensure that the RaptorX launch supports the local ecosystem directly.
+                                                                                        </p>
+                                                                                        <ul class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-semibold text-center mt-6">
+                                                                                            <li class="bg-gray-100 p-4 rounded hover:bg-gray-200 cursor-pointer transition border-b-4 border-transparent hover:border-black">
+                                                                                                <span class="block text-lg font-bold text-gray-900">Slam City Skates</span>
+                                                                                                <span class="text-xs font-normal text-gray-500 uppercase tracking-wide">London • Official Partner</span>
+                                                                                            </li>
+                                                                                            <li class="bg-gray-100 p-4 rounded hover:bg-gray-200 cursor-pointer transition border-b-4 border-transparent hover:border-indigo-600">
+                                                                                                <span class="block text-lg font-bold text-gray-900">Fifty Fifty Store</span>
+                                                                                                <span class="text-xs font-normal text-gray-500 uppercase tracking-wide">Bristol • Official Partner</span>
+                                                                                            </li>
+                                                                                            <li class="bg-gray-100 p-4 rounded hover:bg-gray-200 cursor-pointer transition border-b-4 border-transparent hover:border-yellow-500">
+                                                                                                <span class="block text-lg font-bold text-gray-900">Black Sheep Store</span>
+                                                                                                <span class="text-xs font-normal text-gray-500 uppercase tracking-wide">Manchester • Official Partner</span>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </section>
 
-                                                                                    <h2>How to Get Your RaptorX?</h2>
-                                                                                    <p>RaptorX is now available at authorized retailers nationwide. We don’t sell direct online—support your local skate shop.</p>
-                                                                                    <img src="gear/Scater%20RaptorX%20UK.png" alt="Scaters RaptorX UK" style="margin: 16px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
+                                                                                    <hr class="my-8 border-gray-200">
+
+                                                                                    <!-- SECTION: CALL TO ACTION -->
+                                                                                    <section class="text-center py-10 bg-gradient-to-br from-red-50 to-white rounded-xl shadow-inner border border-red-100">
+                                                                                        <span class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-widest text-red-600 uppercase bg-red-100 rounded-full">Coming Soon</span>
+                                                                                        <h2 class="mt-0 text-3xl font-black text-gray-900">How to Secure Your RaptorX?</h2>
+                                                                                        
+                                                                                        <p class="mb-4 text-lg">
+                                                                                            The countdown has begun. The <strong>Scaters RaptorX series</strong> officially drops nationwide on <strong>April 5th, 2024</strong>.
+                                                                                        </p>
+                                                                                        <p class="mb-8 text-gray-600 max-w-xl mx-auto">
+                                                                                            Don't wait for a shipping confirmation. Be the first to feel the concave and pop by visiting our <strong>authorized local dealers</strong> on launch day.
+                                                                                        </p>
+                                                                                        
+                                                                                        <div class="bg-white border-l-4 border-yellow-400 p-4 rounded shadow-sm mb-8 text-left max-w-2xl mx-auto">
+                                                                                            <p class="text-sm text-gray-700 m-0">
+                                                                                                <strong>🚫 Online Sales Policy:</strong> To support the core scene, Scaters will <u>not</u> be selling the RaptorX directly online at launch. Please visit your local skate shop to pre-order or purchase.
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        
+                                                                                        <div>
+                                                                                            <a href="/store-locator" class="inline-flex items-center bg-black text-white font-bold py-4 px-10 rounded-full shadow-xl hover:bg-gray-800 hover:scale-105 transition transform duration-200 uppercase tracking-widest group">
+                                                                                                <span>Find Launch Locations</span>
+                                                                                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </section>
                                                                                 </section>
 
                                                                                 <aside class="rx-box">
