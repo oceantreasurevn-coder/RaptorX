@@ -2506,7 +2506,12 @@
             sub: { en: "TITANIUM", fr: "TITANE" },
                         badge: { en: "LIMITED FOR UK", fr: "LIMITÉ POUR LE UK" },
                         image: "https://janeportforlio.my.canva.site/ljmu/_assets/media/34e8ea85e73bc80883121127c99b0f8c.png",
-                        theme: { accent: "#1f2937", textClass: "text-gray-800 drop-shadow-md" }
+                                                theme: {
+                                                        accent: "#012169",
+                                                        accentSecondary: "#C8102E",
+                                                        labelGradient: "linear-gradient(135deg, #012169, #C8102E)",
+                                                        textClass: "text-transparent bg-clip-text bg-gradient-to-r from-[#012169] to-[#C8102E] drop-shadow-sm"
+                                                }
           },
           {
             id: 4,
@@ -3055,7 +3060,7 @@
                                         <div className="flex items-baseline gap-2 mb-10">
                                             <span
                                                 className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-white transition-colors duration-500 font-graffiti"
-                                                style={{ textShadow: "-1px -1px 0 #333333, 1px -1px 0 #333333, -1px 1px 0 #333333, 1px 1px 0 #333333" }}
+                                                style={{ textShadow: "0 1px 0 #1f2937, 0 2px 0 #1f2937, 0 3px 0 #1f2937, -1px -1px 0 #1f2937, 1px -1px 0 #1f2937, -1px 1px 0 #1f2937, 1px 1px 0 #1f2937" }}
                                             >
                                                 {day.date}
                                             </span>
