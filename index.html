@@ -50,6 +50,81 @@
             }
         }
     </script>
+    <script type="application/ld+json">
+        [
+            {
+                "@context": "https://schema.org",
+                "@type": "Event",
+                "name": "Scaters RaptorX Unleashed Tour - London",
+                "startDate": "2026-01-26T14:00",
+                "endDate": "2026-01-26T18:00",
+                "eventStatus": "https://schema.org/EventScheduled",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "location": {
+                    "@type": "Place",
+                    "name": "Southbank Centre Skate Space",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Belvedere Rd",
+                        "addressLocality": "London",
+                        "postalCode": "SE1 8XX",
+                        "addressCountry": "UK"
+                    }
+                },
+                "description": "Live demo, try-it-out zone, and meet & greet with pro riders.",
+                "organizer": {
+                    "@type": "Organization",
+                    "name": "Scaters"
+                }
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Event",
+                "name": "Scaters RaptorX Unleashed Tour - Bristol",
+                "startDate": "2026-01-27T13:00",
+                "endDate": "2026-01-27T17:00",
+                "eventStatus": "https://schema.org/EventScheduled",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "location": {
+                    "@type": "Place",
+                    "name": "Dean Lane Skatepark",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Bristol",
+                        "addressCountry": "UK"
+                    }
+                },
+                "description": "Best Trick contest and street art collaboration.",
+                "organizer": {
+                    "@type": "Organization",
+                    "name": "Scaters"
+                }
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Event",
+                "name": "Scaters RaptorX Unleashed Tour - Manchester",
+                "startDate": "2026-01-28T16:00",
+                "endDate": "2026-01-28T20:00",
+                "eventStatus": "https://schema.org/EventScheduled",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "location": {
+                    "@type": "Place",
+                    "name": "Projekts MCR Skatepark",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Manchester",
+                        "addressCountry": "UK"
+                    }
+                },
+                "description": "Skate jam, DJ set, and RaptorX giveaway.",
+                "organizer": {
+                    "@type": "Organization",
+                    "name": "Scaters"
+                }
+            }
+        ]
+    </script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -2989,7 +3064,12 @@
                                 {t.schedule.map((day, i) => (
                                     <RevealOnScroll key={i} delay={i * 150} className="border-r border-b border-gray-300 bg-white hover:bg-neutral-50 transition duration-300 p-6 sm:p-10 h-full group schedule-card">
                                         <div className="flex items-baseline gap-2 mb-10">
-                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-gray-800 transition-colors duration-500 font-graffiti">{day.date}</span>
+                                            <span
+                                                className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-white transition-colors duration-500 font-graffiti"
+                                                style={{ textShadow: "-1px -1px 0 #333333, 1px -1px 0 #333333, -1px 1px 0 #333333, 1px 1px 0 #333333" }}
+                                            >
+                                                {day.date}
+                                            </span>
                                         </div>
                                         <div className="space-y-8">
                                             {day.events.map((event, j) => (
@@ -3263,19 +3343,19 @@
                                                                                         <div class="rx-partner">
                                                                                             <div>
                                                                                                 <b>Southbank Centre Skate Space</b>
-                                                                                                <span>London • Belvedere Rd, SE1 8XX</span>
+                                                                                                <span><a href="https://www.google.com/maps/search/?api=1&query=Southbank%20Centre%20Skate%20Space%20Belvedere%20Rd%20SE1%208XX" target="_blank" rel="noopener noreferrer">London • Belvedere Rd, SE1 8XX</a></span>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="rx-partner">
                                                                                             <div>
                                                                                                 <b>Dean Lane Skatepark</b>
-                                                                                                <span>Bristol • The Deaner</span>
+                                                                                                <span><a href="https://www.google.com/maps/search/?api=1&query=Dean%20Lane%20Skatepark%20Bristol" target="_blank" rel="noopener noreferrer">Bristol • The Deaner</a></span>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="rx-partner">
                                                                                             <div>
                                                                                                 <b>Projekts MCR Skatepark</b>
-                                                                                                <span>Manchester • Indoor park</span>
+                                                                                                <span><a href="https://www.google.com/maps/search/?api=1&query=Projekts%20MCR%20Skatepark%20Manchester" target="_blank" rel="noopener noreferrer">Manchester • Indoor park</a></span>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
