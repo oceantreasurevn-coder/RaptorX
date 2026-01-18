@@ -1205,6 +1205,14 @@
             font-size: 0.62rem;
             letter-spacing: 0.12em;
         }
+        .timeline-date {
+            color: #facc15;
+            -webkit-text-stroke: 2px #000000;
+            text-shadow:
+                2px 2px 0 #000000,
+                4px 4px 0 rgba(0, 0, 0, 0.75),
+                6px 6px 0 rgba(0, 0, 0, 0.45);
+        }
         
         /* Utility for 3D positioning */
         .preserve-3d { transform-style: preserve-3d; }
@@ -2933,7 +2941,7 @@
                                 {t.schedule.map((day, i) => (
                                     <RevealOnScroll key={i} delay={i * 150} className="border-r border-b border-gray-300 bg-white hover:bg-neutral-50 transition duration-300 p-6 sm:p-10 h-full group schedule-card">
                                         <div className="flex items-baseline gap-2 mb-10">
-                                            <span className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-200 group-hover:text-black transition-colors duration-500 font-graffiti">{day.date}</span>
+                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-yellow-400 transition-colors duration-500 font-graffiti">{day.date}</span>
                                         </div>
                                         <div className="space-y-8">
                                             {day.events.map((event, j) => (
