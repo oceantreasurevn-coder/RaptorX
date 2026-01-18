@@ -1239,11 +1239,22 @@
         .register-form * {
             pointer-events: auto;
         }
+        #register {
+            position: relative;
+            z-index: 2;
+        }
+        #register .container {
+            position: relative;
+            z-index: 3;
+        }
         .register-option-label {
             touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
         }
         .register-option {
             transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+            min-height: 40px;
         }
         .register-option:active {
             transform: scale(0.98);
@@ -1493,32 +1504,30 @@
 
         const registerSurvey = {
             en: [
-                { id: "event-date", name: "event_date", type: "date", question: "Event date you want to attend" },
-                { id: "event-city", name: "event_city", type: "multi", question: "Event location (cities) you want to attend", options: ["Paris", "Lyon"] },
-                { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Main entrant full name and date of birth", placeholder: "Full name, DD/MM/YYYY" },
-                { id: "guardian-name", name: "guardian_name", type: "text", question: "Parent/guardian name (if main entrant is under 18)", placeholder: "Full name" },
-                { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Main entrant age and sex", placeholder: "Age, sex" },
-                { id: "guest-names", name: "guest_names", type: "textarea", question: "Names of up to two guests (18+)", placeholder: "Guest 1, Guest 2" },
-                { id: "experience", name: "experience", type: "single", question: "Skateboarding experience", options: ["Beginner", "Intermediate", "Advanced", "Pro"] },
-                { id: "board-types", name: "board_types", type: "multi", question: "Types of skateboards owned", options: ["Street", "Cruiser", "Longboard", "Freestyle", "Downhill", "Electric", "Other"] },
-                { id: "favorite-pros", name: "favorite_pros", type: "text", question: "Favorite professional skateboarders", placeholder: "Names" },
-                { id: "phone", name: "phone", type: "tel", question: "Phone number (work/home/mobile + preferred method)", placeholder: "+33 ... (preferred contact)" },
-                { id: "email", name: "email", type: "email", question: "Email address of the main entrant", placeholder: "name@email.com" },
-                { id: "address", name: "address", type: "textarea", question: "Home address of main entrant", placeholder: "Street, City, Postal code, Country" }
+                { id: "event-date", name: "event_date", type: "date", question: "Event date", placeholder: "Select a date", required: true },
+                { id: "event-city", name: "event_city", type: "text", question: "Event city", placeholder: "Paris, Lyon, etc.", required: true },
+                { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Main entrant full name and date of birth", placeholder: "Full name, DD/MM/YYYY", required: true },
+                { id: "guardian-name", name: "guardian_name", type: "text", question: "Parent/guardian name (if under 18)", placeholder: "Full name", required: true },
+                { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Main entrant age and sex", placeholder: "Age, sex", required: true },
+                { id: "guest-names", name: "guest_names", type: "textarea", question: "Names of up to two guests (18+)", placeholder: "Guest 1, Guest 2", required: true },
+                { id: "experience", name: "experience", type: "text", question: "Skateboarding experience", placeholder: "Beginner / Intermediate / Advanced", required: true },
+                { id: "board-types", name: "board_types", type: "text", question: "Types of skateboards owned", placeholder: "Street, Cruiser, Longboard...", required: false },
+                { id: "phone", name: "phone", type: "tel", question: "Phone number", placeholder: "+33 ...", required: false },
+                { id: "email", name: "email", type: "email", question: "Email address", placeholder: "name@email.com", required: false },
+                { id: "address", name: "address", type: "textarea", question: "Home address", placeholder: "Street, City, Postal code, Country", required: false }
             ],
             fr: [
-                { id: "event-date", name: "event_date", type: "date", question: "Date de l'événement souhaitée" },
-                { id: "event-city", name: "event_city", type: "multi", question: "Ville(s) de l'événement souhaitée(s)", options: [{ label: "Paris", value: "Paris" }, { label: "Lyon", value: "Lyon" }] },
-                { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Nom complet et date de naissance du participant principal", placeholder: "Nom complet, JJ/MM/AAAA" },
-                { id: "guardian-name", name: "guardian_name", type: "text", question: "Nom du parent/tuteur (si moins de 18 ans)", placeholder: "Nom complet" },
-                { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Âge et sexe du participant principal", placeholder: "Âge, sexe" },
-                { id: "guest-names", name: "guest_names", type: "textarea", question: "Noms de jusqu'à deux invités (18+)", placeholder: "Invité 1, Invité 2" },
-                { id: "experience", name: "experience", type: "single", question: "Expérience en skateboard", options: [{ label: "Débutant", value: "Beginner" }, { label: "Intermédiaire", value: "Intermediate" }, { label: "Avancé", value: "Advanced" }, { label: "Pro", value: "Pro" }] },
-                { id: "board-types", name: "board_types", type: "multi", question: "Types de skateboards possédés", options: [{ label: "Street", value: "Street" }, { label: "Cruiser", value: "Cruiser" }, { label: "Longboard", value: "Longboard" }, { label: "Freestyle", value: "Freestyle" }, { label: "Downhill", value: "Downhill" }, { label: "Électrique", value: "Electric" }, { label: "Autre", value: "Other" }] },
-                { id: "favorite-pros", name: "favorite_pros", type: "text", question: "Skateurs professionnels favoris", placeholder: "Noms" },
-                { id: "phone", name: "phone", type: "tel", question: "Numéro de téléphone (pro/domicile/mobile + méthode préférée)", placeholder: "+33 ... (contact préféré)" },
-                { id: "email", name: "email", type: "email", question: "Adresse email du participant principal", placeholder: "nom@email.com" },
-                { id: "address", name: "address", type: "textarea", question: "Adresse postale du participant principal", placeholder: "Rue, Ville, Code postal, Pays" }
+                { id: "event-date", name: "event_date", type: "date", question: "Date de l'événement", placeholder: "Choisir une date", required: true },
+                { id: "event-city", name: "event_city", type: "text", question: "Ville de l'événement", placeholder: "Paris, Lyon...", required: true },
+                { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Nom complet et date de naissance du participant", placeholder: "Nom complet, JJ/MM/AAAA", required: true },
+                { id: "guardian-name", name: "guardian_name", type: "text", question: "Nom du parent/tuteur (si moins de 18 ans)", placeholder: "Nom complet", required: true },
+                { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Âge et sexe du participant", placeholder: "Âge, sexe", required: true },
+                { id: "guest-names", name: "guest_names", type: "textarea", question: "Noms de deux invités max (18+)", placeholder: "Invité 1, Invité 2", required: true },
+                { id: "experience", name: "experience", type: "text", question: "Niveau de pratique du skateboard", placeholder: "Débutant / Intermédiaire / Avancé", required: true },
+                { id: "board-types", name: "board_types", type: "text", question: "Types de planches possédées", placeholder: "Street, Cruiser, Longboard...", required: false },
+                { id: "phone", name: "phone", type: "tel", question: "Téléphone", placeholder: "+33 ...", required: false },
+                { id: "email", name: "email", type: "email", question: "Adresse email", placeholder: "nom@email.com", required: false },
+                { id: "address", name: "address", type: "textarea", question: "Adresse du participant", placeholder: "Rue, Ville, Code postal, Pays", required: false }
             ]
         };
 
@@ -3329,7 +3338,6 @@
                                 <h2 className="text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none font-graffiti">{t.register.title} <br/> <span className="text-gray-500">{t.register.sub}</span></h2>
                                 <p className="text-gray-400 mb-12 max-w-lg mx-auto text-lg">{t.register.desc}</p>
                                 <form className="w-full max-w-3xl mx-auto space-y-6 register-form" onSubmit={handleRegisterSubmit}>
-                                    <input type="email" name="email" placeholder={t.register.placeholder} className="w-full px-6 py-4 bg-white border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black transition-all text-center rounded-none" />
                                     <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur">
                                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-6">
                                             <div>
@@ -3352,7 +3360,14 @@
                                                                 const optionValue = typeof option === "string" ? option : option.value;
                                                                 return (
                                                                     <label key={inputId} htmlFor={inputId} className="cursor-pointer register-option-label">
-                                                                        <input id={inputId} type={inputType} name={inputName} value={optionValue} className="peer sr-only" />
+                                                                        <input
+                                                                            id={inputId}
+                                                                            type={inputType}
+                                                                            name={inputName}
+                                                                            value={optionValue}
+                                                                            required={item.required && inputType === "radio" && optionIndex === 0}
+                                                                            className="peer sr-only"
+                                                                        />
                                                                         <span className="inline-flex items-center px-3 py-2 rounded-full border border-white/20 text-[11px] font-bold uppercase tracking-wide text-gray-300 transition hover:border-white/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black register-option">
                                                                             {optionLabel}
                                                                         </span>
@@ -3365,6 +3380,7 @@
                                                             name={item.name}
                                                             placeholder={item.placeholder || ""}
                                                             rows={3}
+                                                            required={item.required}
                                                             className="w-full rounded-2xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-yellow-400 focus:outline-none"
                                                         />
                                                     ) : (
@@ -3372,6 +3388,7 @@
                                                             type={item.type || "text"}
                                                             name={item.name}
                                                             placeholder={item.placeholder || ""}
+                                                            required={item.required}
                                                             className="w-full rounded-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-yellow-400 focus:outline-none"
                                                         />
                                                     )}
