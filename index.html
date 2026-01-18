@@ -473,6 +473,15 @@
             #register form {
                 pointer-events: auto;
             }
+
+            #register input,
+            #register textarea,
+            #register label,
+            #register button,
+            #register select {
+                touch-action: manipulation;
+                pointer-events: auto;
+            }
         }
 
 
@@ -1208,10 +1217,15 @@
         .timeline-date {
             color: #facc15;
             -webkit-text-stroke: 2px #000000;
+            font-weight: 900;
+            font-variation-settings: "wght" 900;
             text-shadow:
                 2px 2px 0 #000000,
                 4px 4px 0 rgba(0, 0, 0, 0.75),
                 6px 6px 0 rgba(0, 0, 0, 0.45);
+        }
+        .register-overlay {
+            pointer-events: none;
         }
         
         /* Utility for 3D positioning */
@@ -3288,7 +3302,7 @@
                     </section>
 
                     <section id="register" className="relative py-20 md:py-32 bg-black text-white overflow-hidden">
-                        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50"></div>
+                        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50 register-overlay"></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
                             <RevealOnScroll>
                                 <h2 className="text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none font-graffiti">{t.register.title} <br/> <span className="text-gray-500">{t.register.sub}</span></h2>
