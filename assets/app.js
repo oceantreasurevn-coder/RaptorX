@@ -2432,7 +2432,9 @@ const App = () => {
     }
   }), /*#__PURE__*/React.createElement("div", {
     className: "container mx-auto px-4 sm:px-6 relative z-10"
-  }, /*#__PURE__*/React.createElement(RevealOnScroll, null, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(RevealOnScroll, {
+    className: "reveal-no-transform"
+  }, /*#__PURE__*/React.createElement("div", {
     className: "flex flex-col md:flex-row justify-between items-end mb-12"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
     className: "text-4xl sm:text-5xl md:text-7xl font-black text-neutral-900 mb-2 uppercase tracking-tighter font-graffiti"
