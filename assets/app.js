@@ -657,7 +657,7 @@ const registerSurvey = {
     name: "event_city",
     type: "multi",
     question: "Event location (cities) you want to attend",
-    options: ["Paris", "Lyon"],
+    options: ["London", "Manchester", "Bristol"],
     required: true
   }, {
     id: "entrant-name-dob",
@@ -737,11 +737,14 @@ const registerSurvey = {
     type: "multi",
     question: "Ville(s) de l'événement souhaitée(s)",
     options: [{
-      label: "Paris",
-      value: "Paris"
+      label: "Londres",
+      value: "London"
     }, {
-      label: "Lyon",
-      value: "Lyon"
+      label: "Manchester",
+      value: "Manchester"
+    }, {
+      label: "Bristol",
+      value: "Bristol"
     }],
     required: true
   }, {

@@ -301,7 +301,7 @@
         const registerSurvey = {
             en: [
                 { id: "event-date", name: "event_date", type: "date", question: "Event date you want to attend", required: true },
-                { id: "event-city", name: "event_city", type: "multi", question: "Event location (cities) you want to attend", options: ["Paris", "Lyon"], required: true },
+                { id: "event-city", name: "event_city", type: "multi", question: "Event location (cities) you want to attend", options: ["London", "Manchester", "Bristol"], required: true },
                 { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Main entrant full name and date of birth", placeholder: "Full name, DD/MM/YYYY", required: true },
                 { id: "guardian-name", name: "guardian_name", type: "text", question: "Parent/guardian name (if main entrant is under 18)", placeholder: "Full name", required: true },
                 { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Main entrant age and sex", placeholder: "Age, sex", required: true },
@@ -315,7 +315,7 @@
             ],
             fr: [
                 { id: "event-date", name: "event_date", type: "date", question: "Date de l'événement souhaitée", required: true },
-                { id: "event-city", name: "event_city", type: "multi", question: "Ville(s) de l'événement souhaitée(s)", options: [{ label: "Paris", value: "Paris" }, { label: "Lyon", value: "Lyon" }], required: true },
+                { id: "event-city", name: "event_city", type: "multi", question: "Ville(s) de l'événement souhaitée(s)", options: [{ label: "Londres", value: "London" }, { label: "Manchester", value: "Manchester" }, { label: "Bristol", value: "Bristol" }], required: true },
                 { id: "entrant-name-dob", name: "entrant_name_dob", type: "text", question: "Nom complet et date de naissance du participant principal", placeholder: "Nom complet, JJ/MM/AAAA", required: true },
                 { id: "guardian-name", name: "guardian_name", type: "text", question: "Nom du parent/tuteur (si moins de 18 ans)", placeholder: "Nom complet", required: true },
                 { id: "entrant-age-sex", name: "entrant_age_sex", type: "text", question: "Âge et sexe du participant principal", placeholder: "Âge, sexe", required: true },
