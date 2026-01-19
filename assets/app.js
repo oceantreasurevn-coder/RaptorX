@@ -233,6 +233,12 @@ const translations = {
       title: "Blog & Events",
       sub: "Latest News, Stories & Community Highlights"
     },
+    giftBanner: {
+      label: "Limited time",
+      title: "Gift for Student",
+      desc: "Unlock a bonus pack when you register today.",
+      cta: "Claim now"
+    },
     blueprint: {
       title: "Under The Hood",
       sub: "Carbon-Spine Architecture",
@@ -253,6 +259,51 @@ const translations = {
           desc: "15% lighter than standard 7-ply decks without sacrificing breaking strength."
         }
       }
+    },
+    techSpecs: {
+      title: "Tech Specs",
+      sub: "Core deck engineering",
+      items: [{
+        key: "deckWidth",
+        label: "Deck width",
+        value: "8.25 in (21.0 cm)"
+      }, {
+        key: "deckLength",
+        label: "Deck length",
+        value: "32.0 in (81.3 cm)"
+      }, {
+        key: "wheelbase",
+        label: "Wheelbase",
+        value: "14.25 in (36.2 cm)"
+      }, {
+        key: "construction",
+        label: "Construction",
+        value: "7-ply maple + carbon spine"
+      }, {
+        key: "concave",
+        label: "Concave",
+        value: "Medium"
+      }, {
+        key: "trucks",
+        label: "Trucks",
+        value: "5.25 in alloy, polished"
+      }, {
+        key: "wheels",
+        label: "Wheels",
+        value: "52mm / 101A street"
+      }, {
+        key: "bearings",
+        label: "Bearings",
+        value: "ABEC-9 precision"
+      }, {
+        key: "weight",
+        label: "Weight",
+        value: "1.25 kg (deck only)"
+      }, {
+        key: "finish",
+        label: "Finish",
+        value: "Matte black, hydrophobic seal"
+      }]
     },
     marquee2: "NEXT LEVEL PERFORMANCE // PRECISION ENGINEERED //",
     nextLevel: {
@@ -330,7 +381,8 @@ const translations = {
         title: "London: Southbank Centre Skate Space"
       }, {
         time: "16:00",
-        title: "Live Demo + Try-it-out Zone"
+        title: "Live Demo + Try-it-out Zone",
+        desc: "Experience the latest RAPTOR [X] decks hands-on. Safety First, Ride Pro: All demo participants receive pro-level safety gear and guidance from certified instructors."
       }, {
         time: "17:30",
         title: "Meet & Greet with Pro Riders"
@@ -395,6 +447,12 @@ const translations = {
       title: "Blog & Événements",
       sub: "Dernières Nouvelles, Histoires & Temps Forts Communautaires"
     },
+    giftBanner: {
+      label: "Série limitée",
+      title: "Gift for Student",
+      desc: "Débloque un bonus en t'inscrivant maintenant.",
+      cta: "Obtenir"
+    },
     blueprint: {
       title: "Sous le capot",
       sub: "Architecture à épine dorsale en carbone",
@@ -415,6 +473,51 @@ const translations = {
           desc: "15% plus léger qu'un deck 7 plis standard sans sacrifier la résistance."
         }
       }
+    },
+    techSpecs: {
+      title: "Spécifications techniques",
+      sub: "Ingénierie du deck",
+      items: [{
+        key: "deckWidth",
+        label: "Largeur du deck",
+        value: "8,25 po (21,0 cm)"
+      }, {
+        key: "deckLength",
+        label: "Longueur du deck",
+        value: "32,0 po (81,3 cm)"
+      }, {
+        key: "wheelbase",
+        label: "Empattement",
+        value: "14,25 po (36,2 cm)"
+      }, {
+        key: "construction",
+        label: "Construction",
+        value: "7 plis érable + épine carbone"
+      }, {
+        key: "concave",
+        label: "Concave",
+        value: "Moyen"
+      }, {
+        key: "trucks",
+        label: "Trucks",
+        value: "Alliage 5,25 po, poli"
+      }, {
+        key: "wheels",
+        label: "Roues",
+        value: "52mm / 101A street"
+      }, {
+        key: "bearings",
+        label: "Roulements",
+        value: "ABEC-9 précision"
+      }, {
+        key: "weight",
+        label: "Poids",
+        value: "1,25 kg (deck seul)"
+      }, {
+        key: "finish",
+        label: "Finition",
+        value: "Noir mat, scellage hydrophobe"
+      }]
     },
     marquee2: "PERFORMANCE DE NIVEAU SUPÉRIEUR // INGÉNIERIE DE PRÉCISION //",
     nextLevel: {
@@ -492,7 +595,8 @@ const translations = {
         title: "Londres : Southbank Centre Skate Space"
       }, {
         time: "16:00",
-        title: "Démo live + Zone d'essai"
+        title: "Démo live + Zone d'essai",
+        desc: "Testez les nouveaux decks RAPTOR [X] en conditions réelles. Safety First, Ride Pro : tous les participants reçoivent un kit sécurité pro et des conseils d'instructeurs certifiés."
       }, {
         time: "17:30",
         title: "Meet & Greet avec les pros"
@@ -2355,7 +2459,26 @@ const App = () => {
     className: "flex items-center gap-2 text-xl font-bold uppercase mt-4"
   }, /*#__PURE__*/React.createElement(Globe, {
     size: 20
-  }), " ", lang === 'en' ? t.langSwitch.toFrench : t.langSwitch.toEnglish))), /*#__PURE__*/React.createElement("header", {
+  }), " ", lang === 'en' ? t.langSwitch.toFrench : t.langSwitch.toEnglish))), /*#__PURE__*/React.createElement("div", {
+    className: "md:hidden w-full bg-yellow-400 text-black border-b-2 border-black"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container mx-auto px-4 sm:px-6 pt-24 pb-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rounded-3xl bg-white/90 border-2 border-black shadow-[0_16px_40px_rgba(0,0,0,0.2)] px-5 py-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between gap-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex-1"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500 mb-1"
+  }, t.giftBanner.label), /*#__PURE__*/React.createElement("h3", {
+    className: "text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight"
+  }, t.giftBanner.title), /*#__PURE__*/React.createElement("p", {
+    className: "text-sm font-bold text-neutral-600 mt-1"
+  }, t.giftBanner.desc)), /*#__PURE__*/React.createElement("a", {
+    href: "#register",
+    className: "shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg"
+  }, t.giftBanner.cta))))), /*#__PURE__*/React.createElement("header", {
     className: "relative w-full min-h-[100svh] md:h-screen overflow-hidden bg-black flex items-center justify-center"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 w-full h-full z-0 flex items-center justify-center"
@@ -2500,6 +2623,31 @@ const App = () => {
     isAnimating: isAnimating,
     lang: lang
   }))), /*#__PURE__*/React.createElement("div", {
+    className: "hidden md:block mt-12"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rounded-[28px] border border-neutral-200 bg-white/90 shadow-[0_24px_60px_rgba(0,0,0,0.08)] p-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-xs font-black uppercase tracking-[0.4em] text-neutral-400 mb-2"
+  }, t.techSpecs.sub), /*#__PURE__*/React.createElement("h3", {
+    className: "text-3xl md:text-4xl font-black uppercase tracking-tight text-neutral-900 font-graffiti"
+  }, t.techSpecs.title)), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em] text-neutral-500"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "px-3 py-1 rounded-full border border-neutral-200"
+  }, "RAPTOR [X]"), /*#__PURE__*/React.createElement("span", {
+    className: "hidden lg:inline"
+  }, "Core deck spec sheet"))), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 lg:grid-cols-3 gap-4"
+  }, t.techSpecs.items.map(item => /*#__PURE__*/React.createElement("div", {
+    key: item.key,
+    className: "rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-[11px] font-black uppercase tracking-[0.3em] text-neutral-400 mb-2"
+  }, item.label), /*#__PURE__*/React.createElement("p", {
+    className: "text-lg font-black text-neutral-900"
+  }, item.value)))))), /*#__PURE__*/React.createElement("div", {
     className: "grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-10 border-t border-gray-100 collection-thumbs"
   }, products.map((item, index) => {
     const productSub = getLocalized(item.sub);
@@ -2815,7 +2963,7 @@ const App = () => {
                                                                                             </div>
                                                                                             <div>
                                                                                                 <h4>▸ Southbank Centre Skate Space</h4>
-                                                                                                <p>14:00–18:00 • Live demo, try‑it‑out zone, meet & greet with pro riders.</p>
+                                                                                                <p>14:00–18:00 • Live demo, try‑it‑out zone, meet & greet with pro riders.<br><span style="color:#facc15;font-weight:700">Safety First, Ride Pro:</span> All demo participants receive pro-level safety gear and guidance from certified instructors. Try the latest RAPTOR [X] decks hands-on in a safe, pro-supervised environment.</p>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="rx-step">
