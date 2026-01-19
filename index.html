@@ -500,11 +500,27 @@
 
             .mobile-layout #register .register-form {
                 text-align: left;
+                position: relative;
+                z-index: 40;
+                isolation: isolate;
             }
 
             .mobile-layout #register input,
             .mobile-layout #register textarea {
                 border-radius: 16px;
+                position: relative;
+                z-index: 45;
+                -webkit-user-select: text;
+                user-select: text;
+            }
+
+            .mobile-layout #register select,
+            .mobile-layout #register button,
+            .mobile-layout #register label {
+                position: relative;
+                z-index: 45;
+                -webkit-user-select: text;
+                user-select: text;
             }
 
             .mobile-layout footer .footer-layout {
