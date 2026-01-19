@@ -628,8 +628,8 @@ const translations = {
     }]
   }
 };
-const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeO7w14EwzrwlTRuU1VWPFFKL_3-p6Moo8ySis3rfshZPc_jg/viewform?embedded=true";
-const GOOGLE_FORM_ACTION_URL = GOOGLE_FORM_URL.replace("viewform?embedded=true", "formResponse");
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeO7w14EwzrwlTRuU1VWPFFKL_3-p6Moo8ySis3rfshZPc_jg/viewform?usp=header";
+const GOOGLE_FORM_ACTION_URL = GOOGLE_FORM_URL.replace("viewform?usp=header", "formResponse");
 const GOOGLE_FORM_FIELDS = {
   event_date: "entry.2092238618",
   event_city: "entry.1556369182",
