@@ -553,6 +553,21 @@
             font-family: 'Sedgwick Ave Display', cursive;
         }
 
+        .brand-3d {
+            color: #000000;
+            -webkit-text-stroke: 3px #facc15;
+            text-shadow:
+                2px 2px 0 #facc15,
+                -2px 2px 0 #facc15,
+                2px -2px 0 #facc15,
+                -2px -2px 0 #facc15,
+                4px 4px 0 #eab308,
+                6px 6px 0 rgba(0, 0, 0, 0.6),
+                8px 8px 0 rgba(0, 0, 0, 0.35);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+        }
+
         .perspective-1000 {
             perspective: 1000px;
         }
@@ -2806,9 +2821,8 @@
                                 <div className={`flex items-center justify-center transition-all duration-300 transform group-hover:rotate-12 ${scrolled ? 'text-neutral-800' : 'text-white'}`}>
                                     <SkateboardIcon size={32} strokeWidth={2} className="transform -rotate-12 group-hover:rotate-0 transition-transform duration-300" />
                                 </div>
-                                <div className={`flex items-baseline text-3xl sm:text-4xl tracking-wide leading-none transition-colors duration-300 font-graffiti ${scrolled ? 'text-black' : 'text-white'}`}>
-                                    Scater RAPTOR
-                                    <span className="text-yellow-500 text-5xl sm:text-6xl ml-1 drop-shadow-[0_0_20px_rgba(234,179,8,1)] filter transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 inline-block transform origin-bottom-left">[X]</span>
+                                <div className="flex items-baseline text-4xl sm:text-5xl md:text-6xl tracking-wide leading-none transition-colors duration-300 font-graffiti brand-3d">
+                                    SCATERS
                                 </div>
                             </div>
                             <div className={`hidden md:flex items-center gap-8 font-bold text-sm uppercase tracking-widest transition-colors duration-300 ${scrolled ? 'text-neutral-600' : 'text-gray-300'}`}>
