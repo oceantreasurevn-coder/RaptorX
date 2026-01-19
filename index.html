@@ -484,6 +484,18 @@
             .mobile-layout #register {
                 padding-top: 72px;
                 padding-bottom: 72px;
+                position: relative;
+                z-index: 30;
+            }
+
+            .mobile-layout .register-overlay {
+                display: none;
+            }
+
+            .mobile-layout #register .register-form,
+            .mobile-layout #register .register-form * {
+                pointer-events: auto;
+                touch-action: manipulation;
             }
 
             .mobile-layout #register .register-form {
