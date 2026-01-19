@@ -1756,13 +1756,13 @@
                 },
             ];
 
+            // Add floating animation state
+            const [floatOffset, setFloatOffset] = React.useState(0);
+
             const floatDistance = isHovering ? 28 : 0;
             const tiltX = isHovering ? (mousePos.y - 0.5) * 12 : 0;
             const tiltY = isHovering ? (mousePos.x - 0.5) * -12 : 0;
             const wobbleZ = Math.sin(floatOffset * 1.4) * 1.6;
-
-            // Add floating animation state
-            const [floatOffset, setFloatOffset] = React.useState(0);
             React.useEffect(() => {
                 const interval = setInterval(() => {
                     setFloatOffset(prev => (prev + 0.02) % (Math.PI * 2));
