@@ -3068,7 +3068,7 @@ const App = () => {
     }
   }))), /*#__PURE__*/React.createElement("section", {
     id: "register",
-    className: "relative py-20 md:py-32 bg-black text-white overflow-hidden"
+    className: "relative py-20 md:py-32 bg-black text-white"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50 register-overlay"
   }), /*#__PURE__*/React.createElement("div", {

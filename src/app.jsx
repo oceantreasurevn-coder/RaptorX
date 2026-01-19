@@ -2202,7 +2202,7 @@
                         </div>
                     </section>
 
-                    <section id="register" className="relative py-20 md:py-32 bg-black text-white overflow-hidden">
+                    <section id="register" className="relative py-20 md:py-32 bg-black text-white">
                         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50 register-overlay"></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
                             <RevealOnScroll>

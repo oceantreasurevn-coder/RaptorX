@@ -485,7 +485,10 @@
                 padding-top: 72px;
                 padding-bottom: 72px;
                 position: relative;
-                z-index: 30;
+                z-index: 50;
+                overflow: visible;
+                pointer-events: auto;
+                touch-action: auto;
             }
 
             .mobile-layout .register-overlay {
@@ -503,6 +506,7 @@
                 position: relative;
                 z-index: 40;
                 isolation: isolate;
+                overflow: visible;
             }
 
             .mobile-layout #register input,
@@ -545,6 +549,7 @@
             body {
                 display: block;
                 cursor: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             #root {
@@ -563,6 +568,10 @@
             #register,
             #register form {
                 pointer-events: auto;
+            }
+
+            #register {
+                overflow: visible !important;
             }
 
             #register input,
@@ -3601,7 +3610,7 @@
                         </div>
                     </section>
 
-                    <section id="register" className="relative py-20 md:py-32 bg-black text-white overflow-hidden">
+                    <section id="register" className="relative py-20 md:py-32 bg-black text-white">
                         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50 register-overlay"></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
                             <RevealOnScroll>
