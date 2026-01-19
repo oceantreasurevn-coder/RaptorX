@@ -124,6 +124,92 @@
                 chat: {
                     label: "Raptor AI",
                     brand: "Raptor[X]",
+                    title: "Raptor [X] AI Assistant",
+                    titleSuffix: "AI Assistant",
+                    subtitle: "Skate + streetwear intel",
+                    greeting: "Hey — I'm the RAPTOR [X] concierge. Ask me about decks, street culture, streetwear fits, or event drops.",
+                    placeholder: "Ask about boards, streetwear, events...",
+                    send: "Send",
+                    open: "Chat",
+                    close: "Close",
+                    thinking: "Dialing in the setup...",
+                    error: "Assistant is temporarily unavailable. Please try again soon.",
+                    statusOffline: "Assistant offline",
+                    retry: "Retry",
+                    quickTitle: "Quick picks",
+                    suggestions: [
+                        "Best deck size for street skating?",
+                        "Wheel hardness for rough Paris streets?",
+                        "Streetwear fit guide for RAPTOR [X] drops",
+                        "Event schedule highlights"
+                    ],
+                    disclaimer: "Focused on skate, street culture, and RAPTOR [X]."
+                },
+                langSwitch: { toEnglish: "Switch to English", toFrench: "Switch to French" },
+                ui: { close: "Close" },
+                footer: { rights: "Product copyright of Raptor Gaming Gear © 2024.", design: "Designed for the future.", support: "Support", instagram: "Instagram", twitter: "Twitter", facebook: "Facebook" },
+                schedule: [
+                    { date: "26 JAN", events: [{ time: "14:00", title: "London: Southbank Centre Skate Space" }, { time: "16:00", title: "Live Demo + Try-it-out Zone" }, { time: "17:30", title: "Meet & Greet with Pro Riders" }] },
+                    { date: "27 JAN", events: [{ time: "13:00", title: "Bristol: Dean Lane Skatepark" }, { time: "14:30", title: "Best Trick Contest" }, { time: "16:00", title: "Street Art Collab" }] },
+                    { date: "28 JAN", events: [{ time: "16:00", title: "Manchester: Projekts MCR Skatepark" }, { time: "18:00", title: "Skate Jam + DJ Set" }, { time: "19:30", title: "RaptorX Giveaway" }] }
+                ]
+            },
+            fr: {
+                nav: { product: "Produits", gear: "Équipement", blog: "Blog/Événements", schedule: "Programme", register: "S'inscrire" },
+                meta: { title: "RAPTOR [X] - Skate de rue" },
+                hero: {
+                    badge: "SPÉCIAL",
+                    subtext: "[X] SÉRIE",
+                    desc: "La fusion parfaite d'un design ergonomique et d'une technologie de capteur ultime.",
+                    boldDesc: "Noir Absolu. Puissant. Premium.",
+                    siteDesc: "SCATERS est le hub officiel du lancement RAPTOR [X] : decks, gear drops et tournée UK 2026. Découvre la collection, le programme et réserve ta place.",
+                    preOrder: "Pré-commander",
+                    explore: "Explorer",
+                    alt: "Arrière-plan héro RAPTOR [X]"
+                },
+                marquee: "RUE // SKATE // PUISSANCE // RAPTOR-X //",
+                collection: { title: "Collection", sub: "Produits à venir 2026" },
+                gear: { title: "Équipement", sub: "Accessoires Essentiels pour l'Expérience Skate Ultime", cta: "Ajouter au panier" },
+                blog: { title: "Blog & Événements", sub: "Dernières Nouvelles, Histoires & Temps Forts Communautaires" },
+                blueprint: {
+                    title: "Sous le capot",
+                    sub: "Architecture à épine dorsale en carbone",
+                    drag: "Glisser pour tourner",
+                    auto: "Rotation Auto",
+                    stop: "Arrêt",
+                    parts: {
+                        deck: { label: "Retour d'énergie cinétique", desc: "La couche carbone stocke l'énergie à l'atterrissage et la libère au pop. Ollies plus hauts, moins d'effort." },
+                        trucks: { label: "Verrouillage anti-humidité", desc: "La résine époxy hydrophobe scelle les plis et empêche l'humidité UK d'abîmer la planche." },
+                        wheels: { label: "Résistance ultralégère", desc: "15% plus léger qu'un deck 7 plis standard sans sacrifier la résistance." }
+                    }
+                },
+                marquee2: "PERFORMANCE DE NIVEAU SUPÉRIEUR // INGÉNIERIE DE PRÉCISION //",
+                nextLevel: { title: "Niveau Supérieur", sub: "Performance . Précision . Puissance", alt: "Arrière-plan bannière RAPTOR [X]" },
+                timeline: { title: "Chronologie", imageAlt: "Billboard RAPTOR [X] sur une place skate" },
+                register: {
+                    title: "Prêt à",
+                    sub: "Dominer?",
+                    desc: "Places limitées. Inscrivez-vous aujourd'hui pour être le premier propriétaire.",
+                    placeholder: "Entrez votre adresse email",
+                    button: "Obtenir l'invitation",
+                    sending: "Envoi...",
+                    success: "Envoyé avec succès",
+                    successEmail: "Envoyé. Email de confirmation envoyé.",
+                    successSaved: "Envoyé. Email de confirmation non configuré.",
+                    error: "Échec de l'envoi. Réessayez."
+                },
+                registerSurvey: {
+                    title: "Profil Skater Express",
+                    desc: "Partage ta pratique et tes habitudes d'achat pour personnaliser les drops et recommandations.",
+                    note: "Optionnel — moins d'une minute"
+                },
+                form: {
+                    title: "Questionnaire Profil Skater",
+                    sub: "Questions rapides sur ta pratique, tes achats et tes accessoires préférés",
+                    desc: "Tes réponses nous aident à personnaliser les drops, événements et recommandations.",
+                    preview: "Aperçu des questions",
+                    open: "Ouvrir le Google Form",
+                    close: "Fermer"
                 },
                 chat: {
                     label: "Raptor AI",
