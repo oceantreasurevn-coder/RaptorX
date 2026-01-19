@@ -1,6 +1,6 @@
 # SCATER RAPTOR X - Product Launch Event Website
 
-Website giới thiệu sản phẩm RAPTOR X được xây dựng bằng HTML, CSS và JavaScript thuần túy, tối ưu để chạy trên GitHub Pages.
+Website giới thiệu sản phẩm RAPTOR X dùng React (CDN) + Tailwind CSS build bằng CLI, tối ưu để chạy trên GitHub Pages.
 
 ## 🚀 Tính năng
 
@@ -15,10 +15,12 @@ Website giới thiệu sản phẩm RAPTOR X được xây dựng bằng HTML, C
 
 ```
 .
-├── index.html      # Trang chủ
-├── style.css       # Stylesheet chính
-├── script.js       # JavaScript interactions
-└── README.md       # Hướng dẫn
+├── index.html         # Trang chủ
+├── src/app.jsx        # React app source
+├── src/tailwind.css   # Tailwind entry
+├── assets/app.js      # JS build output
+├── assets/tailwind.css# CSS build output
+└── README.md          # Hướng dẫn
 ```
 
 ## 🌐 Deploy lên GitHub Pages
@@ -69,21 +71,20 @@ git push -u origin main
 
 Sau đó làm theo bước 3 ở Cách 1 để kích hoạt GitHub Pages.
 
+## 🛠 Build production (loại bỏ cảnh báo Tailwind/Babel)
+
+```bash
+npm install
+npm run build
+```
+
+Lệnh build tạo `assets/tailwind.css` và `assets/app.js` để dùng trong production.
+
 ## 🎨 Tùy chỉnh
 
 ### Thay đổi màu sắc
 
-Mở file `style.css` và chỉnh sửa các biến CSS trong `:root`:
-
-```css
-:root {
-    --primary-dark: #150E60;    /* Màu chính tối */
-    --primary-blue: #304254;    /* Màu xanh chính */
-    --gray-dark: #262624;       /* Màu xám đậm */
-    --gray-medium: #90908F;     /* Màu xám trung bình */
-    --yellow: #fbbf24;          /* Màu vàng */
-}
-```
+Mở `index.html` để chỉnh CSS custom trong `<style>` hoặc cập nhật lớp Tailwind.
 
 ### Thay đổi nội dung
 
@@ -94,7 +95,7 @@ Mở file `index.html` và chỉnh sửa:
 
 ### Thay đổi hiệu ứng
 
-Mở file `script.js` để:
+Mở `src/app.jsx` để:
 - Điều chỉnh thời gian animation
 - Thêm/bỏ các hiệu ứng scroll
 - Tùy chỉnh hành vi của buttons
