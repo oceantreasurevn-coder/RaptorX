@@ -1450,7 +1450,18 @@
                 marquee2: "NEXT LEVEL PERFORMANCE // PRECISION ENGINEERED //",
                 nextLevel: { title: "Next Level", sub: "Performance . Precision . Power", alt: "Raptor [X] banner background" },
                 timeline: { title: "Timeline", imageAlt: "RAPTOR [X] billboard at a skate plaza" },
-                register: { title: "Ready to", sub: "Dominate?", desc: "Limited slots available. Register today to be the first owner.", placeholder: "Enter your email address", button: "Get Invitation", success: "Submitted successfully" },
+                register: {
+                    title: "Ready to",
+                    sub: "Dominate?",
+                    desc: "Limited slots available. Register today to be the first owner.",
+                    placeholder: "Enter your email address",
+                    button: "Get Invitation",
+                    sending: "Submitting...",
+                    success: "Submitted successfully",
+                    successEmail: "Submitted. Confirmation email sent.",
+                    successSaved: "Submitted. Email confirmation not configured.",
+                    error: "Submission failed. Please try again."
+                },
                 registerSurvey: {
                     title: "Skater Intake",
                     desc: "Share your ride and shopping habits so we can tailor drops and gear recommendations.",
@@ -1520,7 +1531,18 @@
                 marquee2: "PERFORMANCE DE NIVEAU SUPÉRIEUR // INGÉNIERIE DE PRÉCISION //",
                 nextLevel: { title: "Niveau Supérieur", sub: "Performance . Précision . Puissance", alt: "Arrière-plan bannière RAPTOR [X]" },
                 timeline: { title: "Chronologie", imageAlt: "Billboard RAPTOR [X] sur une place skate" },
-                register: { title: "Prêt à", sub: "Dominer?", desc: "Places limitées. Inscrivez-vous aujourd'hui pour être le premier propriétaire.", placeholder: "Entrez votre adresse email", button: "Obtenir l'invitation", success: "Envoyé avec succès" },
+                register: {
+                    title: "Prêt à",
+                    sub: "Dominer?",
+                    desc: "Places limitées. Inscrivez-vous aujourd'hui pour être le premier propriétaire.",
+                    placeholder: "Entrez votre adresse email",
+                    button: "Obtenir l'invitation",
+                    sending: "Envoi...",
+                    success: "Envoyé avec succès",
+                    successEmail: "Envoyé. Email de confirmation envoyé.",
+                    successSaved: "Envoyé. Email de confirmation non configuré.",
+                    error: "Échec de l'envoi. Réessayez."
+                },
                 registerSurvey: {
                     title: "Profil Skater Express",
                     desc: "Partage ta pratique et tes habitudes d'achat pour personnaliser les drops et recommandations.",
@@ -2721,6 +2743,8 @@
             const [lang, setLang] = useState('en');
             const [showSuccess, setShowSuccess] = useState(false);
             const [isMobileView, setIsMobileView] = useState(false);
+            const [registerStatus, setRegisterStatus] = useState({ state: "idle", message: "" });
+            const [isRegisterSending, setIsRegisterSending] = useState(false);
             
             const t = translations[lang];
 
@@ -2784,25 +2808,83 @@
                 return value?.[lang] || value?.en || "";
             };
 
-            const handleRegisterSubmit = (event) => {
+            const resolveApiBase = () => {
+                if (typeof window === "undefined") return "";
+                const metaBase = document.querySelector('meta[name="raptor-api-base"]')?.getAttribute("content");
+                if (metaBase && metaBase.trim()) return metaBase.trim();
+                const origin = window.location.origin;
+                if (origin === "null") return "http://localhost:8787";
+                const hostname = window.location.hostname;
+                if (hostname === "localhost" || hostname === "127.0.0.1") return origin;
+                return `https://api.${hostname}`;
+            };
+
+            const handleRegisterSubmit = async (event) => {
                 event.preventDefault();
+                if (isRegisterSending) return;
+
+                setIsRegisterSending(true);
+                setRegisterStatus({ state: "sending", message: t.register.sending });
+
                 const formData = new FormData(event.currentTarget);
-                if (GOOGLE_FORM_READY) {
-                    const googleData = new FormData();
-                    Object.entries(GOOGLE_FORM_FIELDS).forEach(([key, entryId]) => {
-                        if (!entryId) return;
-                        const values = formData.getAll(key);
-                        values.forEach((value) => {
-                            if (value) googleData.append(entryId, value);
-                        });
+                const formPayload = {};
+                Object.keys(GOOGLE_FORM_FIELDS).forEach((key) => {
+                    const values = formData.getAll(key).filter(Boolean);
+                    if (!values.length) return;
+                    formPayload[key] = values.length === 1 ? values[0] : values;
+                });
+
+                const googleData = new FormData();
+                Object.entries(GOOGLE_FORM_FIELDS).forEach(([key, entryId]) => {
+                    if (!entryId) return;
+                    const values = formData.getAll(key);
+                    values.forEach((value) => {
+                        if (value) googleData.append(entryId, value);
                     });
-                    fetch(GOOGLE_FORM_ACTION_URL, {
+                });
+
+                try {
+                    const apiBase = resolveApiBase();
+                    const response = await fetch(`${apiBase}/api/register`, {
                         method: "POST",
-                        mode: "no-cors",
-                        body: googleData
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            form: formPayload,
+                            fields: GOOGLE_FORM_FIELDS,
+                            googleFormActionUrl: GOOGLE_FORM_ACTION_URL,
+                            lang
+                        })
                     });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        throw new Error(data.error || t.register.error);
+                    }
+                    let message = t.register.success;
+                    if (data.emailStatus === "sent") message = t.register.successEmail;
+                    if (data.emailStatus === "skipped") message = t.register.successSaved;
+                    setRegisterStatus({ state: "success", message });
+                    setShowSuccess(true);
+                    event.currentTarget.reset();
+                } catch (error) {
+                    if (GOOGLE_FORM_READY) {
+                        try {
+                            await fetch(GOOGLE_FORM_ACTION_URL, {
+                                method: "POST",
+                                mode: "no-cors",
+                                body: googleData
+                            });
+                            setRegisterStatus({ state: "success", message: t.register.successSaved });
+                            setShowSuccess(true);
+                            event.currentTarget.reset();
+                        } catch (fallbackError) {
+                            setRegisterStatus({ state: "error", message: t.register.error });
+                        }
+                    } else {
+                        setRegisterStatus({ state: "error", message: error?.message || t.register.error });
+                    }
+                } finally {
+                    setIsRegisterSending(false);
                 }
-                setShowSuccess(true);
             };
 
             const activeProduct = products[activeIndex];
@@ -3548,7 +3630,20 @@
                                             ))}
                                         </div>
                                     </div>
-                                    <button type="submit" className="w-full px-10 py-4 bg-yellow-400 text-black font-black text-xl uppercase tracking-widest hover:bg-yellow-300 transition-colors font-graffiti">{t.register.button}</button>
+                                    <button
+                                        type="submit"
+                                        disabled={isRegisterSending}
+                                        className={`w-full px-10 py-4 font-black text-xl uppercase tracking-widest transition-colors font-graffiti ${isRegisterSending ? 'bg-yellow-300/70 text-black/70 cursor-not-allowed' : 'bg-yellow-400 text-black hover:bg-yellow-300'}`}
+                                    >
+                                        {isRegisterSending ? t.register.sending : t.register.button}
+                                    </button>
+                                    {registerStatus.state !== "idle" && (
+                                        <p
+                                            className={`text-sm text-center ${registerStatus.state === "error" ? 'text-red-400' : registerStatus.state === "success" ? 'text-emerald-300' : 'text-yellow-300'}`}
+                                        >
+                                            {registerStatus.message}
+                                        </p>
+                                    )}
                                 </form>
                             </RevealOnScroll>
                         </div>

@@ -110,6 +110,18 @@ Mở file `script.js` để:
 - Không cần cài đặt gì, chỉ cần trình duyệt web hiện đại
 - Hỗ trợ: Chrome, Firefox, Safari, Edge (phiên bản mới nhất)
 
+## 📬 Form đăng ký + Email xác nhận
+
+Trang đăng ký gửi dữ liệu qua API `/api/register` để forward vào Google Form và gửi email xác nhận (tuỳ chọn).
+
+Thiết lập biến môi trường khi chạy `server.js`:
+
+- `RESEND_API_KEY`: API key từ Resend
+- `RESEND_FROM`: địa chỉ gửi (vd: `Scaters <noreply@yourdomain.com>`)
+- `RESEND_REPLY_TO` (tuỳ chọn)
+
+Nếu thiếu các biến trên, form vẫn gửi về Google Form nhưng **không gửi email xác nhận**.
+
 ## 📝 License
 
 © 2025 SCATER RAPTOR X. All rights reserved.

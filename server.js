@@ -9,6 +9,9 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "openrouter/auto";
 const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const RESEND_FROM = process.env.RESEND_FROM;
+const RESEND_REPLY_TO = process.env.RESEND_REPLY_TO;
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -80,6 +83,56 @@ Respond in ${language}.
 
 SITE CONTEXT:
 ${siteContext || "No website context provided."}`;
+
+const sendConfirmationEmail = async ({ to, name, lang, formSummary }) => {
+  if (!RESEND_API_KEY || !RESEND_FROM || !to) {
+    return { status: "skipped" };
+  }
+
+  const subject = lang === "fr"
+    ? "Confirmation d'inscription RAPTOR [X]"
+    : "RAPTOR [X] Registration Confirmation";
+
+  const greeting = lang === "fr"
+    ? `Bonjour ${name || ""}`.trim()
+    : `Hi ${name || ""}`.trim();
+
+  const intro = lang === "fr"
+    ? "Merci pour votre inscription. Nous avons bien reçu vos informations."
+    : "Thanks for registering. We've received your details.";
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
+      <h2 style="margin: 0 0 12px;">${greeting}</h2>
+      <p style="margin: 0 0 12px;">${intro}</p>
+      <p style="margin: 0 0 12px;">RAPTOR [X] team sẽ gửi cập nhật lịch trình sớm nhất.</p>
+      ${formSummary ? `<pre style="background:#f6f6f6;padding:12px;border-radius:8px;">${formSummary}</pre>` : ""}
+      <p style="margin: 12px 0 0;">— Scaters / RAPTOR [X]</p>
+    </div>
+  `;
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: RESEND_FROM,
+      to: [to],
+      subject,
+      html,
+      ...(RESEND_REPLY_TO ? { reply_to: RESEND_REPLY_TO } : {})
+    })
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error || "Email send failed.");
+  }
+
+  return { status: "sent" };
+};
 
 const server = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
@@ -195,6 +248,77 @@ const server = http.createServer(async (req, res) => {
       }
 
       return sendJson(res, 200, { reply });
+    } catch (error) {
+      return sendJson(res, 500, { error: error.message || "Server error." });
+    }
+  }
+
+  if (requestUrl.pathname === "/api/register") {
+    if (req.method === "OPTIONS") {
+      return sendJson(res, 204, {});
+    }
+
+    if (req.method !== "POST") {
+      return sendJson(res, 405, { error: "Method not allowed." });
+    }
+
+    try {
+      const body = await readRequestBody(req);
+      const payload = body ? JSON.parse(body) : {};
+      const form = payload.form || {};
+      const fields = payload.fields || {};
+      const googleFormActionUrl = payload.googleFormActionUrl || "";
+      const lang = payload.lang === "fr" ? "fr" : "en";
+
+      if (!googleFormActionUrl || !googleFormActionUrl.startsWith("https://docs.google.com/forms/")) {
+        return sendJson(res, 400, { error: "Invalid Google Form action URL." });
+      }
+
+      const params = new URLSearchParams();
+      Object.entries(fields).forEach(([key, entryId]) => {
+        if (!entryId) return;
+        const value = form[key];
+        if (Array.isArray(value)) {
+          value.filter(Boolean).forEach((item) => params.append(entryId, item));
+        } else if (value) {
+          params.append(entryId, value);
+        }
+      });
+
+      const formResponse = await fetch(googleFormActionUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString()
+      });
+
+      if (!formResponse.ok) {
+        return sendJson(res, 502, { error: "Google Form submission failed." });
+      }
+
+      const name = form.entrant_name_dob || "";
+      const email = form.email || "";
+      const formSummary = Object.entries(form)
+        .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(", ") : value}`)
+        .join("\n");
+
+      let emailStatus = "skipped";
+      try {
+        const emailResult = await sendConfirmationEmail({
+          to: email,
+          name,
+          lang,
+          formSummary
+        });
+        emailStatus = emailResult.status;
+      } catch (error) {
+        emailStatus = "failed";
+      }
+
+      return sendJson(res, 200, {
+        status: "ok",
+        formStatus: "submitted",
+        emailStatus
+      });
     } catch (error) {
       return sendJson(res, 500, { error: error.message || "Server error." });
     }
