@@ -27,12 +27,26 @@ const MIME_TYPES = {
   ".woff2": "font/woff2"
 };
 
-const sendJson = (res, statusCode, payload) => {
+const getCorsOrigin = (req) => {
+  const origin = req?.headers?.origin;
+  if (!origin) return "*";
+  return origin;
+};
+
+const getCorsHeaders = (req) => {
+  const allowHeaders = req?.headers?.["access-control-request-headers"];
+  return {
+    "Access-Control-Allow-Origin": getCorsOrigin(req),
+    "Access-Control-Allow-Headers": allowHeaders || "Content-Type",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    Vary: "Origin"
+  };
+};
+
+const sendJson = (req, res, statusCode, payload) => {
   res.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+    ...getCorsHeaders(req)
   });
   res.end(JSON.stringify(payload));
 };
@@ -139,16 +153,16 @@ const server = http.createServer(async (req, res) => {
 
   if (requestUrl.pathname === "/api/health") {
     if (req.method === "OPTIONS") {
-      return sendJson(res, 204, {});
+      return sendJson(req, res, 204, {});
     }
     if (req.method !== "GET") {
-      return sendJson(res, 405, { error: "Method not allowed." });
+      return sendJson(req, res, 405, { error: "Method not allowed." });
     }
 
     const isOpenAI = AI_PROVIDER === "openai";
     const isOpenRouter = AI_PROVIDER === "openrouter";
     if (!isOpenAI && !isOpenRouter) {
-      return sendJson(res, 500, {
+      return sendJson(req, res, 500, {
         status: "error",
         configured: false,
         message: "Invalid AI_PROVIDER. Use openrouter or openai."
@@ -161,7 +175,7 @@ const server = http.createServer(async (req, res) => {
       ? "ready"
       : `Missing ${isOpenAI ? "OPENAI_API_KEY" : "OPENROUTER_API_KEY"}.`;
 
-    return sendJson(res, 200, {
+    return sendJson(req, res, 200, {
       status: configured ? "ok" : "error",
       provider: isOpenAI ? "openai" : "openrouter",
       model,
@@ -173,23 +187,23 @@ const server = http.createServer(async (req, res) => {
 
   if (requestUrl.pathname === "/api/chat") {
     if (req.method === "OPTIONS") {
-      return sendJson(res, 204, {});
+      return sendJson(req, res, 204, {});
     }
 
     if (req.method !== "POST") {
-      return sendJson(res, 405, { error: "Method not allowed." });
+      return sendJson(req, res, 405, { error: "Method not allowed." });
     }
 
     const isOpenAI = AI_PROVIDER === "openai";
     const isOpenRouter = AI_PROVIDER === "openrouter";
     if (!isOpenAI && !isOpenRouter) {
-      return sendJson(res, 500, { error: "Invalid AI_PROVIDER. Use openrouter or openai." });
+      return sendJson(req, res, 500, { error: "Invalid AI_PROVIDER. Use openrouter or openai." });
     }
     if (isOpenRouter && !OPENROUTER_API_KEY) {
-      return sendJson(res, 500, { error: "Missing OPENROUTER_API_KEY." });
+      return sendJson(req, res, 500, { error: "Missing OPENROUTER_API_KEY." });
     }
     if (isOpenAI && !OPENAI_API_KEY) {
-      return sendJson(res, 500, { error: "Missing OPENAI_API_KEY." });
+      return sendJson(req, res, 500, { error: "Missing OPENAI_API_KEY." });
     }
 
     try {
@@ -237,29 +251,29 @@ const server = http.createServer(async (req, res) => {
       const providerData = await providerResponse.json();
       if (!providerResponse.ok) {
         const providerName = isOpenAI ? "OpenAI" : "OpenRouter";
-        return sendJson(res, providerResponse.status, {
+        return sendJson(req, res, providerResponse.status, {
           error: providerData.error?.message || `${providerName} request failed.`
         });
       }
 
       const reply = providerData.choices?.[0]?.message?.content?.trim();
       if (!reply) {
-        return sendJson(res, 502, { error: "No response content received." });
+        return sendJson(req, res, 502, { error: "No response content received." });
       }
 
-      return sendJson(res, 200, { reply });
+      return sendJson(req, res, 200, { reply });
     } catch (error) {
-      return sendJson(res, 500, { error: error.message || "Server error." });
+      return sendJson(req, res, 500, { error: error.message || "Server error." });
     }
   }
 
   if (requestUrl.pathname === "/api/register") {
     if (req.method === "OPTIONS") {
-      return sendJson(res, 204, {});
+      return sendJson(req, res, 204, {});
     }
 
     if (req.method !== "POST") {
-      return sendJson(res, 405, { error: "Method not allowed." });
+      return sendJson(req, res, 405, { error: "Method not allowed." });
     }
 
     try {
@@ -271,7 +285,7 @@ const server = http.createServer(async (req, res) => {
       const lang = payload.lang === "fr" ? "fr" : "en";
 
       if (!googleFormActionUrl || !googleFormActionUrl.startsWith("https://docs.google.com/forms/")) {
-        return sendJson(res, 400, { error: "Invalid Google Form action URL." });
+        return sendJson(req, res, 400, { error: "Invalid Google Form action URL." });
       }
 
       const params = new URLSearchParams();
@@ -285,14 +299,21 @@ const server = http.createServer(async (req, res) => {
         }
       });
 
-      const formResponse = await fetch(googleFormActionUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString()
-      });
-
-      if (!formResponse.ok) {
-        return sendJson(res, 502, { error: "Google Form submission failed." });
+      let formStatus = "submitted";
+      let formError = "";
+      try {
+        const formResponse = await fetch(googleFormActionUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: params.toString()
+        });
+        if (!formResponse.ok) {
+          formStatus = "failed";
+          formError = `Google Form submission failed (${formResponse.status}).`;
+        }
+      } catch (error) {
+        formStatus = "failed";
+        formError = error.message || "Google Form submission failed.";
       }
 
       const name = form.entrant_name_dob || "";
@@ -314,13 +335,14 @@ const server = http.createServer(async (req, res) => {
         emailStatus = "failed";
       }
 
-      return sendJson(res, 200, {
+      return sendJson(req, res, 200, {
         status: "ok",
-        formStatus: "submitted",
+        formStatus,
+        ...(formError ? { formError } : {}),
         emailStatus
       });
     } catch (error) {
-      return sendJson(res, 500, { error: error.message || "Server error." });
+      return sendJson(req, res, 500, { error: error.message || "Server error." });
     }
   }
 

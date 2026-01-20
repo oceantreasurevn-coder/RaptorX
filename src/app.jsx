@@ -119,6 +119,7 @@
                     success: "Submitted successfully",
                     successEmail: "Submitted. Confirmation email sent.",
                     successSaved: "Submitted. Email confirmation not configured.",
+                    fallback: "Submitted. If you don't receive a confirmation, open the Google Form.",
                     error: "Submission failed. Please try again."
                 },
                 registerSurvey: {
@@ -226,6 +227,7 @@
                     success: "Envoyé avec succès",
                     successEmail: "Envoyé. Email de confirmation envoyé.",
                     successSaved: "Envoyé. Email de confirmation non configuré.",
+                    fallback: "Envoyé. Si vous ne recevez pas de confirmation, ouvrez le Google Form.",
                     error: "Échec de l'envoi. Réessayez."
                 },
                 registerSurvey: {
@@ -309,7 +311,7 @@
                 { id: "experience", name: "experience", type: "single", question: "Skateboarding experience", options: ["Beginner", "Intermediate", "Advanced", "Pro"], required: true },
                 { id: "board-types", name: "board_types", type: "multi", question: "Types of skateboards owned", options: ["Street", "Cruiser", "Longboard", "Freestyle", "Downhill", "Electric", "Other"] },
                 { id: "favorite-pros", name: "favorite_pros", type: "text", question: "Favorite professional skateboarders", placeholder: "Names" },
-                { id: "phone", name: "phone", type: "tel", question: "Phone number (work/home/mobile + preferred method)", placeholder: "+33 ... (preferred contact)" },
+                { id: "phone", name: "phone", type: "tel", question: "Phone number (work/home/mobile + preferred method)", placeholder: "(+44) ... (preferred contact)" },
                 { id: "email", name: "email", type: "email", question: "Email address of the main entrant", placeholder: "name@email.com" },
                 { id: "address", name: "address", type: "textarea", question: "Home address of main entrant", placeholder: "Street, City, Postal code, Country" }
             ],
@@ -323,7 +325,7 @@
                 { id: "experience", name: "experience", type: "single", question: "Expérience en skateboard", options: [{ label: "Débutant", value: "Beginner" }, { label: "Intermédiaire", value: "Intermediate" }, { label: "Avancé", value: "Advanced" }, { label: "Pro", value: "Pro" }], required: true },
                 { id: "board-types", name: "board_types", type: "multi", question: "Types de skateboards possédés", options: [{ label: "Street", value: "Street" }, { label: "Cruiser", value: "Cruiser" }, { label: "Longboard", value: "Longboard" }, { label: "Freestyle", value: "Freestyle" }, { label: "Downhill", value: "Downhill" }, { label: "Électrique", value: "Electric" }, { label: "Autre", value: "Other" }] },
                 { id: "favorite-pros", name: "favorite_pros", type: "text", question: "Skateurs professionnels favoris", placeholder: "Noms" },
-                { id: "phone", name: "phone", type: "tel", question: "Numéro de téléphone (pro/domicile/mobile + méthode préférée)", placeholder: "+33 ... (contact préféré)" },
+                { id: "phone", name: "phone", type: "tel", question: "Numéro de téléphone (pro/domicile/mobile + méthode préférée)", placeholder: "(+44) ... (contact préféré)" },
                 { id: "email", name: "email", type: "email", question: "Adresse email du participant principal", placeholder: "nom@email.com" },
                 { id: "address", name: "address", type: "textarea", question: "Adresse postale du participant principal", placeholder: "Rue, Ville, Code postal, Pays" }
             ]
@@ -730,6 +732,9 @@
             };
             const apiBase = useMemo(() => {
                 if (typeof window === "undefined") return "";
+                const params = new URLSearchParams(window.location.search);
+                const paramBase = params.get("apiBase");
+                if (paramBase && paramBase.trim()) return paramBase.trim();
                 const metaBase = document.querySelector('meta[name="raptor-api-base"]')?.getAttribute("content");
                 if (metaBase && metaBase.trim()) return metaBase.trim();
                 const origin = window.location.origin;
@@ -738,11 +743,26 @@
                 if (hostname === "localhost" || hostname === "127.0.0.1") return origin;
                 return `https://api.${hostname}`;
             }, []);
-            const fallbackApiBase = "https://raptorx-api.onrender.com";
+            const fallbackApiBase = "https://raptorx.onrender.com";
             const apiBases = [apiBase, fallbackApiBase].filter(Boolean).filter((value, index, array) => array.indexOf(value) === index);
             const buildApiUrl = (base, path) => (base ? `${base}${path}` : path);
-            const chatApiUrls = apiBases.length ? apiBases.map((base) => buildApiUrl(base, "/api/chat")) : ["/api/chat"];
-            const healthApiUrls = apiBases.length ? apiBases.map((base) => buildApiUrl(base, "/api/health")) : ["/api/health"];
+            const uniqueUrls = (urls) => urls.filter((value, index, array) => array.indexOf(value) === index);
+            const chatApiUrls = uniqueUrls([
+                ...apiBases.map((base) => buildApiUrl(base, "/api/chat")),
+                "/api/chat"
+            ]);
+            const healthApiUrls = uniqueUrls([
+                ...apiBases.map((base) => buildApiUrl(base, "/api/health")),
+                "/api/health"
+            ]);
+            const MAX_CONTEXT_CHARS = 12000;
+            const CHAT_TIMEOUT_MS = 20000;
+            const HEALTH_TIMEOUT_MS = 12000;
+            const trimContext = (value) => {
+                if (!value) return "";
+                if (value.length <= MAX_CONTEXT_CHARS) return value;
+                return `${value.slice(0, MAX_CONTEXT_CHARS)}\n[Context trimmed]`;
+            };
 
             const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
             const fetchWithTimeout = async (url, options, timeoutMs = 8000) => {
@@ -763,7 +783,7 @@
             const checkHealth = async () => {
                 for (const url of healthApiUrls) {
                     try {
-                        const response = await fetchWithTimeout(url, { method: "GET" }, 4000);
+                        const response = await fetchWithTimeout(url, { method: "GET" }, HEALTH_TIMEOUT_MS);
                         const data = await response.json().catch(() => ({}));
                         if (!response.ok) {
                             throw new Error(data.error || "Health check failed.");
@@ -792,13 +812,13 @@
                 updateStatusFromHealth(health);
                 return health;
             };
-            const fetchWithRetry = async (url, options, attempts = 3) => {
+            const fetchWithRetry = async (url, options, attempts = 3, timeoutMs = 10000) => {
                 const urls = Array.isArray(url) ? url : [url];
                 let lastError = null;
                 for (const currentUrl of urls) {
                     for (let attempt = 0; attempt < attempts; attempt += 1) {
                         try {
-                            const response = await fetchWithTimeout(currentUrl, options, 10000);
+                            const response = await fetchWithTimeout(currentUrl, options, timeoutMs);
                             const data = await response.json().catch(() => ({}));
                             if (!response.ok) {
                                 throw new Error(data.error || "Chat request failed.");
@@ -920,7 +940,9 @@
                 if (normalized.includes("timed out") || normalized.includes("aborted")) return "Request timed out. Please try again.";
                 const isNetworkError = normalized.includes("failed to fetch") || normalized.includes("network") || normalized.includes("offline");
                 if (isNetworkError || !rawMessage) return t.chat.error;
-                return rawMessage;
+                // If backend provides a more specific error, show it
+                if (rawMessage && rawMessage !== t.chat.error) return rawMessage;
+                return t.chat.error;
             };
 
             const sendMessage = async (text) => {
@@ -939,12 +961,11 @@
                     .slice(-12);
 
                 try {
-                    const siteContext = buildSiteContext();
+                    const siteContext = trimContext(buildSiteContext());
                     const data = await fetchWithRetry(chatApiUrls, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ messages: history, lang, siteContext })
-                    });
+                    }, 3, CHAT_TIMEOUT_MS);
                     if (!data.reply) {
                         throw new Error("Chat response missing.");
                     }
@@ -1432,7 +1453,7 @@
             const [lang, setLang] = useState('en');
             const [showSuccess, setShowSuccess] = useState(false);
             const [isMobileView, setIsMobileView] = useState(false);
-            const [registerStatus, setRegisterStatus] = useState({ state: "idle", message: "" });
+            const [registerStatus, setRegisterStatus] = useState({ state: "idle", message: "", link: "" });
             const [isRegisterSending, setIsRegisterSending] = useState(false);
             
             const t = translations[lang];
@@ -1499,6 +1520,9 @@
 
             const resolveApiBase = () => {
                 if (typeof window === "undefined") return "";
+                const params = new URLSearchParams(window.location.search);
+                const paramBase = params.get("apiBase");
+                if (paramBase && paramBase.trim()) return paramBase.trim();
                 const metaBase = document.querySelector('meta[name="raptor-api-base"]')?.getAttribute("content");
                 if (metaBase && metaBase.trim()) return metaBase.trim();
                 const origin = window.location.origin;
@@ -1512,10 +1536,11 @@
                 event.preventDefault();
                 if (isRegisterSending) return;
 
+                const formElement = event.currentTarget;
                 setIsRegisterSending(true);
-                setRegisterStatus({ state: "sending", message: t.register.sending });
+                setRegisterStatus({ state: "sending", message: t.register.sending, link: "" });
 
-                const formData = new FormData(event.currentTarget);
+                const formData = new FormData(formElement);
                 const formPayload = {};
                 Object.keys(GOOGLE_FORM_FIELDS).forEach((key) => {
                     const values = formData.getAll(key).filter(Boolean);
@@ -1548,12 +1573,23 @@
                     if (!response.ok) {
                         throw new Error(data.error || t.register.error);
                     }
+                    const formStatus = data.formStatus || "submitted";
+                    const formFailed = formStatus !== "submitted";
                     let message = t.register.success;
-                    if (data.emailStatus === "sent") message = t.register.successEmail;
-                    if (data.emailStatus === "skipped") message = t.register.successSaved;
-                    setRegisterStatus({ state: "success", message });
-                    setShowSuccess(true);
-                    event.currentTarget.reset();
+                    let link = "";
+                    if (formFailed) {
+                        message = t.register.fallback;
+                        link = GOOGLE_FORM_URL;
+                    } else if (data.emailStatus === "sent") {
+                        message = t.register.successEmail;
+                    } else if (data.emailStatus === "skipped") {
+                        message = t.register.successSaved;
+                    }
+                    setRegisterStatus({ state: formFailed ? "warning" : "success", message, link });
+                    if (!formFailed) {
+                        setShowSuccess(true);
+                        formElement.reset();
+                    }
                 } catch (error) {
                     if (GOOGLE_FORM_READY) {
                         try {
@@ -1562,14 +1598,12 @@
                                 mode: "no-cors",
                                 body: googleData
                             });
-                            setRegisterStatus({ state: "success", message: t.register.successSaved });
-                            setShowSuccess(true);
-                            event.currentTarget.reset();
                         } catch (fallbackError) {
-                            setRegisterStatus({ state: "error", message: t.register.error });
+                            // Fall back to showing the Google Form link regardless of POST outcome.
                         }
+                        setRegisterStatus({ state: "warning", message: t.register.fallback, link: GOOGLE_FORM_URL });
                     } else {
-                        setRegisterStatus({ state: "error", message: error?.message || t.register.error });
+                        setRegisterStatus({ state: "warning", message: t.register.fallback, link: GOOGLE_FORM_URL });
                     }
                 } finally {
                     setIsRegisterSending(false);
@@ -2345,6 +2379,18 @@
                                                             required={item.required}
                                                             className="w-full rounded-2xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-yellow-400 focus:outline-none"
                                                         />
+                                                    ) : item.type === "tel" ? (
+                                                        <input
+                                                            type="tel"
+                                                            inputMode="tel"
+                                                            pattern="^\\+?\\d{6,15}$"
+                                                            name={item.name}
+                                                            placeholder={item.placeholder || ""}
+                                                            required={item.required}
+                                                            autoComplete="tel"
+                                                            aria-label={item.question}
+                                                            className="w-full rounded-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-yellow-400 focus:outline-none"
+                                                        />
                                                     ) : (
                                                         <input
                                                             type={item.type || "text"}
@@ -2366,11 +2412,21 @@
                                         {isRegisterSending ? t.register.sending : t.register.button}
                                     </button>
                                     {registerStatus.state !== "idle" && (
-                                        <p
+                                        <div
                                             className={`text-sm text-center ${registerStatus.state === "error" ? 'text-red-400' : registerStatus.state === "success" ? 'text-emerald-300' : 'text-yellow-300'}`}
                                         >
-                                            {registerStatus.message}
-                                        </p>
+                                            <p>{registerStatus.message}</p>
+                                            {registerStatus.link && (
+                                                <a
+                                                    href={registerStatus.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="mt-2 inline-flex items-center justify-center rounded-full border border-yellow-400/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-200 transition hover:border-yellow-300 hover:text-yellow-100"
+                                                >
+                                                    {t.form.open}
+                                                </a>
+                                            )}
+                                        </div>
                                     )}
                                 </form>
                             </RevealOnScroll>
@@ -2385,7 +2441,7 @@
                                 <div className="success-orbit"></div>
                                 <div className="success-pop">
                                     <div className="success-pop-inner font-graffiti">
-                                        {t.register.success}
+                                        {registerStatus.message || t.register.success}
                                     </div>
                                     <button type="button" onClick={() => setShowSuccess(false)} className="mt-4 mx-auto flex items-center justify-center px-6 py-2 text-xs font-bold uppercase tracking-[0.3em] text-black bg-yellow-400 rounded-full shadow-[0_12px_30px_rgba(255,214,0,0.35)] hover:bg-yellow-300 transition-colors">
                                         {t.ui.close}
