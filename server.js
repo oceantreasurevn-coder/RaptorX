@@ -12,6 +12,7 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM = process.env.RESEND_FROM;
 const RESEND_REPLY_TO = process.env.RESEND_REPLY_TO;
+const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -64,6 +65,23 @@ const readRequestBody = (req) =>
     req.on("end", () => resolve(body));
     req.on("error", reject);
   });
+
+const submitToGoogleScript = async (payload) => {
+  if (!GOOGLE_SCRIPT_URL) {
+    return { status: "skipped" };
+  }
+
+  const response = await fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || "Google Sheet sync failed.");
+  }
+  return data;
+};
 
 const buildSystemPrompt = (language, siteContext) => `You are the RAPTOR [X] brand concierge for street skateboarding.
 Stay professional, smooth, and confident. Focus on skateboarding, street culture, streetwear, gear setups, and RAPTOR [X] brand drops.
@@ -284,10 +302,6 @@ const server = http.createServer(async (req, res) => {
       const googleFormActionUrl = payload.googleFormActionUrl || "";
       const lang = payload.lang === "fr" ? "fr" : "en";
 
-      if (!googleFormActionUrl || !googleFormActionUrl.startsWith("https://docs.google.com/forms/")) {
-        return sendJson(req, res, 400, { error: "Invalid Google Form action URL." });
-      }
-
       const params = new URLSearchParams();
       Object.entries(fields).forEach(([key, entryId]) => {
         if (!entryId) return;
@@ -301,15 +315,32 @@ const server = http.createServer(async (req, res) => {
 
       let formStatus = "submitted";
       let formError = "";
+      let formTarget = "google_form";
       try {
-        const formResponse = await fetch(googleFormActionUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: params.toString()
-        });
-        if (!formResponse.ok) {
-          formStatus = "failed";
-          formError = `Google Form submission failed (${formResponse.status}).`;
+        if (GOOGLE_SCRIPT_URL) {
+          formTarget = "google_script";
+          await submitToGoogleScript({
+            form,
+            lang,
+            source: "raptorx-site",
+            meta: {
+              origin: req.headers.origin || "",
+              userAgent: req.headers["user-agent"] || ""
+            }
+          });
+        } else {
+          if (!googleFormActionUrl || !googleFormActionUrl.startsWith("https://docs.google.com/forms/")) {
+            return sendJson(req, res, 400, { error: "Invalid Google Form action URL." });
+          }
+          const formResponse = await fetch(googleFormActionUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
+          });
+          if (!formResponse.ok) {
+            formStatus = "failed";
+            formError = `Google Form submission failed (${formResponse.status}).`;
+          }
         }
       } catch (error) {
         formStatus = "failed";
@@ -338,6 +369,7 @@ const server = http.createServer(async (req, res) => {
       return sendJson(req, res, 200, {
         status: "ok",
         formStatus,
+        formTarget,
         ...(formError ? { formError } : {}),
         emailStatus
       });

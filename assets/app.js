@@ -1581,6 +1581,33 @@ const ChatbotWidget = ({
     if (rawMessage && rawMessage !== t.chat.error) return rawMessage;
     return t.chat.error;
   };
+  const normalizeQuestion = value => (value || "").toLowerCase().replace(/\s+/g, " ").trim();
+  const resolveImageUrl = src => {
+    if (!src) return "";
+    if (/^https?:\/\//i.test(src)) return src;
+    if (typeof window === "undefined") return src;
+    const origin = window.location.origin;
+    if (src.startsWith("/")) return `${origin}${src}`;
+    return `${origin}/${src}`;
+  };
+  const isGearGuideQuestion = value => normalizeQuestion(value) === "streetwear fit guide for raptor [x] drops";
+  const buildGearGuideReply = () => {
+    const imageLines = gear.map(item => resolveImageUrl(item.image)).filter(Boolean).map(url => `Image: ${url}`);
+    const intro = lang === "fr" ? "Voici tous les produits de la section Gear avec leurs informations complètes :" : "Here are all products in the Gear section with full details:";
+    const labelPrice = lang === "fr" ? "Prix" : "Price";
+    const labelBadge = lang === "fr" ? "Badge" : "Badge";
+    const labelDetails = lang === "fr" ? "Détails" : "Details";
+    const items = gear.map((item, index) => {
+      const name = localizeValue(item.name);
+      const sub = localizeValue(item.sub);
+      const description = localizeValue(item.description);
+      const badge = localizeValue(item.badge);
+      const price = item.price || "";
+      const lines = [`${index + 1}) ${name}${sub ? ` — ${sub}` : ""}`, price ? `${labelPrice}: ${price}` : "", badge ? `${labelBadge}: ${badge}` : "", description ? `${labelDetails}: ${description}` : ""].filter(Boolean);
+      return lines.join("\n");
+    });
+    return [...imageLines, "", intro, "", ...items].filter(Boolean).join("\n");
+  };
   const sendMessage = async text => {
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
@@ -1592,6 +1619,21 @@ const ChatbotWidget = ({
     setInput("");
     setIsSending(true);
     setRobotMood("cute");
+    if (isGearGuideQuestion(trimmed)) {
+      const reply = buildGearGuideReply();
+      setChatStatus({
+        state: "online",
+        message: ""
+      });
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: reply
+      }]);
+      setRobotMood(getExpressionFromReply(reply));
+      setShowOfflineBanner(false);
+      setIsSending(false);
+      return;
+    }
     const history = [...messages, userMessage].filter(item => item && typeof item.content === "string").map(item => ({
       role: item.role,
       content: item.content
