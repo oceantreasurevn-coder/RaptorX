@@ -1807,7 +1807,7 @@
                 desc: partContent.deck.desc, 
                 icon: <Zap size={16} />,
                 anchor: { x: -40, y: -120, z: 10 }, 
-                pos: { x: -180, y: -160, z: 50 },   
+                pos: { x: -240, y: -180, z: 50 },   
                 },
                 { 
                 id: 'trucks', 
@@ -1815,7 +1815,7 @@
                 desc: partContent.trucks.desc, 
                 icon: <Droplet size={16} />,
                 anchor: { x: 50, y: 50, z: 20 }, 
-                pos: { x: 200, y: 0, z: 80 },
+                pos: { x: 260, y: -10, z: 80 },
                 },
                 { 
                 id: 'wheels', 
@@ -1823,7 +1823,7 @@
                 desc: partContent.wheels.desc, 
                 icon: <Scale size={16} />,
                 anchor: { x: 80, y: 100, z: 20 }, 
-                pos: { x: 200, y: 160, z: 20 },
+                pos: { x: 260, y: 190, z: 20 },
                 },
             ];
 
@@ -1850,9 +1850,9 @@
             }, []);
 
             const mobileLayout = {
-                deck: { anchor: { x: 10, y: -80 }, pos: { x: 60, y: -140 } },
-                trucks: { anchor: { x: 30, y: -20 }, pos: { x: 0, y: -70 } },
-                wheels: { anchor: { x: 40, y: 40 }, pos: { x: 0, y: 80 } },
+                deck: { anchor: { x: 10, y: -80 }, pos: { x: 90, y: -150 } },
+                trucks: { anchor: { x: 30, y: -20 }, pos: { x: 70, y: -80 } },
+                wheels: { anchor: { x: 40, y: 40 }, pos: { x: 80, y: 110 } },
                 grip: { anchor: { x: -30, y: 90 }, pos: { x: 0, y: 190 } }
             };
 
@@ -2410,6 +2410,16 @@
             );
 
             const registerReplyPayload = { type: "registerForm" };
+            const eventHighlightsQuestionKeys = new Set([
+                "event schedule highlights",
+                "temps forts du programme"
+            ]);
+
+            const isEventHighlightsQuestion = (value) => (
+                eventHighlightsQuestionKeys.has(normalizeQuestionKey(value))
+            );
+
+            const eventHighlightsPayload = { type: "eventHighlights" };
 
             const sendMessage = async (text) => {
                 const trimmed = text.trim();
@@ -2424,6 +2434,15 @@
                 if (isRegisterQuestion(trimmed)) {
                     setChatStatus({ state: "online", message: "" });
                     setMessages((prev) => [...prev, { role: "assistant", content: registerReplyPayload }]);
+                    setRobotMood("happy");
+                    setShowOfflineBanner(false);
+                    setIsSending(false);
+                    return;
+                }
+
+                if (isEventHighlightsQuestion(trimmed)) {
+                    setChatStatus({ state: "online", message: "" });
+                    setMessages((prev) => [...prev, { role: "assistant", content: eventHighlightsPayload }]);
                     setRobotMood("happy");
                     setShowOfflineBanner(false);
                     setIsSending(false);
@@ -2653,6 +2672,34 @@
                 content && typeof content === "object" && content.type === "registerForm"
             );
 
+            const isEventHighlightsMessage = (content) => (
+                content && typeof content === "object" && content.type === "eventHighlights"
+            );
+
+            const eventLocations = [
+                {
+                    id: "southbank",
+                    name: "Southbank Centre Skate Space",
+                    address: "London • Belvedere Rd, SE1 8XX",
+                    mapTitle: "Southbank Centre Skate Space",
+                    mapSrc: "https://www.google.com/maps?q=Southbank%20Centre%20Skate%20Space%20Belvedere%20Rd%20SE1%208XX&output=embed"
+                },
+                {
+                    id: "dean-lane",
+                    name: "Dean Lane Skatepark",
+                    address: "Bristol • The Deaner",
+                    mapTitle: "Dean Lane Skatepark",
+                    mapSrc: "https://www.google.com/maps?q=Dean%20Lane%20Skatepark%20Bristol&output=embed"
+                },
+                {
+                    id: "projekts",
+                    name: "Projekts MCR Skatepark",
+                    address: "Manchester • Indoor park",
+                    mapTitle: "Projekts MCR Skatepark",
+                    mapSrc: "https://www.google.com/maps?q=Projekts%20MCR%20Skatepark%20Manchester&output=embed"
+                }
+            ];
+
             const ChatRegisterForm = ({ formId }) => {
                 const idPrefix = `chat-${formId}`;
                 const statusTone = registerStatus.state === "success"
@@ -2767,9 +2814,64 @@
                 );
             };
 
+            const ChatEventHighlights = () => {
+                const locationsTitle = lang === "fr" ? "Lieux des événements" : "Event Locations";
+                return (
+                    <div className="space-y-4">
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">{t.timeline.title}</p>
+                            <div className="mt-3 space-y-3">
+                                {t.schedule.map((day, dayIndex) => (
+                                    <div key={`day-${dayIndex}`} className="rounded-2xl border border-black/10 bg-white p-3">
+                                        <p className="text-xs font-black uppercase tracking-[0.3em] text-black">{day.date}</p>
+                                        <div className="mt-3 space-y-2">
+                                            {day.events.map((event, eventIndex) => {
+                                                const description = getLocalized(event.desc);
+                                                return (
+                                                    <div key={`event-${dayIndex}-${eventIndex}`} className="rounded-xl border border-black/5 bg-gray-50 px-3 py-2">
+                                                        <p className="text-xs font-bold font-mono text-gray-500">{event.time}</p>
+                                                        <p className="text-sm font-bold text-black">{event.title}</p>
+                                                        {description && (
+                                                            <p className="text-xs text-gray-600 mt-1">{description}</p>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">{locationsTitle}</p>
+                            <div className="mt-3 space-y-3">
+                                {eventLocations.map((location) => (
+                                    <div key={location.id} className="rounded-2xl border border-black/10 bg-white p-3">
+                                        <div>
+                                            <p className="text-sm font-bold text-black">{location.name}</p>
+                                            <p className="text-xs text-gray-600 mt-1">{location.address}</p>
+                                        </div>
+                                        <iframe
+                                            title={location.mapTitle}
+                                            src={location.mapSrc}
+                                            style={{ marginTop: "10px", width: "100%", height: "180px", border: 0, borderRadius: "12px" }}
+                                            loading="lazy"
+                                            referrerPolicy="no-referrer-when-downgrade"
+                                        ></iframe>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
             const renderAssistantContent = (content, messageIndex) => {
                 if (isRegisterFormMessage(content)) {
                     return <ChatRegisterForm formId={messageIndex} />;
+                }
+                if (isEventHighlightsMessage(content)) {
+                    return <ChatEventHighlights />;
                 }
                 if (typeof content !== "string") return null;
                 return renderChatMessage(content);
@@ -2808,10 +2910,11 @@
                             </div>
                             <div ref={messagesRef} className="max-h-[420px] sm:max-h-[520px] overflow-y-auto px-4 py-4 space-y-3 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]">
                                 {messages.map((message, index) => {
-                                    const isRegisterContent = message.role === "assistant" && isRegisterFormMessage(message.content);
+                                    const isRichAssistantContent = message.role === "assistant"
+                                        && (isRegisterFormMessage(message.content) || isEventHighlightsMessage(message.content));
                                     return (
                                         <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`chat-message ${isRegisterContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
+                                            <div className={`chat-message ${isRichAssistantContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
                                                 {message.role === 'user' ? renderChatBrand(message.content) : renderAssistantContent(message.content, index)}
                                             </div>
                                         </div>
@@ -4124,6 +4227,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260120-9" defer></script>
+    <script src="assets/app.js?v=20260120-11" defer></script>
 </body>
 </html>

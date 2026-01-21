@@ -969,8 +969,8 @@ const ProductBlueprint = ({
       z: 10
     },
     pos: {
-      x: -180,
-      y: -160,
+      x: -240,
+      y: -180,
       z: 50
     }
   }, {
@@ -986,8 +986,8 @@ const ProductBlueprint = ({
       z: 20
     },
     pos: {
-      x: 200,
-      y: 0,
+      x: 260,
+      y: -10,
       z: 80
     }
   }, {
@@ -1003,8 +1003,8 @@ const ProductBlueprint = ({
       z: 20
     },
     pos: {
-      x: 200,
-      y: 160,
+      x: 260,
+      y: 190,
       z: 20
     }
   }];
@@ -1035,8 +1035,8 @@ const ProductBlueprint = ({
         y: -80
       },
       pos: {
-        x: 60,
-        y: -140
+        x: 90,
+        y: -150
       }
     },
     trucks: {
@@ -1045,8 +1045,8 @@ const ProductBlueprint = ({
         y: -20
       },
       pos: {
-        x: 0,
-        y: -70
+        x: 70,
+        y: -80
       }
     },
     wheels: {
@@ -1055,8 +1055,8 @@ const ProductBlueprint = ({
         y: 40
       },
       pos: {
-        x: 0,
-        y: 80
+        x: 80,
+        y: 110
       }
     },
     grip: {
@@ -1632,6 +1632,11 @@ const ChatbotWidget = ({
   const registerReplyPayload = {
     type: "registerForm"
   };
+  const eventHighlightsQuestionKeys = new Set(["event schedule highlights", "temps forts du programme"]);
+  const isEventHighlightsQuestion = value => eventHighlightsQuestionKeys.has(normalizeQuestionKey(value));
+  const eventHighlightsPayload = {
+    type: "eventHighlights"
+  };
   const sendMessage = async text => {
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
@@ -1651,6 +1656,20 @@ const ChatbotWidget = ({
       setMessages(prev => [...prev, {
         role: "assistant",
         content: registerReplyPayload
+      }]);
+      setRobotMood("happy");
+      setShowOfflineBanner(false);
+      setIsSending(false);
+      return;
+    }
+    if (isEventHighlightsQuestion(trimmed)) {
+      setChatStatus({
+        state: "online",
+        message: ""
+      });
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: eventHighlightsPayload
       }]);
       setRobotMood("happy");
       setShowOfflineBanner(false);
@@ -1888,6 +1907,26 @@ const ChatbotWidget = ({
     return items;
   };
   const isRegisterFormMessage = content => content && typeof content === "object" && content.type === "registerForm";
+  const isEventHighlightsMessage = content => content && typeof content === "object" && content.type === "eventHighlights";
+  const eventLocations = [{
+    id: "southbank",
+    name: "Southbank Centre Skate Space",
+    address: "London • Belvedere Rd, SE1 8XX",
+    mapTitle: "Southbank Centre Skate Space",
+    mapSrc: "https://www.google.com/maps?q=Southbank%20Centre%20Skate%20Space%20Belvedere%20Rd%20SE1%208XX&output=embed"
+  }, {
+    id: "dean-lane",
+    name: "Dean Lane Skatepark",
+    address: "Bristol • The Deaner",
+    mapTitle: "Dean Lane Skatepark",
+    mapSrc: "https://www.google.com/maps?q=Dean%20Lane%20Skatepark%20Bristol&output=embed"
+  }, {
+    id: "projekts",
+    name: "Projekts MCR Skatepark",
+    address: "Manchester • Indoor park",
+    mapTitle: "Projekts MCR Skatepark",
+    mapSrc: "https://www.google.com/maps?q=Projekts%20MCR%20Skatepark%20Manchester&output=embed"
+  }];
   const ChatRegisterForm = ({
     formId
   }) => {
@@ -1976,11 +2015,66 @@ const ChatbotWidget = ({
       className: "mt-2 inline-flex items-center justify-center rounded-full border border-yellow-400/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-200 transition hover:border-yellow-300 hover:text-yellow-100"
     }, t.form.open))));
   };
+  const ChatEventHighlights = () => {
+    const locationsTitle = lang === "fr" ? "Lieux des événements" : "Event Locations";
+    return /*#__PURE__*/React.createElement("div", {
+      className: "space-y-4"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      className: "text-[10px] font-black uppercase tracking-[0.3em] text-gray-500"
+    }, t.timeline.title), /*#__PURE__*/React.createElement("div", {
+      className: "mt-3 space-y-3"
+    }, t.schedule.map((day, dayIndex) => /*#__PURE__*/React.createElement("div", {
+      key: `day-${dayIndex}`,
+      className: "rounded-2xl border border-black/10 bg-white p-3"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "text-xs font-black uppercase tracking-[0.3em] text-black"
+    }, day.date), /*#__PURE__*/React.createElement("div", {
+      className: "mt-3 space-y-2"
+    }, day.events.map((event, eventIndex) => {
+      const description = getLocalized(event.desc);
+      return /*#__PURE__*/React.createElement("div", {
+        key: `event-${dayIndex}-${eventIndex}`,
+        className: "rounded-xl border border-black/5 bg-gray-50 px-3 py-2"
+      }, /*#__PURE__*/React.createElement("p", {
+        className: "text-xs font-bold font-mono text-gray-500"
+      }, event.time), /*#__PURE__*/React.createElement("p", {
+        className: "text-sm font-bold text-black"
+      }, event.title), description && /*#__PURE__*/React.createElement("p", {
+        className: "text-xs text-gray-600 mt-1"
+      }, description));
+    })))))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      className: "text-[10px] font-black uppercase tracking-[0.3em] text-gray-500"
+    }, locationsTitle), /*#__PURE__*/React.createElement("div", {
+      className: "mt-3 space-y-3"
+    }, eventLocations.map(location => /*#__PURE__*/React.createElement("div", {
+      key: location.id,
+      className: "rounded-2xl border border-black/10 bg-white p-3"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      className: "text-sm font-bold text-black"
+    }, location.name), /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-gray-600 mt-1"
+    }, location.address)), /*#__PURE__*/React.createElement("iframe", {
+      title: location.mapTitle,
+      src: location.mapSrc,
+      style: {
+        marginTop: "10px",
+        width: "100%",
+        height: "180px",
+        border: 0,
+        borderRadius: "12px"
+      },
+      loading: "lazy",
+      referrerPolicy: "no-referrer-when-downgrade"
+    }))))));
+  };
   const renderAssistantContent = (content, messageIndex) => {
     if (isRegisterFormMessage(content)) {
       return /*#__PURE__*/React.createElement(ChatRegisterForm, {
         formId: messageIndex
       });
+    }
+    if (isEventHighlightsMessage(content)) {
+      return /*#__PURE__*/React.createElement(ChatEventHighlights, null);
     }
     if (typeof content !== "string") return null;
     return renderChatMessage(content);
@@ -2035,12 +2129,12 @@ const ChatbotWidget = ({
     ref: messagesRef,
     className: "max-h-[420px] sm:max-h-[520px] overflow-y-auto px-4 py-4 space-y-3 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]"
   }, messages.map((message, index) => {
-    const isRegisterContent = message.role === "assistant" && isRegisterFormMessage(message.content);
+    const isRichAssistantContent = message.role === "assistant" && (isRegisterFormMessage(message.content) || isEventHighlightsMessage(message.content));
     return /*#__PURE__*/React.createElement("div", {
       key: `${message.role}-${index}`,
       className: `flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`
     }, /*#__PURE__*/React.createElement("div", {
-      className: `chat-message ${isRegisterContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`
+      className: `chat-message ${isRichAssistantContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`
     }, message.role === 'user' ? renderChatBrand(message.content) : renderAssistantContent(message.content, index)));
   }), isSending && /*#__PURE__*/React.createElement("div", {
     className: "flex justify-start"
