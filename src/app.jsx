@@ -155,7 +155,6 @@
                         "Best deck size for street skating?",
                         "Wheel hardness for rough Paris streets?",
                         "Streetwear fit guide for RAPTOR [X] drops",
-                        "Ready to Dominate? Limited slots available. Register today to be the first owner.",
                         "Event schedule highlights"
                     ],
                     disclaimer: "Focused on skate, street culture, and RAPTOR [X]."
@@ -264,7 +263,6 @@
                         "Quelle largeur de deck pour le street ?",
                         "Dureté de roues pour les rues parisiennes ?",
                         "Guide fits streetwear pour les drops RAPTOR [X]",
-                        "Prêt à Dominer? Places limitées. Inscrivez-vous aujourd'hui pour être le premier propriétaire.",
                         "Temps forts du programme"
                     ],
                     disclaimer: "Axé sur le skate, la street culture et RAPTOR [X]."
@@ -429,7 +427,7 @@
                 desc: partContent.deck.desc, 
                 icon: <Zap size={16} />,
                 anchor: { x: -40, y: -120, z: 10 }, 
-                pos: { x: -240, y: -180, z: 50 },   
+                pos: { x: -240, y: -220, z: 50 },   
                 },
                 { 
                 id: 'trucks', 
@@ -437,7 +435,7 @@
                 desc: partContent.trucks.desc, 
                 icon: <Droplet size={16} />,
                 anchor: { x: 50, y: 50, z: 20 }, 
-                pos: { x: 260, y: -10, z: 80 },
+                pos: { x: 260, y: -220, z: 80 },
                 },
                 { 
                 id: 'wheels', 
@@ -445,7 +443,7 @@
                 desc: partContent.wheels.desc, 
                 icon: <Scale size={16} />,
                 anchor: { x: 80, y: 100, z: 20 }, 
-                pos: { x: 260, y: 190, z: 20 },
+                pos: { x: 260, y: 220, z: 20 },
                 },
             ];
 
@@ -472,9 +470,9 @@
             }, []);
 
             const mobileLayout = {
-                deck: { anchor: { x: 10, y: -80 }, pos: { x: 90, y: -150 } },
-                trucks: { anchor: { x: 30, y: -20 }, pos: { x: 70, y: -80 } },
-                wheels: { anchor: { x: 40, y: 40 }, pos: { x: 80, y: 110 } },
+                deck: { anchor: { x: 10, y: -80 }, pos: { x: -90, y: -150 } },
+                trucks: { anchor: { x: 30, y: -20 }, pos: { x: 90, y: -150 } },
+                wheels: { anchor: { x: 40, y: 40 }, pos: { x: 90, y: 150 } },
                 grip: { anchor: { x: -30, y: 90 }, pos: { x: 0, y: 190 } }
             };
 
@@ -1024,16 +1022,6 @@
                 return [...imageLines, "", intro, "", ...items].filter(Boolean).join("\n");
             };
 
-            const registerQuestionKeys = new Set([
-                "ready to dominate? limited slots available. register today to be the first owner",
-                "prêt à dominer? places limitées. inscrivez-vous aujourd'hui pour être le premier propriétaire"
-            ]);
-
-            const isRegisterQuestion = (value) => (
-                registerQuestionKeys.has(normalizeQuestionKey(value))
-            );
-
-            const registerReplyPayload = { type: "registerForm" };
             const eventHighlightsQuestionKeys = new Set([
                 "event schedule highlights",
                 "temps forts du programme"
@@ -1054,15 +1042,6 @@
                 setInput("");
                 setIsSending(true);
                 setRobotMood("cute");
-
-                if (isRegisterQuestion(trimmed)) {
-                    setChatStatus({ state: "online", message: "" });
-                    setMessages((prev) => [...prev, { role: "assistant", content: registerReplyPayload }]);
-                    setRobotMood("happy");
-                    setShowOfflineBanner(false);
-                    setIsSending(false);
-                    return;
-                }
 
                 if (isEventHighlightsQuestion(trimmed)) {
                     setChatStatus({ state: "online", message: "" });
@@ -1292,208 +1271,56 @@
                 return items;
             };
 
-            const isRegisterFormMessage = (content) => (
-                content && typeof content === "object" && content.type === "registerForm"
-            );
-
             const isEventHighlightsMessage = (content) => (
                 content && typeof content === "object" && content.type === "eventHighlights"
             );
 
-            const eventLocations = [
-                {
-                    id: "southbank",
-                    name: "Southbank Centre Skate Space",
-                    address: "London • Belvedere Rd, SE1 8XX",
-                    mapTitle: "Southbank Centre Skate Space",
-                    mapSrc: "https://www.google.com/maps?q=Southbank%20Centre%20Skate%20Space%20Belvedere%20Rd%20SE1%208XX&output=embed"
-                },
-                {
-                    id: "dean-lane",
-                    name: "Dean Lane Skatepark",
-                    address: "Bristol • The Deaner",
-                    mapTitle: "Dean Lane Skatepark",
-                    mapSrc: "https://www.google.com/maps?q=Dean%20Lane%20Skatepark%20Bristol&output=embed"
-                },
-                {
-                    id: "projekts",
-                    name: "Projekts MCR Skatepark",
-                    address: "Manchester • Indoor park",
-                    mapTitle: "Projekts MCR Skatepark",
-                    mapSrc: "https://www.google.com/maps?q=Projekts%20MCR%20Skatepark%20Manchester&output=embed"
-                }
-            ];
+            const eventScheduleExcerpt = `
+                <h2>The Event Schedule: UK Roadshow</h2>
+                <p>3 Days. 3 Cities. 1 Vibe. The Scaters team and pro riders are rolling in with demos, meetups, and exclusive drops. Pull up early for the best spots.</p>
 
-            const ChatRegisterForm = ({ formId }) => {
-                const idPrefix = `chat-${formId}`;
-                const statusTone = registerStatus.state === "success"
-                    ? "text-emerald-300"
-                    : registerStatus.state === "warning"
-                        ? "text-yellow-300"
-                        : "text-red-400";
-
-                return (
-                    <div className="space-y-3">
+                <div class="rx-timeline">
+                    <div class="rx-step">
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
-                                {`${t.register.title} ${t.register.sub}`.replace(/\s+/g, " ").trim()}
-                            </p>
-                            <p className="text-xs text-gray-600 mt-2">{t.register.desc}</p>
-                        </div>
-                        <form onSubmit={handleRegisterSubmit} className="space-y-3">
-                            <div className="rounded-2xl border border-black/10 bg-white p-3">
-                                <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500">{t.registerSurvey.title}</p>
-                                        <p className="text-[11px] text-neutral-500 mt-1">{t.registerSurvey.desc}</p>
-                                    </div>
-                                    <span className="text-[10px] uppercase tracking-widest text-neutral-400">{t.registerSurvey.note}</span>
-                                </div>
-                                <div className="grid gap-3">
-                                    {registerSurvey[lang].map((item) => (
-                                        <fieldset key={`${idPrefix}-${item.id}`} className="space-y-3">
-                                            <legend className="text-[11px] font-bold text-black">{item.question}</legend>
-                                            {item.type === "single" || item.type === "multi" ? (
-                                                <div className="flex flex-wrap gap-2">
-                                                    {item.options.map((option, optionIndex) => {
-                                                        const inputType = item.type === "multi" ? "checkbox" : "radio";
-                                                        const inputName = item.name;
-                                                        const inputId = `${idPrefix}-${inputName}-${optionIndex}`;
-                                                        const optionLabel = typeof option === "string" ? option : option.label;
-                                                        const optionValue = typeof option === "string" ? option : option.value;
-                                                        return (
-                                                            <label key={inputId} htmlFor={inputId} className="cursor-pointer register-option-label">
-                                                                <input
-                                                                    id={inputId}
-                                                                    type={inputType}
-                                                                    name={inputName}
-                                                                    value={optionValue}
-                                                                    required={item.required && inputType === "radio" && optionIndex === 0}
-                                                                    className="peer sr-only"
-                                                                />
-                                                                <span className="inline-flex items-center px-3 py-2 rounded-full border border-black/10 text-[10px] font-bold uppercase tracking-wide text-gray-600 transition hover:border-black/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black register-option">
-                                                                    {optionLabel}
-                                                                </span>
-                                                            </label>
-                                                        );
-                                                    })}
-                                                </div>
-                                            ) : item.type === "textarea" ? (
-                                                <textarea
-                                                    name={item.name}
-                                                    placeholder={item.placeholder || ""}
-                                                    rows={2}
-                                                    required={item.required}
-                                                    className="w-full rounded-2xl border border-black/10 bg-white px-3 py-2 text-xs text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
-                                                />
-                                            ) : item.type === "tel" ? (
-                                                <input
-                                                    type="tel"
-                                                    inputMode="tel"
-                                                    pattern="^\\+?\\d{6,15}$"
-                                                    name={item.name}
-                                                    placeholder={item.placeholder || ""}
-                                                    required={item.required}
-                                                    autoComplete="tel"
-                                                    aria-label={item.question}
-                                                    className="w-full rounded-full border border-black/10 bg-white px-3 py-2 text-xs text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
-                                                />
-                                            ) : (
-                                                <input
-                                                    type={item.type || "text"}
-                                                    name={item.name}
-                                                    placeholder={item.placeholder || ""}
-                                                    required={item.required}
-                                                    className="w-full rounded-full border border-black/10 bg-white px-3 py-2 text-xs text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
-                                                />
-                                            )}
-                                        </fieldset>
-                                    ))}
-                                </div>
-                            </div>
-                            <button
-                                type="submit"
-                                disabled={isRegisterSending}
-                                className={`w-full px-4 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-colors ${isRegisterSending ? 'bg-yellow-300/70 text-black/70 cursor-not-allowed' : 'bg-yellow-400 text-black hover:bg-yellow-300'}`}
-                            >
-                                {isRegisterSending ? t.register.sending : t.register.button}
-                            </button>
-                            {registerStatus.state !== "idle" && (
-                                <div className={`text-[11px] text-center ${statusTone}`}>
-                                    <p>{registerStatus.message}</p>
-                                    {registerStatus.link && (
-                                        <a
-                                            href={registerStatus.link}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="mt-2 inline-flex items-center justify-center rounded-full border border-yellow-400/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-200 transition hover:border-yellow-300 hover:text-yellow-100"
-                                        >
-                                            {t.form.open}
-                                        </a>
-                                    )}
-                                </div>
-                            )}
-                        </form>
-                    </div>
-                );
-            };
-
-            const ChatEventHighlights = () => {
-                const locationsTitle = lang === "fr" ? "Lieux des événements" : "Event Locations";
-                return (
-                    <div className="space-y-4">
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">{t.timeline.title}</p>
-                            <div className="mt-3 space-y-3">
-                                {t.schedule.map((day, dayIndex) => (
-                                    <div key={`day-${dayIndex}`} className="rounded-2xl border border-black/10 bg-white p-3">
-                                        <p className="text-xs font-black uppercase tracking-[0.3em] text-black">{day.date}</p>
-                                        <div className="mt-3 space-y-2">
-                                            {day.events.map((event, eventIndex) => {
-                                                const description = getLocalized(event.desc);
-                                                return (
-                                                    <div key={`event-${dayIndex}-${eventIndex}`} className="rounded-xl border border-black/5 bg-gray-50 px-3 py-2">
-                                                        <p className="text-xs font-bold font-mono text-gray-500">{event.time}</p>
-                                                        <p className="text-sm font-bold text-black">{event.title}</p>
-                                                        {description && (
-                                                            <p className="text-xs text-gray-600 mt-1">{description}</p>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                            <div class="rx-date">26 JAN</div>
+                            <div class="rx-city">LONDON</div>
                         </div>
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">{locationsTitle}</p>
-                            <div className="mt-3 space-y-3">
-                                {eventLocations.map((location) => (
-                                    <div key={location.id} className="rounded-2xl border border-black/10 bg-white p-3">
-                                        <div>
-                                            <p className="text-sm font-bold text-black">{location.name}</p>
-                                            <p className="text-xs text-gray-600 mt-1">{location.address}</p>
-                                        </div>
-                                        <iframe
-                                            title={location.mapTitle}
-                                            src={location.mapSrc}
-                                            style={{ marginTop: "10px", width: "100%", height: "180px", border: 0, borderRadius: "12px" }}
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                        ></iframe>
-                                    </div>
-                                ))}
-                            </div>
+                            <h4>▸ Southbank Centre Skate Space</h4>
+                            <p>14:00–18:00 • Live demo, try‑it‑out zone, meet & greet with pro riders.<br><span style="color:#facc15;font-weight:700">Safety First, Ride Pro:</span> All demo participants receive pro-level safety gear and guidance from certified instructors. Try the latest RAPTOR [X] decks hands-on in a safe, pro-supervised environment.</p>
                         </div>
                     </div>
-                );
-            };
+                    <div class="rx-step">
+                        <div>
+                            <div class="rx-date">27 JAN</div>
+                            <div class="rx-city">BRISTOL</div>
+                        </div>
+                        <div>
+                            <h4>▸ Dean Lane Skatepark</h4>
+                            <p>13:00–17:00 • Best Trick contest and street art collab.</p>
+                        </div>
+                    </div>
+                    <div class="rx-step">
+                        <div>
+                            <div class="rx-date">28 JAN</div>
+                            <div class="rx-city">MANCHESTER</div>
+                        </div>
+                        <div>
+                            <h4>▸ Projekts MCR Skatepark</h4>
+                            <p>16:00–20:00 • Skate jam, DJs, and RaptorX giveaway.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const ChatEventHighlights = () => (
+                <div
+                    className="rx-box rx-prose"
+                    dangerouslySetInnerHTML={{ __html: eventScheduleExcerpt }}
+                />
+            );
 
             const renderAssistantContent = (content, messageIndex) => {
-                if (isRegisterFormMessage(content)) {
-                    return <ChatRegisterForm formId={messageIndex} />;
-                }
                 if (isEventHighlightsMessage(content)) {
                     return <ChatEventHighlights />;
                 }
@@ -1535,7 +1362,7 @@
                             <div ref={messagesRef} className="max-h-[420px] sm:max-h-[520px] overflow-y-auto px-4 py-4 space-y-3 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]">
                                 {messages.map((message, index) => {
                                     const isRichAssistantContent = message.role === "assistant"
-                                        && (isRegisterFormMessage(message.content) || isEventHighlightsMessage(message.content));
+                                        && isEventHighlightsMessage(message.content);
                                     return (
                                         <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                             <div className={`chat-message ${isRichAssistantContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
