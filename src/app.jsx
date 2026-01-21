@@ -155,6 +155,7 @@
                         "Best deck size for street skating?",
                         "Wheel hardness for rough Paris streets?",
                         "Streetwear fit guide for RAPTOR [X] drops",
+                        "Ready to Dominate? Limited slots available. Register today to be the first owner.",
                         "Event schedule highlights"
                     ],
                     disclaimer: "Focused on skate, street culture, and RAPTOR [X]."
@@ -263,6 +264,7 @@
                         "Quelle largeur de deck pour le street ?",
                         "Dureté de roues pour les rues parisiennes ?",
                         "Guide fits streetwear pour les drops RAPTOR [X]",
+                        "Prêt à Dominer? Places limitées. Inscrivez-vous aujourd'hui pour être le premier propriétaire.",
                         "Temps forts du programme"
                     ],
                     disclaimer: "Axé sur le skate, la street culture et RAPTOR [X]."
@@ -702,7 +704,13 @@
                     })
                     .join("\n");
                 const gearSummary = gear
-                    .map((item) => `${localizeValue(item.name)}: ${localizeValue(item.sub)} — ${item.price}. ${localizeValue(item.description)}`)
+                    .map((item) => {
+                        const name = localizeValue(item.name);
+                        const sub = localizeValue(item.sub);
+                        const description = localizeValue(item.description);
+                        const base = [name, sub].filter(Boolean).join(": ");
+                        return [base, description].filter(Boolean).join(" — ");
+                    })
                     .join("; ");
                 const gearImages = gear
                     .map((item) => `${localizeValue(item.name)}: ${item.image}`)
@@ -950,6 +958,8 @@
                 .replace(/\s+/g, " ")
                 .trim();
 
+            const normalizeQuestionKey = (value) => normalizeQuestion(value).replace(/[?!.]+$/, "");
+
             const resolveImageUrl = (src) => {
                 if (!src) return "";
                 if (/^https?:\/\//i.test(src)) return src;
@@ -960,7 +970,7 @@
             };
 
             const isGearGuideQuestion = (value) => (
-                normalizeQuestion(value) === "streetwear fit guide for raptor [x] drops"
+                normalizeQuestionKey(value) === "streetwear fit guide for raptor [x] drops"
             );
 
             const buildGearGuideReply = () => {
@@ -971,7 +981,6 @@
                 const intro = lang === "fr"
                     ? "Voici tous les produits de la section Gear avec leurs informations complètes :"
                     : "Here are all products in the Gear section with full details:";
-                const labelPrice = lang === "fr" ? "Prix" : "Price";
                 const labelBadge = lang === "fr" ? "Badge" : "Badge";
                 const labelDetails = lang === "fr" ? "Détails" : "Details";
                 const items = gear.map((item, index) => {
@@ -979,16 +988,64 @@
                     const sub = localizeValue(item.sub);
                     const description = localizeValue(item.description);
                     const badge = localizeValue(item.badge);
-                    const price = item.price || "";
                     const lines = [
                         `${index + 1}) ${name}${sub ? ` — ${sub}` : ""}`,
-                        price ? `${labelPrice}: ${price}` : "",
                         badge ? `${labelBadge}: ${badge}` : "",
                         description ? `${labelDetails}: ${description}` : ""
                     ].filter(Boolean);
                     return lines.join("\n");
                 });
                 return [...imageLines, "", intro, "", ...items].filter(Boolean).join("\n");
+            };
+
+            const isCollectionQuestion = (value) => (
+                normalizeQuestionKey(value) === "best deck size for street skating"
+            );
+
+            const buildCollectionReply = () => {
+                const imageLines = products
+                    .map((item) => resolveImageUrl(item.image))
+                    .filter(Boolean)
+                    .map((url) => `Image: ${url}`);
+                const intro = lang === "fr"
+                    ? "Voici les produits de la section Collection :"
+                    : "Here are the products in the Collection section:";
+                const labelBadge = lang === "fr" ? "Badge" : "Badge";
+                const items = products.map((item, index) => {
+                    const name = localizeValue(item.name);
+                    const sub = localizeValue(item.sub);
+                    const badge = localizeValue(item.badge);
+                    const lines = [
+                        `${index + 1}) ${name}${sub ? ` — ${sub}` : ""}`,
+                        badge ? `${labelBadge}: ${badge}` : ""
+                    ].filter(Boolean);
+                    return lines.join("\n");
+                });
+                return [...imageLines, "", intro, "", ...items].filter(Boolean).join("\n");
+            };
+
+            const registerQuestionKeys = new Set([
+                "ready to dominate? limited slots available. register today to be the first owner",
+                "prêt à dominer? places limitées. inscrivez-vous aujourd'hui pour être le premier propriétaire"
+            ]);
+
+            const isRegisterQuestion = (value) => (
+                registerQuestionKeys.has(normalizeQuestionKey(value))
+            );
+
+            const buildRegisterReply = () => {
+                const headline = `${t.register.title} ${t.register.sub}`.replace(/\s+/g, " ").trim();
+                const linkLabel = t.form.open || (lang === "fr" ? "Ouvrir le Google Form" : "Open Google Form");
+                const syncNote = lang === "fr"
+                    ? "Remplissez toutes les informations; les réponses seront synchronisées dans Google Form."
+                    : "Complete all fields; responses sync directly to Google Form.";
+                return [
+                    headline,
+                    t.register.desc,
+                    "",
+                    `${linkLabel}: ${GOOGLE_FORM_URL}`,
+                    syncNote
+                ].filter(Boolean).join("\n");
             };
 
             const sendMessage = async (text) => {
@@ -1000,6 +1057,26 @@
                 setInput("");
                 setIsSending(true);
                 setRobotMood("cute");
+
+                if (isRegisterQuestion(trimmed)) {
+                    const reply = buildRegisterReply();
+                    setChatStatus({ state: "online", message: "" });
+                    setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+                    setRobotMood(getExpressionFromReply(reply));
+                    setShowOfflineBanner(false);
+                    setIsSending(false);
+                    return;
+                }
+
+                if (isCollectionQuestion(trimmed)) {
+                    const reply = buildCollectionReply();
+                    setChatStatus({ state: "online", message: "" });
+                    setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+                    setRobotMood(getExpressionFromReply(reply));
+                    setShowOfflineBanner(false);
+                    setIsSending(false);
+                    return;
+                }
 
                 if (isGearGuideQuestion(trimmed)) {
                     const reply = buildGearGuideReply();
@@ -1351,7 +1428,6 @@
                 name: { en: "BABY RAPTOR RIDE TEE", fr: "T-SHIRT BABY RAPTOR RIDE" },
                 sub: { en: "Soft Cotton Graphic T-Shirt", fr: "T-shirt graphique en coton doux" },
                 image: "gear/7.png",
-                price: "$32",
                 badge: { en: "GIRL'S FAVORITE", fr: "PRÉFÉRÉE DES FILLES" },
                 badgeTone: "bg-pink-500 text-white",
                 imageClass: "scale-[1.22] md:scale-[1.3] group-hover:scale-[1.3] md:group-hover:scale-[1.36]",
@@ -1362,7 +1438,6 @@
                 name: { en: "HATCHLING HOODIE", fr: "HOODIE HATCHLING" },
                 sub: { en: "Baby Raptor Pullover", fr: "Pull à capuche Baby Raptor" },
                 image: "gear/8.png",
-                price: "$68",
                 badge: { en: "UP COMING 2026", fr: "UP COMING 2026" },
                 badgeTone: "bg-sky-300 text-black",
                 imageClass: "scale-[1.2] md:scale-[1.28] group-hover:scale-[1.28] md:group-hover:scale-[1.34]",
@@ -1373,7 +1448,6 @@
                 name: { en: "RAPTOR CREST HOODIE", fr: "HOODIE RAPTOR CREST" },
                 sub: { en: "Classic Logo Pullover", fr: "Pull logo classique" },
                 image: "gear/9.png",
-                price: "$74",
                 badge: { en: "CORE CLASSIC", fr: "CLASSIQUE" },
                 badgeTone: "bg-black text-white",
                 imageClass: "scale-[0.96] md:scale-[0.98] group-hover:scale-[1.0] md:group-hover:scale-[1.02]",
@@ -1384,7 +1458,6 @@
                 name: { en: "NIGHT CLAW TEE", fr: "T-SHIRT NIGHT CLAW" },
                 sub: { en: "Front Crest + Back Claw", fr: "Crest avant + griffes dos" },
                 image: "gear/10.png",
-                price: "$36",
                 badge: { en: "FREESTYLE", fr: "FREESTYLE" },
                 badgeTone: "bg-neutral-900 text-white",
                 imageClass: "scale-[1.2] md:scale-[1.28] group-hover:scale-[1.28] md:group-hover:scale-[1.34]",
@@ -1395,7 +1468,6 @@
                 name: { en: "RAPTOR X ZIP HOODIE", fr: "HOODIE ZIP RAPTOR X" },
                 sub: { en: "Signature Back Logo", fr: "Logo signature au dos" },
                 image: "gear/11.png",
-                price: "$88",
                 badge: { en: "SKATER LOVE IT", fr: "SKATER LOVE IT" },
                 badgeTone: "bg-yellow-300 text-black",
                 imageClass: "scale-[1.22] md:scale-[1.3] group-hover:scale-[1.3] md:group-hover:scale-[1.36]",
@@ -1406,7 +1478,6 @@
                 name: { en: "RAPTOR DAILY DUO", fr: "RAPTOR DAILY DUO" },
                 sub: { en: "Steel Tumbler + Phone Case", fr: "Gobelet acier + coque téléphone" },
                 image: "gear/12.png",
-                price: "$49",
                 badge: { en: "ESSENTIAL", fr: "ESSENTIAL" },
                 badgeTone: "bg-emerald-300 text-black",
                 imageClass: "scale-[1.18] md:scale-[1.24] group-hover:scale-[1.24] md:group-hover:scale-[1.3]",
@@ -1588,6 +1659,16 @@
                 return `https://api.${hostname}`;
             };
 
+            const scrollToRegister = (event) => {
+                if (event?.preventDefault) event.preventDefault();
+                const target = document.getElementById("register");
+                if (target?.scrollIntoView) {
+                    target.scrollIntoView({ behavior: "auto", block: "start" });
+                } else {
+                    window.location.hash = "#register";
+                }
+            };
+
             const handleRegisterSubmit = async (event) => {
                 event.preventDefault();
                 if (isRegisterSending) return;
@@ -1734,7 +1815,7 @@
                                         <h3 className="text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight">{t.giftBanner.title}</h3>
                                         <p className="text-sm font-bold text-neutral-600 mt-1">{t.giftBanner.desc}</p>
                                     </div>
-                                    <a href="#register" className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
+                                    <a href="#register" onClick={scrollToRegister} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
                                         {t.giftBanner.cta}
                                     </a>
                                 </div>
