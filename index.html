@@ -1354,17 +1354,17 @@
             letter-spacing: 0.12em;
         }
         .timeline-date {
-            color: #ffffff;
-            -webkit-text-stroke: 3px #4b4b4b;
+            color: #000000;
+            -webkit-text-stroke: 3px #2b2b2b;
             font-weight: 900;
             font-variation-settings: "wght" 900;
             text-shadow:
-                -3px -3px 0 #4b4b4b,
-                3px -3px 0 #4b4b4b,
-                -3px 3px 0 #4b4b4b,
-                3px 3px 0 #4b4b4b,
-                0 4px 0 #2d2d2d,
-                0 7px 0 #2d2d2d,
+                -3px -3px 0 #2b2b2b,
+                3px -3px 0 #2b2b2b,
+                -3px 3px 0 #2b2b2b,
+                3px 3px 0 #2b2b2b,
+                0 4px 0 #1f1f1f,
+                0 7px 0 #1f1f1f,
                 0 10px 0 rgba(0, 0, 0, 0.65),
                 0 14px 14px rgba(0, 0, 0, 0.35),
                 0 18px 20px rgba(0, 0, 0, 0.2);
@@ -3400,7 +3400,7 @@
                                 {t.schedule.map((day, i) => (
                                     <RevealOnScroll key={i} delay={i * 150} className="border-r border-b border-gray-300 bg-white hover:bg-neutral-50 transition duration-300 p-6 sm:p-10 h-full group schedule-card">
                                         <div className="flex items-baseline gap-2 mb-10">
-                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-white transition-colors duration-500 font-graffiti">
+                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-black transition-colors duration-500 font-graffiti">
                                                 {day.date}
                                             </span>
                                         </div>
@@ -3980,6 +3980,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260120-18" defer></script>
+    <script src="assets/app.js?v=20260120-19" defer></script>
 </body>
 </html>

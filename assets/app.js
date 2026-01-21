@@ -2949,7 +2949,7 @@ const App = () => {
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-baseline gap-2 mb-10"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-white transition-colors duration-500 font-graffiti"
+    className: "timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-black transition-colors duration-500 font-graffiti"
   }, day.date)), /*#__PURE__*/React.createElement("div", {
     className: "space-y-8"
   }, day.events.map((event, j) => /*#__PURE__*/React.createElement("div", {
