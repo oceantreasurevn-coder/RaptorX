@@ -1629,11 +1629,8 @@ const ChatbotWidget = ({
   };
   const registerQuestionKeys = new Set(["ready to dominate? limited slots available. register today to be the first owner", "prêt à dominer? places limitées. inscrivez-vous aujourd'hui pour être le premier propriétaire"]);
   const isRegisterQuestion = value => registerQuestionKeys.has(normalizeQuestionKey(value));
-  const buildRegisterReply = () => {
-    const headline = `${t.register.title} ${t.register.sub}`.replace(/\s+/g, " ").trim();
-    const linkLabel = t.form.open || (lang === "fr" ? "Ouvrir le Google Form" : "Open Google Form");
-    const syncNote = lang === "fr" ? "Remplissez toutes les informations; les réponses seront synchronisées dans Google Form." : "Complete all fields; responses sync directly to Google Form.";
-    return [headline, t.register.desc, "", `${linkLabel}: ${GOOGLE_FORM_URL}`, syncNote].filter(Boolean).join("\n");
+  const registerReplyPayload = {
+    type: "registerForm"
   };
   const sendMessage = async text => {
     const trimmed = text.trim();
@@ -1647,16 +1644,15 @@ const ChatbotWidget = ({
     setIsSending(true);
     setRobotMood("cute");
     if (isRegisterQuestion(trimmed)) {
-      const reply = buildRegisterReply();
       setChatStatus({
         state: "online",
         message: ""
       });
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: reply
+        content: registerReplyPayload
       }]);
-      setRobotMood(getExpressionFromReply(reply));
+      setRobotMood("happy");
       setShowOfflineBanner(false);
       setIsSending(false);
       return;
@@ -1891,6 +1887,104 @@ const ChatbotWidget = ({
     flushList();
     return items;
   };
+  const isRegisterFormMessage = content => content && typeof content === "object" && content.type === "registerForm";
+  const ChatRegisterForm = ({
+    formId
+  }) => {
+    const idPrefix = `chat-${formId}`;
+    const statusTone = registerStatus.state === "success" ? "text-emerald-300" : registerStatus.state === "warning" ? "text-yellow-300" : "text-red-400";
+    return /*#__PURE__*/React.createElement("div", {
+      className: "space-y-3"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      className: "text-[10px] font-black uppercase tracking-[0.3em] text-gray-500"
+    }, `${t.register.title} ${t.register.sub}`.replace(/\s+/g, " ").trim()), /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-gray-600 mt-2"
+    }, t.register.desc)), /*#__PURE__*/React.createElement("form", {
+      onSubmit: handleRegisterSubmit,
+      className: "space-y-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "rounded-2xl border border-black/10 bg-white p-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-wrap items-start justify-between gap-2 mb-3"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      className: "text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500"
+    }, t.registerSurvey.title), /*#__PURE__*/React.createElement("p", {
+      className: "text-[11px] text-neutral-500 mt-1"
+    }, t.registerSurvey.desc)), /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase tracking-widest text-neutral-400"
+    }, t.registerSurvey.note)), /*#__PURE__*/React.createElement("div", {
+      className: "grid gap-3"
+    }, registerSurvey[lang].map(item => /*#__PURE__*/React.createElement("fieldset", {
+      key: `${idPrefix}-${item.id}`,
+      className: "space-y-3"
+    }, /*#__PURE__*/React.createElement("legend", {
+      className: "text-[11px] font-bold text-black"
+    }, item.question), item.type === "single" || item.type === "multi" ? /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-wrap gap-2"
+    }, item.options.map((option, optionIndex) => {
+      const inputType = item.type === "multi" ? "checkbox" : "radio";
+      const inputName = item.name;
+      const inputId = `${idPrefix}-${inputName}-${optionIndex}`;
+      const optionLabel = typeof option === "string" ? option : option.label;
+      const optionValue = typeof option === "string" ? option : option.value;
+      return /*#__PURE__*/React.createElement("label", {
+        key: inputId,
+        htmlFor: inputId,
+        className: "cursor-pointer register-option-label"
+      }, /*#__PURE__*/React.createElement("input", {
+        id: inputId,
+        type: inputType,
+        name: inputName,
+        value: optionValue,
+        required: item.required && inputType === "radio" && optionIndex === 0,
+        className: "peer sr-only"
+      }), /*#__PURE__*/React.createElement("span", {
+        className: "inline-flex items-center px-3 py-2 rounded-full border border-black/10 text-[10px] font-bold uppercase tracking-wide text-gray-600 transition hover:border-black/60 peer-checked:bg-yellow-400 peer-checked:border-yellow-400 peer-checked:text-black register-option"
+      }, optionLabel));
+    })) : item.type === "textarea" ? /*#__PURE__*/React.createElement("textarea", {
+      name: item.name,
+      placeholder: item.placeholder || "",
+      rows: 2,
+      required: item.required,
+      className: "w-full rounded-2xl border border-black/10 bg-white px-3 py-2 text-xs text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
+    }) : item.type === "tel" ? /*#__PURE__*/React.createElement("input", {
+      type: "tel",
+      inputMode: "tel",
+      pattern: "^\\\\+?\\\\d{6,15}$",
+      name: item.name,
+      placeholder: item.placeholder || "",
+      required: item.required,
+      autoComplete: "tel",
+      "aria-label": item.question,
+      className: "w-full rounded-full border border-black/10 bg-white px-3 py-2 text-xs text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
+    }) : /*#__PURE__*/React.createElement("input", {
+      type: item.type || "text",
+      name: item.name,
+      placeholder: item.placeholder || "",
+      required: item.required,
+      className: "w-full rounded-full border border-black/10 bg-white px-3 py-2 text-xs text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
+    }))))), /*#__PURE__*/React.createElement("button", {
+      type: "submit",
+      disabled: isRegisterSending,
+      className: `w-full px-4 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-colors ${isRegisterSending ? 'bg-yellow-300/70 text-black/70 cursor-not-allowed' : 'bg-yellow-400 text-black hover:bg-yellow-300'}`
+    }, isRegisterSending ? t.register.sending : t.register.button), registerStatus.state !== "idle" && /*#__PURE__*/React.createElement("div", {
+      className: `text-[11px] text-center ${statusTone}`
+    }, /*#__PURE__*/React.createElement("p", null, registerStatus.message), registerStatus.link && /*#__PURE__*/React.createElement("a", {
+      href: registerStatus.link,
+      target: "_blank",
+      rel: "noreferrer",
+      className: "mt-2 inline-flex items-center justify-center rounded-full border border-yellow-400/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-200 transition hover:border-yellow-300 hover:text-yellow-100"
+    }, t.form.open))));
+  };
+  const renderAssistantContent = (content, messageIndex) => {
+    if (isRegisterFormMessage(content)) {
+      return /*#__PURE__*/React.createElement(ChatRegisterForm, {
+        formId: messageIndex
+      });
+    }
+    if (typeof content !== "string") return null;
+    return renderChatMessage(content);
+  };
   return /*#__PURE__*/React.createElement("div", {
     className: "fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3"
   }, isOpen && showOfflineBanner && chatStatus.state === "offline" && /*#__PURE__*/React.createElement("div", {
@@ -1940,12 +2034,15 @@ const ChatbotWidget = ({
   }))), /*#__PURE__*/React.createElement("div", {
     ref: messagesRef,
     className: "max-h-[420px] sm:max-h-[520px] overflow-y-auto px-4 py-4 space-y-3 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]"
-  }, messages.map((message, index) => /*#__PURE__*/React.createElement("div", {
-    key: `${message.role}-${index}`,
-    className: `flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`
-  }, /*#__PURE__*/React.createElement("div", {
-    className: `chat-message max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`
-  }, message.role === 'user' ? renderChatBrand(message.content) : renderChatMessage(message.content)))), isSending && /*#__PURE__*/React.createElement("div", {
+  }, messages.map((message, index) => {
+    const isRegisterContent = message.role === "assistant" && isRegisterFormMessage(message.content);
+    return /*#__PURE__*/React.createElement("div", {
+      key: `${message.role}-${index}`,
+      className: `flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `chat-message ${isRegisterContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`
+    }, message.role === 'user' ? renderChatBrand(message.content) : renderAssistantContent(message.content, index)));
+  }), isSending && /*#__PURE__*/React.createElement("div", {
     className: "flex justify-start"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-[82%] rounded-2xl px-4 py-3 text-sm text-black border border-black/5 bg-gray-100"
