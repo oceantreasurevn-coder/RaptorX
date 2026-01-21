@@ -1891,7 +1891,7 @@ const ChatbotWidget = ({
   }), /*#__PURE__*/React.createElement("div", {
     className: "relative rounded-3xl overflow-hidden border border-black/10 bg-white text-black shadow-[0_30px_70px_rgba(0,0,0,0.2)]"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "px-4 py-3 border-b border-black/10 flex items-center justify-between bg-gradient-to-r from-yellow-400 via-yellow-200 to-white"
+    className: "px-4 py-3 border-b border-black/10 flex items-center justify-between chat-header-bar"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1915,7 +1915,7 @@ const ChatbotWidget = ({
   }, t.chat.titleSuffix)))), /*#__PURE__*/React.createElement("button", {
     type: "button",
     onClick: () => setIsOpen(false),
-    className: "text-black/60 hover:text-black transition"
+    className: "text-white/80 hover:text-white transition"
   }, /*#__PURE__*/React.createElement(X, {
     size: 18
   }))), /*#__PURE__*/React.createElement("div", {

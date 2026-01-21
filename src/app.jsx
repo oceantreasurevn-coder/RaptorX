@@ -1270,7 +1270,7 @@
                         <div className="chat-glow"></div>
                         <div className="chat-orbit"></div>
                         <div className="relative rounded-3xl overflow-hidden border border-black/10 bg-white text-black shadow-[0_30px_70px_rgba(0,0,0,0.2)]">
-                            <div className="px-4 py-3 border-b border-black/10 flex items-center justify-between bg-gradient-to-r from-yellow-400 via-yellow-200 to-white">
+                            <div className="px-4 py-3 border-b border-black/10 flex items-center justify-between chat-header-bar">
                                 <div className="flex items-center gap-3">
                                     <div className="chat-header-robot" style={{ transform: `translate3d(${cursorShift.x * 0.15}px, ${cursorShift.y * 0.15}px, 0)` }}>
                                         <RobotAvatar size={36} eyeOffset={eyeOffset} wrapperRef={headerRobotRef} expression={activeExpression} />
@@ -1283,7 +1283,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" onClick={() => setIsOpen(false)} className="text-black/60 hover:text-black transition">
+                                <button type="button" onClick={() => setIsOpen(false)} className="text-white/80 hover:text-white transition">
                                     <X size={18} />
                                 </button>
                             </div>
