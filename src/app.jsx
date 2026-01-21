@@ -2041,10 +2041,7 @@
                                 {t.schedule.map((day, i) => (
                                     <RevealOnScroll key={i} delay={i * 150} className="border-r border-b border-gray-300 bg-white hover:bg-neutral-50 transition duration-300 p-6 sm:p-10 h-full group schedule-card">
                                         <div className="flex items-baseline gap-2 mb-10">
-                                            <span
-                                                className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-white transition-colors duration-500 font-graffiti"
-                                                style={{ textShadow: "0 1px 0 #1f2937, 0 2px 0 #1f2937, 0 3px 0 #1f2937, -1px -1px 0 #1f2937, 1px -1px 0 #1f2937, -1px 1px 0 #1f2937, 1px 1px 0 #1f2937" }}
-                                            >
+                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-neutral-800 transition-colors duration-500 font-graffiti">
                                                 {day.date}
                                             </span>
                                         </div>
