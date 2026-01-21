@@ -382,7 +382,7 @@ const translations = {
         title: "London: Southbank Centre Skate Space"
       }, {
         time: "16:00",
-        title: "Live Demo + Try-it-out Zone",
+        title: "Live Demo + Try-it-out Zone\nSafety First, Ride Pro with RaptorX",
         desc: "Experience the latest RAPTOR [X] decks hands-on. Safety First, Ride Pro: All demo participants receive pro-level safety gear and guidance from certified instructors."
       }, {
         time: "17:30",
@@ -2959,7 +2959,9 @@ const App = () => {
     className: "text-xs font-bold font-mono text-gray-500 mb-1"
   }, event.time), /*#__PURE__*/React.createElement("h4", {
     className: "text-lg font-bold text-black"
-  }, event.title))))))))), /*#__PURE__*/React.createElement("section", {
+  }, event.title.split("\n").map((line, lineIndex, lines) => /*#__PURE__*/React.createElement("span", {
+    key: `${event.time}-${lineIndex}`
+  }, line, lineIndex < lines.length - 1 && /*#__PURE__*/React.createElement("br", null)))))))))))), /*#__PURE__*/React.createElement("section", {
     id: "blog",
     className: "py-20 md:py-32 bg-black text-white overflow-hidden relative"
   }, /*#__PURE__*/React.createElement("div", {

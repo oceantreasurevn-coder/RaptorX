@@ -165,7 +165,7 @@
                 schedule: [
                     { date: "26 JAN", events: [
                         { time: "14:00", title: "London: Southbank Centre Skate Space" },
-                        { time: "16:00", title: "Live Demo + Try-it-out Zone", desc: "Experience the latest RAPTOR [X] decks hands-on. Safety First, Ride Pro: All demo participants receive pro-level safety gear and guidance from certified instructors." },
+                        { time: "16:00", title: "Live Demo + Try-it-out Zone\nSafety First, Ride Pro with RaptorX", desc: "Experience the latest RAPTOR [X] decks hands-on. Safety First, Ride Pro: All demo participants receive pro-level safety gear and guidance from certified instructors." },
                         { time: "17:30", title: "Meet & Greet with Pro Riders" }
                     ] },
                     { date: "27 JAN", events: [{ time: "13:00", title: "Bristol: Dean Lane Skatepark" }, { time: "14:30", title: "Best Trick Contest" }, { time: "16:00", title: "Street Art Collab - Custom your RaptorX" }] },
@@ -2049,7 +2049,14 @@
                                             {day.events.map((event, j) => (
                                                 <div key={j} className="relative pl-6 border-l-2 border-gray-200 group-hover:border-black transition-colors duration-500">
                                                     <p className="text-xs font-bold font-mono text-gray-500 mb-1">{event.time}</p>
-                                                    <h4 className="text-lg font-bold text-black">{event.title}</h4>
+                                                    <h4 className="text-lg font-bold text-black">
+                                                        {event.title.split("\n").map((line, lineIndex, lines) => (
+                                                            <span key={`${event.time}-${lineIndex}`}>
+                                                                {line}
+                                                                {lineIndex < lines.length - 1 && <br />}
+                                                            </span>
+                                                        ))}
+                                                    </h4>
                                                 </div>
                                             ))}
                                         </div>

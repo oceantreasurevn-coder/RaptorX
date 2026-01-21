@@ -1561,7 +1561,7 @@
                 ui: { close: "Close" },
                 footer: { rights: "Product copyright of Raptor Gaming Gear © 2024.", design: "Designed for the future.", support: "Support", instagram: "Instagram", twitter: "Twitter", facebook: "Facebook" },
                 schedule: [
-                    { date: "26 JAN", events: [{ time: "14:00", title: "London: Southbank Centre Skate Space" }, { time: "16:00", title: "Live Demo + Try-it-out Zone" }, { time: "17:30", title: "Meet & Greet with Pro Riders" }] },
+                    { date: "26 JAN", events: [{ time: "14:00", title: "London: Southbank Centre Skate Space" }, { time: "16:00", title: "Live Demo + Try-it-out Zone\nSafety First, Ride Pro with RaptorX" }, { time: "17:30", title: "Meet & Greet with Pro Riders" }] },
                     { date: "27 JAN", events: [{ time: "13:00", title: "Bristol: Dean Lane Skatepark" }, { time: "14:30", title: "Best Trick Contest" }, { time: "16:00", title: "Street Art Collab - Custom your RaptorX" }] },
                     { date: "28 JAN", events: [{ time: "16:00", title: "Manchester: Projekts MCR Skatepark" }, { time: "18:00", title: "Skate Jam + DJ Set" }, { time: "19:30", title: "RaptorX Giveaway" }] }
                 ]
@@ -3407,7 +3407,14 @@
                                             {day.events.map((event, j) => (
                                                 <div key={j} className="relative pl-6 border-l-2 border-gray-200 group-hover:border-black transition-colors duration-500">
                                                     <p className="text-xs font-bold font-mono text-gray-500 mb-1">{event.time}</p>
-                                                    <h4 className="text-lg font-bold text-black">{event.title}</h4>
+                                                    <h4 className="text-lg font-bold text-black">
+                                                        {event.title.split("\n").map((line, lineIndex, lines) => (
+                                                            <span key={`${event.time}-${lineIndex}`}>
+                                                                {line}
+                                                                {lineIndex < lines.length - 1 && <br />}
+                                                            </span>
+                                                        ))}
+                                                    </h4>
                                                 </div>
                                             ))}
                                         </div>
@@ -3979,6 +3986,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260120-21" defer></script>
+    <script src="assets/app.js?v=20260120-22" defer></script>
 </body>
 </html>
