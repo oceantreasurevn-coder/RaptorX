@@ -398,7 +398,7 @@ const translations = {
         title: "Best Trick Contest"
       }, {
         time: "16:00",
-        title: "Street Art Collab"
+        title: "Street Art Collab - Custom your RaptorX"
       }]
     }, {
       date: "28 JAN",
@@ -2275,8 +2275,8 @@ const launchPost = {
       city: "Paris",
       venue: "Palais de Tokyo Plaza",
       desc: {
-        en: "Street Art Collab",
-        fr: "Street Art Collab"
+        en: "Street Art Collab - Custom your RaptorX",
+        fr: "Street Art Collab - Custom your RaptorX"
       }
     }, {
       date: "29 JAN",
