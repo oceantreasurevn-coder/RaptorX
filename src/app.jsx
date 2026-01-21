@@ -2041,7 +2041,7 @@
                                 {t.schedule.map((day, i) => (
                                     <RevealOnScroll key={i} delay={i * 150} className="border-r border-b border-gray-300 bg-white hover:bg-neutral-50 transition duration-300 p-6 sm:p-10 h-full group schedule-card">
                                         <div className="flex items-baseline gap-2 mb-10">
-                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-black transition-colors duration-500 font-graffiti">
+                                            <span className="timeline-date text-4xl sm:text-5xl md:text-6xl font-black text-white transition-colors duration-500 font-graffiti">
                                                 {day.date}
                                             </span>
                                         </div>
