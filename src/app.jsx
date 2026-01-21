@@ -1022,17 +1022,6 @@
                 return [...imageLines, "", intro, "", ...items].filter(Boolean).join("\n");
             };
 
-            const eventHighlightsQuestionKeys = new Set([
-                "event schedule highlights",
-                "temps forts du programme"
-            ]);
-
-            const isEventHighlightsQuestion = (value) => (
-                eventHighlightsQuestionKeys.has(normalizeQuestionKey(value))
-            );
-
-            const eventHighlightsPayload = { type: "eventHighlights" };
-
             const sendMessage = async (text) => {
                 const trimmed = text.trim();
                 if (!trimmed || isSending) return;
@@ -1042,15 +1031,6 @@
                 setInput("");
                 setIsSending(true);
                 setRobotMood("cute");
-
-                if (isEventHighlightsQuestion(trimmed)) {
-                    setChatStatus({ state: "online", message: "" });
-                    setMessages((prev) => [...prev, { role: "assistant", content: eventHighlightsPayload }]);
-                    setRobotMood("happy");
-                    setShowOfflineBanner(false);
-                    setIsSending(false);
-                    return;
-                }
 
                 if (isCollectionQuestion(trimmed)) {
                     const reply = buildCollectionReply();
@@ -1271,59 +1251,7 @@
                 return items;
             };
 
-            const isEventHighlightsMessage = (content) => (
-                content && typeof content === "object" && content.type === "eventHighlights"
-            );
-
-            const eventScheduleExcerpt = `
-                <h2>The Event Schedule: UK Roadshow</h2>
-                <p>3 Days. 3 Cities. 1 Vibe. The Scaters team and pro riders are rolling in with demos, meetups, and exclusive drops. Pull up early for the best spots.</p>
-
-                <div class="rx-timeline">
-                    <div class="rx-step">
-                        <div>
-                            <div class="rx-date">26 JAN</div>
-                            <div class="rx-city">LONDON</div>
-                        </div>
-                        <div>
-                            <h4>▸ Southbank Centre Skate Space</h4>
-                            <p>14:00–18:00 • Live demo, try‑it‑out zone, meet & greet with pro riders.<br><span style="color:#facc15;font-weight:700">Safety First, Ride Pro:</span> All demo participants receive pro-level safety gear and guidance from certified instructors. Try the latest RAPTOR [X] decks hands-on in a safe, pro-supervised environment.</p>
-                        </div>
-                    </div>
-                    <div class="rx-step">
-                        <div>
-                            <div class="rx-date">27 JAN</div>
-                            <div class="rx-city">BRISTOL</div>
-                        </div>
-                        <div>
-                            <h4>▸ Dean Lane Skatepark</h4>
-                            <p>13:00–17:00 • Best Trick contest and street art collab.</p>
-                        </div>
-                    </div>
-                    <div class="rx-step">
-                        <div>
-                            <div class="rx-date">28 JAN</div>
-                            <div class="rx-city">MANCHESTER</div>
-                        </div>
-                        <div>
-                            <h4>▸ Projekts MCR Skatepark</h4>
-                            <p>16:00–20:00 • Skate jam, DJs, and RaptorX giveaway.</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            const ChatEventHighlights = () => (
-                <div
-                    className="rx-box rx-prose"
-                    dangerouslySetInnerHTML={{ __html: eventScheduleExcerpt }}
-                />
-            );
-
             const renderAssistantContent = (content, messageIndex) => {
-                if (isEventHighlightsMessage(content)) {
-                    return <ChatEventHighlights />;
-                }
                 if (typeof content !== "string") return null;
                 return renderChatMessage(content);
             };
@@ -1360,17 +1288,13 @@
                                 </button>
                             </div>
                             <div ref={messagesRef} className="max-h-[420px] sm:max-h-[520px] overflow-y-auto px-4 py-4 space-y-3 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]">
-                                {messages.map((message, index) => {
-                                    const isRichAssistantContent = message.role === "assistant"
-                                        && isEventHighlightsMessage(message.content);
-                                    return (
-                                        <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`chat-message ${isRichAssistantContent ? 'w-full max-w-full' : 'max-w-[82%]'} rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
-                                                {message.role === 'user' ? renderChatBrand(message.content) : renderAssistantContent(message.content, index)}
-                                            </div>
+                                {messages.map((message, index) => (
+                                    <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        <div className={`chat-message max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === 'user' ? 'bg-yellow-400 text-black' : 'bg-gray-100 text-black border border-black/5'}`}>
+                                            {message.role === 'user' ? renderChatBrand(message.content) : renderAssistantContent(message.content, index)}
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                ))}
                                 {isSending && (
                                     <div className="flex justify-start">
                                         <div className="max-w-[82%] rounded-2xl px-4 py-3 text-sm text-black border border-black/5 bg-gray-100">
