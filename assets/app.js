@@ -376,7 +376,7 @@ const translations = {
       facebook: "Facebook"
     },
     schedule: [{
-      date: "26 JAN",
+      date: "04 APR",
       events: [{
         time: "14:00",
         title: "London: Southbank Centre Skate Space"
@@ -389,7 +389,7 @@ const translations = {
         title: "Meet & Greet with Pro Riders"
       }]
     }, {
-      date: "27 JAN",
+      date: "05 APR",
       events: [{
         time: "13:00",
         title: "Bristol: Dean Lane Skatepark"
@@ -401,7 +401,7 @@ const translations = {
         title: "Street Art Collab - Custom your RaptorX"
       }]
     }, {
-      date: "28 JAN",
+      date: "06 APR",
       events: [{
         time: "16:00",
         title: "Manchester: Projekts MCR Skatepark"
@@ -591,7 +591,7 @@ const translations = {
       facebook: "Facebook"
     },
     schedule: [{
-      date: "26 JAN",
+      date: "04 APR",
       events: [{
         time: "14:00",
         title: "Londres : Southbank Centre Skate Space"
@@ -604,7 +604,7 @@ const translations = {
         title: "Meet & Greet avec les pros"
       }]
     }, {
-      date: "27 JAN",
+      date: "05 APR",
       events: [{
         time: "13:00",
         title: "Bristol : Dean Lane Skatepark"
@@ -616,7 +616,7 @@ const translations = {
         title: "Collab street art"
       }]
     }, {
-      date: "28 JAN",
+      date: "06 APR",
       events: [{
         time: "16:00",
         title: "Manchester : Projekts MCR Skatepark"
@@ -3047,7 +3047,7 @@ const App = () => {
                                                                             <img src="/event/Skater%20at%20Republique%20Paris%202.png" alt="Scaters RaptorX UK tour hero" style="margin: 22px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
                                                                             <div class="rx-badges">
                                                                                 <span class="rx-badge">▸ London • Bristol • Manchester</span>
-                                                                                <span class="rx-badge">▸ 26–28 JAN 2026</span>
+                                                                                <span class="rx-badge">▸ 04–06 APR 2026</span>
                                                                                 <span class="rx-badge">▸ Live Demos</span>
                                                                                 <span class="rx-badge">▸ Official Launch</span>
                                                                             </div>
@@ -3075,7 +3075,7 @@ const App = () => {
                                                                                     <div class="rx-timeline" id="rxTimeline">
                                                                                         <div class="rx-step">
                                                                                             <div>
-                                                                                                <div class="rx-date">26 JAN</div>
+                                                                                                <div class="rx-date">04 APR</div>
                                                                                                 <div class="rx-city">LONDON</div>
                                                                                             </div>
                                                                                             <div>
@@ -3085,7 +3085,7 @@ const App = () => {
                                                                                         </div>
                                                                                         <div class="rx-step">
                                                                                             <div>
-                                                                                                <div class="rx-date">27 JAN</div>
+                                                                                                <div class="rx-date">05 APR</div>
                                                                                                 <div class="rx-city">BRISTOL</div>
                                                                                             </div>
                                                                                             <div>
@@ -3095,7 +3095,7 @@ const App = () => {
                                                                                         </div>
                                                                                         <div class="rx-step">
                                                                                             <div>
-                                                                                                <div class="rx-date">28 JAN</div>
+                                                                                                <div class="rx-date">06 APR</div>
                                                                                                 <div class="rx-city">MANCHESTER</div>
                                                                                             </div>
                                                                                             <div>
@@ -3140,7 +3140,7 @@ const App = () => {
                                                                                         <h2 class="mt-0 text-3xl font-black text-gray-900">How to Secure Your RaptorX?</h2>
                                                                                         
                                                                                         <p class="mb-4 text-lg">
-                                                                                            The countdown has begun. The <strong>Scaters RaptorX series</strong> officially drops nationwide on <strong>26th Jan 2026</strong>.
+                                                                                            The countdown has begun. The <strong>Scaters RaptorX series</strong> officially drops nationwide on <strong>4th Apr 2026</strong>.
                                                                                         </p>
                                                                                         <p class="mb-8 text-gray-600 max-w-xl mx-auto">
                                                                                             Don't wait for a shipping confirmation. Be the first to feel the concave and pop by visiting our <strong>authorized local dealers</strong> on launch day.
@@ -3168,7 +3168,7 @@ const App = () => {
                                                                                         <div class="rx-partner">
                                                                                             <div>
                                                                                                 <b>Dates</b>
-                                                                                                <span>26–28 January 2026</span>
+                                                                                                <span>04–06 April 2026</span>
                                                                                             </div>
                                                                                             <a class="rx-btn" href="#schedule" style="font-size:12px">Schedule</a>
                                                                                         </div>

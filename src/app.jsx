@@ -163,13 +163,13 @@
                 ui: { close: "Close" },
                 footer: { rights: "Product copyright of Raptor Gaming Gear © 2024.", design: "Designed for the future.", support: "Support", instagram: "Instagram", twitter: "Twitter", facebook: "Facebook" },
                 schedule: [
-                    { date: "26 JAN", events: [
+                    { date: "04 APR", events: [
                         { time: "14:00", title: "London: Southbank Centre Skate Space" },
                         { time: "16:00", title: "Live Demo + Try-it-out Zone\nSafety First, Ride Pro with RaptorX", desc: "Experience the latest RAPTOR [X] decks hands-on. Safety First, Ride Pro: All demo participants receive pro-level safety gear and guidance from certified instructors." },
                         { time: "17:30", title: "Meet & Greet with Pro Riders" }
                     ] },
-                    { date: "27 JAN", events: [{ time: "13:00", title: "Bristol: Dean Lane Skatepark" }, { time: "14:30", title: "Best Trick Contest" }, { time: "16:00", title: "Street Art Collab - Custom your RaptorX" }] },
-                    { date: "28 JAN", events: [{ time: "16:00", title: "Manchester: Projekts MCR Skatepark" }, { time: "18:00", title: "Skate Jam + DJ Set" }, { time: "19:30", title: "RaptorX Giveaway" }] }
+                    { date: "05 APR", events: [{ time: "13:00", title: "Bristol: Dean Lane Skatepark" }, { time: "14:30", title: "Best Trick Contest" }, { time: "16:00", title: "Street Art Collab - Custom your RaptorX" }] },
+                    { date: "06 APR", events: [{ time: "16:00", title: "Manchester: Projekts MCR Skatepark" }, { time: "18:00", title: "Skate Jam + DJ Set" }, { time: "19:30", title: "RaptorX Giveaway" }] }
                 ]
             },
             fr: {
@@ -271,13 +271,13 @@
                 ui: { close: "Fermer" },
                 footer: { rights: "Droits d'auteur du produit Raptor Gaming Gear © 2024.", design: "Conçu pour le futur.", support: "Assistance", instagram: "Instagram", twitter: "Twitter", facebook: "Facebook" },
                 schedule: [
-                    { date: "26 JAN", events: [
+                    { date: "04 APR", events: [
                         { time: "14:00", title: "Londres : Southbank Centre Skate Space" },
                         { time: "16:00", title: "Démo live + Zone d'essai", desc: "Testez les nouveaux decks RAPTOR [X] en conditions réelles. Safety First, Ride Pro : tous les participants reçoivent un kit sécurité pro et des conseils d'instructeurs certifiés." },
                         { time: "17:30", title: "Meet & Greet avec les pros" }
                     ] },
-                    { date: "27 JAN", events: [{ time: "13:00", title: "Bristol : Dean Lane Skatepark" }, { time: "14:30", title: "Concours Best Trick" }, { time: "16:00", title: "Collab street art" }] },
-                    { date: "28 JAN", events: [{ time: "16:00", title: "Manchester : Projekts MCR Skatepark" }, { time: "18:00", title: "Skate jam + DJ set" }, { time: "19:30", title: "Giveaway RaptorX" }] }
+                    { date: "05 APR", events: [{ time: "13:00", title: "Bristol : Dean Lane Skatepark" }, { time: "14:30", title: "Concours Best Trick" }, { time: "16:00", title: "Collab street art" }] },
+                    { date: "06 APR", events: [{ time: "16:00", title: "Manchester : Projekts MCR Skatepark" }, { time: "18:00", title: "Skate jam + DJ set" }, { time: "19:30", title: "Giveaway RaptorX" }] }
                 ]
             }
         };
@@ -2150,7 +2150,7 @@
                                                                             <img src="/event/Skater%20at%20Republique%20Paris%202.png" alt="Scaters RaptorX UK tour hero" style="margin: 22px 0; border-radius: 12px; width: 100%; height: auto; object-fit: contain;"/>
                                                                             <div class="rx-badges">
                                                                                 <span class="rx-badge">▸ London • Bristol • Manchester</span>
-                                                                                <span class="rx-badge">▸ 26–28 JAN 2026</span>
+                                                                                <span class="rx-badge">▸ 04–06 APR 2026</span>
                                                                                 <span class="rx-badge">▸ Live Demos</span>
                                                                                 <span class="rx-badge">▸ Official Launch</span>
                                                                             </div>
@@ -2178,7 +2178,7 @@
                                                                                     <div class="rx-timeline" id="rxTimeline">
                                                                                         <div class="rx-step">
                                                                                             <div>
-                                                                                                <div class="rx-date">26 JAN</div>
+                                                                                                <div class="rx-date">04 APR</div>
                                                                                                 <div class="rx-city">LONDON</div>
                                                                                             </div>
                                                                                             <div>
@@ -2188,7 +2188,7 @@
                                                                                         </div>
                                                                                         <div class="rx-step">
                                                                                             <div>
-                                                                                                <div class="rx-date">27 JAN</div>
+                                                                                                <div class="rx-date">05 APR</div>
                                                                                                 <div class="rx-city">BRISTOL</div>
                                                                                             </div>
                                                                                             <div>
@@ -2198,7 +2198,7 @@
                                                                                         </div>
                                                                                         <div class="rx-step">
                                                                                             <div>
-                                                                                                <div class="rx-date">28 JAN</div>
+                                                                                                <div class="rx-date">06 APR</div>
                                                                                                 <div class="rx-city">MANCHESTER</div>
                                                                                             </div>
                                                                                             <div>
@@ -2243,7 +2243,7 @@
                                                                                         <h2 class="mt-0 text-3xl font-black text-gray-900">How to Secure Your RaptorX?</h2>
                                                                                         
                                                                                         <p class="mb-4 text-lg">
-                                                                                            The countdown has begun. The <strong>Scaters RaptorX series</strong> officially drops nationwide on <strong>26th Jan 2026</strong>.
+                                                                                            The countdown has begun. The <strong>Scaters RaptorX series</strong> officially drops nationwide on <strong>4th Apr 2026</strong>.
                                                                                         </p>
                                                                                         <p class="mb-8 text-gray-600 max-w-xl mx-auto">
                                                                                             Don't wait for a shipping confirmation. Be the first to feel the concave and pop by visiting our <strong>authorized local dealers</strong> on launch day.
@@ -2271,7 +2271,7 @@
                                                                                         <div class="rx-partner">
                                                                                             <div>
                                                                                                 <b>Dates</b>
-                                                                                                <span>26–28 January 2026</span>
+                                                                                                <span>04–06 April 2026</span>
                                                                                             </div>
                                                                                             <a class="rx-btn" href="#schedule" style="font-size:12px">Schedule</a>
                                                                                         </div>
