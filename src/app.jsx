@@ -282,8 +282,17 @@
             }
         };
 
-        const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeO7w14EwzrwlTRuU1VWPFFKL_3-p6Moo8ySis3rfshZPc_jg/viewform?usp=header";
-        const GOOGLE_FORM_ACTION_URL = GOOGLE_FORM_URL.replace("viewform?usp=header", "formResponse");
+        const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeO7w14EwzrwlTRuU1VWPFFKL_3-p6Moo8ySis3rfshZPc_jg/viewform";
+        const GOOGLE_FORM_ACTION_URL = (() => {
+            try {
+                const url = new URL(GOOGLE_FORM_URL);
+                url.pathname = url.pathname.replace(/\/viewform$/i, "/formResponse");
+                url.search = "";
+                return url.toString();
+            } catch (error) {
+                return GOOGLE_FORM_URL.replace(/viewform.*$/i, "formResponse");
+            }
+        })();
         const GOOGLE_FORM_FIELDS = {
             event_date: "entry.2092238618",
             event_city: "entry.1556369182",
@@ -1628,6 +1637,21 @@
                 return `https://api.${hostname}`;
             };
 
+            const submitGoogleFormDirect = async (googleParams) => {
+                if (!GOOGLE_FORM_READY) return false;
+                try {
+                    await fetch(GOOGLE_FORM_ACTION_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: googleParams.toString()
+                    });
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            };
+
             const scrollToRegister = (event) => {
                 if (event?.preventDefault) event.preventDefault();
                 const target = document.getElementById("register");
@@ -1655,11 +1679,15 @@
                 });
 
                 const googleData = new FormData();
+                const googleParams = new URLSearchParams();
                 Object.entries(GOOGLE_FORM_FIELDS).forEach(([key, entryId]) => {
                     if (!entryId) return;
                     const values = formData.getAll(key);
                     values.forEach((value) => {
-                        if (value) googleData.append(entryId, value);
+                        if (value) {
+                            googleData.append(entryId, value);
+                            googleParams.append(entryId, value);
+                        }
                     });
                 });
 
@@ -1683,33 +1711,36 @@
                     const formFailed = formStatus !== "submitted";
                     let message = t.register.success;
                     let link = "";
+                    let statusState = "success";
                     if (formFailed) {
-                        message = t.register.fallback;
-                        link = GOOGLE_FORM_URL;
+                        const directOk = await submitGoogleFormDirect(googleParams);
+                        statusState = directOk ? "success" : "warning";
+                        message = directOk ? t.register.success : t.register.fallback;
+                        link = directOk || !GOOGLE_FORM_READY ? "" : GOOGLE_FORM_URL;
+                        if (directOk) {
+                            setShowSuccess(true);
+                            formElement.reset();
+                        }
                     } else if (data.emailStatus === "sent") {
                         message = t.register.successEmail;
                     } else if (data.emailStatus === "skipped") {
                         message = t.register.successSaved;
                     }
-                    setRegisterStatus({ state: formFailed ? "warning" : "success", message, link });
+                    setRegisterStatus({ state: statusState, message, link });
                     if (!formFailed) {
                         setShowSuccess(true);
                         formElement.reset();
                     }
                 } catch (error) {
-                    if (GOOGLE_FORM_READY) {
-                        try {
-                            await fetch(GOOGLE_FORM_ACTION_URL, {
-                                method: "POST",
-                                mode: "no-cors",
-                                body: googleData
-                            });
-                        } catch (fallbackError) {
-                            // Fall back to showing the Google Form link regardless of POST outcome.
-                        }
-                        setRegisterStatus({ state: "warning", message: t.register.fallback, link: GOOGLE_FORM_URL });
-                    } else {
-                        setRegisterStatus({ state: "warning", message: t.register.fallback, link: GOOGLE_FORM_URL });
+                    const directOk = await submitGoogleFormDirect(googleParams);
+                    setRegisterStatus({
+                        state: directOk ? "success" : "warning",
+                        message: directOk ? t.register.success : t.register.fallback,
+                        link: directOk || !GOOGLE_FORM_READY ? "" : GOOGLE_FORM_URL
+                    });
+                    if (directOk) {
+                        setShowSuccess(true);
+                        formElement.reset();
                     }
                 } finally {
                     setIsRegisterSending(false);
@@ -2493,7 +2524,7 @@
                                                         <input
                                                             type="tel"
                                                             inputMode="tel"
-                                                            pattern="^\\+?\\d{6,15}$"
+                                                            pattern="^\\+?[\\d\\s().-]{6,20}$"
                                                             name={item.name}
                                                             placeholder={item.placeholder || ""}
                                                             required={item.required}

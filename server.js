@@ -116,30 +116,125 @@ Respond in ${language}.
 SITE CONTEXT:
 ${siteContext || "No website context provided."}`;
 
-const sendConfirmationEmail = async ({ to, name, lang, formSummary }) => {
+const escapeHtml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+const sendConfirmationEmail = async ({ to, name, lang, formSummary, origin }) => {
   if (!RESEND_API_KEY || !RESEND_FROM || !to) {
     return { status: "skipped" };
   }
 
-  const subject = lang === "fr"
-    ? "Confirmation d'inscription RAPTOR [X]"
-    : "RAPTOR [X] Registration Confirmation";
+  const isFrench = lang === "fr";
+  const subject = isFrench
+    ? "RAPTOR [X] — Inscription confirmée"
+    : "RAPTOR [X] — Registration Confirmed";
 
-  const greeting = lang === "fr"
+  const greeting = isFrench
     ? `Bonjour ${name || ""}`.trim()
     : `Hi ${name || ""}`.trim();
 
-  const intro = lang === "fr"
+  const intro = isFrench
     ? "Merci pour votre inscription. Nous avons bien reçu vos informations."
     : "Thanks for registering. We've received your details.";
 
+  const statusLabel = isFrench ? "Statut" : "Status";
+  const statusValue = isFrench ? "Envoyé avec succès" : "Submitted successfully";
+  const detailTitle = isFrench ? "Détails envoyés" : "Submission details";
+  const ctaLabel = isFrench ? "Voir le programme" : "View the schedule";
+  const storyLabel = isFrench ? "Lire l'article" : "Read the story";
+  const footerLine = isFrench
+    ? "Si une information est incorrecte, répondez simplement à cet email."
+    : "If any detail is incorrect, just reply to this email.";
+  const teamLine = isFrench
+    ? "L'équipe RAPTOR [X] enverra bientôt les mises à jour."
+    : "The RAPTOR [X] team will send updates shortly.";
+
+  const safeSummary = formSummary ? escapeHtml(formSummary) : "";
+  const siteUrl = origin && origin !== "null" ? origin : "https://scaterraptorx.com/";
+  const scheduleUrl = `${siteUrl.replace(/\/$/, "")}/#schedule`;
+  const blogUrl = `${siteUrl.replace(/\/$/, "")}/#blog`;
+  const heroImage = `${siteUrl.replace(/\/$/, "")}/event/Skater%20at%20Republique%20Paris%202.png`;
+  const heroAlt = isFrench ? "RaptorX Unleashed UK Roadshow" : "RaptorX Unleashed UK Roadshow";
+
+  const eventTitle = "RaptorX Unleashed: Waking Up the UK Streets";
+  const eventIntro = isFrench
+    ? "Scaters lance officiellement la série RaptorX avec une tournée sur 3 villes : Londres, Bristol et Manchester. Démos live, rencontres avec les pros et drops exclusifs."
+    : "Scaters officially launches the RaptorX series with a 3-city tour across London, Bristol, and Manchester. Live demos, pro rider meetups, and exclusive gear drops.";
+  const eventDateRange = isFrench ? "04–06 avril 2026" : "04–06 April 2026";
+  const eventCities = "London • Bristol • Manchester";
+  const scheduleHeading = isFrench ? "Temps forts du roadshow" : "Roadshow highlights";
+  const scheduleItems = isFrench
+    ? [
+        "04 AVR — Londres : Southbank Centre Skate Space (14:00–18:00)",
+        "05 AVR — Bristol : Dean Lane Skatepark (13:00–17:00)",
+        "06 AVR — Manchester : Projekts MCR Skatepark (16:00–20:00)"
+      ]
+    : [
+        "04 APR — London: Southbank Centre Skate Space (14:00–18:00)",
+        "05 APR — Bristol: Dean Lane Skatepark (13:00–17:00)",
+        "06 APR — Manchester: Projekts MCR Skatepark (16:00–20:00)"
+      ];
+  const safetyNote = isFrench
+    ? "Safety First, Ride Pro : kit sécurité pro + conseils d'instructeurs certifiés."
+    : "Safety First, Ride Pro: pro safety gear + guidance from certified instructors.";
+
   const html = `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
-      <h2 style="margin: 0 0 12px;">${greeting}</h2>
-      <p style="margin: 0 0 12px;">${intro}</p>
-      <p style="margin: 0 0 12px;">RAPTOR [X] team sẽ gửi cập nhật lịch trình sớm nhất.</p>
-      ${formSummary ? `<pre style="background:#f6f6f6;padding:12px;border-radius:8px;">${formSummary}</pre>` : ""}
-      <p style="margin: 12px 0 0;">— Scaters / RAPTOR [X]</p>
+    <div style="margin:0;padding:32px;background:#0b0b0b;">
+      <div style="max-width:620px;margin:0 auto;background:#111111;border:1px solid #262626;border-radius:16px;overflow:hidden;font-family:'Aptos Display','Segoe UI',Arial,sans-serif;color:#f2f2f2;">
+        <div style="padding:28px 28px 18px;">
+          <div style="letter-spacing:0.35em;font-size:12px;font-weight:700;text-transform:uppercase;color:#facc15;margin-bottom:16px;">RAPTOR [X]</div>
+          <h2 style="margin:0 0 8px;font-size:24px;line-height:1.3;">${greeting}</h2>
+          <p style="margin:0 0 14px;color:#d0d0d0;line-height:1.6;">${intro}</p>
+
+          <div style="display:inline-block;background:#1f1f1f;border:1px solid #2f2f2f;border-radius:999px;padding:6px 14px;margin:4px 0 8px;">
+            <span style="font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#9ca3af;">${statusLabel}</span>
+            <span style="margin-left:8px;font-weight:700;color:#facc15;">${statusValue}</span>
+          </div>
+        </div>
+
+        <img src="${heroImage}" alt="${heroAlt}" style="display:block;width:100%;height:auto;max-width:620px;">
+
+        <div style="padding:22px 28px 28px;">
+          <div style="font-size:12px;letter-spacing:0.3em;text-transform:uppercase;color:#9ca3af;">UK Roadshow</div>
+          <h3 style="margin:10px 0 6px;font-size:22px;line-height:1.3;color:#ffffff;">${eventTitle}</h3>
+          <p style="margin:0 0 12px;color:#d0d0d0;line-height:1.6;">${eventIntro}</p>
+
+          <div style="margin:0 0 12px;">
+            <span style="display:inline-block;background:#151515;border:1px solid #2b2b2b;border-radius:999px;padding:6px 10px;margin:0 8px 8px 0;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#facc15;">${eventDateRange}</span>
+            <span style="display:inline-block;background:#151515;border:1px solid #2b2b2b;border-radius:999px;padding:6px 10px;margin:0 8px 8px 0;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#e5e5e5;">${eventCities}</span>
+          </div>
+
+          <div style="border:1px solid #262626;border-radius:12px;padding:14px 16px;margin-bottom:16px;background:#0f0f0f;">
+            <div style="font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;">${scheduleHeading}</div>
+            ${scheduleItems.map((item) => `
+              <div style="margin:6px 0;color:#e5e5e5;font-size:13px;line-height:1.6;">${item}</div>
+            `).join("")}
+            <div style="margin-top:10px;color:#facc15;font-weight:700;font-size:12px;letter-spacing:0.06em;">${safetyNote}</div>
+          </div>
+
+          <p style="margin:0 0 18px;color:#d0d0d0;line-height:1.6;">${teamLine}</p>
+
+          ${safeSummary ? `
+            <div style="background:#0f0f0f;border:1px solid #262626;border-radius:12px;padding:16px;margin-bottom:18px;">
+              <div style="font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;">${detailTitle}</div>
+              <pre style="margin:0;white-space:pre-wrap;font-family:Consolas,monospace;font-size:12px;color:#e5e5e5;">${safeSummary}</pre>
+            </div>
+          ` : ""}
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <a href="${scheduleUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#facc15;color:#111111;font-weight:700;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;font-size:12px;">${ctaLabel}</a>
+            <a href="${blogUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;border:1px solid #3a3a3a;color:#f2f2f2;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;font-size:12px;">${storyLabel}</a>
+          </div>
+
+          <p style="margin:18px 0 0;color:#9ca3af;font-size:12px;line-height:1.6;">${footerLine}</p>
+          <p style="margin:18px 0 0;color:#6b7280;font-size:12px;">— Scaters / RAPTOR [X]</p>
+        </div>
+      </div>
     </div>
   `;
 
@@ -313,12 +408,38 @@ const server = http.createServer(async (req, res) => {
         }
       });
 
-      let formStatus = "submitted";
+      let formStatus = "failed";
       let formError = "";
       let formTarget = "google_form";
-      try {
-        if (GOOGLE_SCRIPT_URL) {
-          formTarget = "google_script";
+      let formSubmitted = false;
+
+      const canUseGoogleForm = Boolean(
+        googleFormActionUrl && googleFormActionUrl.startsWith("https://docs.google.com/forms/")
+      );
+
+      if (canUseGoogleForm) {
+        try {
+          const formResponse = await fetch(googleFormActionUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
+          });
+          if (!formResponse.ok) {
+            throw new Error(`Google Form submission failed (${formResponse.status}).`);
+          }
+          formSubmitted = true;
+          formStatus = "submitted";
+        } catch (error) {
+          formStatus = "failed";
+          formError = error.message || "Google Form submission failed.";
+        }
+      } else {
+        formError = "Invalid Google Form action URL.";
+      }
+
+      if (!formSubmitted && GOOGLE_SCRIPT_URL) {
+        formTarget = "google_script";
+        try {
           await submitToGoogleScript({
             form,
             lang,
@@ -328,23 +449,13 @@ const server = http.createServer(async (req, res) => {
               userAgent: req.headers["user-agent"] || ""
             }
           });
-        } else {
-          if (!googleFormActionUrl || !googleFormActionUrl.startsWith("https://docs.google.com/forms/")) {
-            return sendJson(req, res, 400, { error: "Invalid Google Form action URL." });
-          }
-          const formResponse = await fetch(googleFormActionUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: params.toString()
-          });
-          if (!formResponse.ok) {
-            formStatus = "failed";
-            formError = `Google Form submission failed (${formResponse.status}).`;
-          }
+          formSubmitted = true;
+          formStatus = "submitted";
+          formError = "";
+        } catch (error) {
+          formStatus = "failed";
+          formError = error.message || "Google Sheet sync failed.";
         }
-      } catch (error) {
-        formStatus = "failed";
-        formError = error.message || "Google Form submission failed.";
       }
 
       const name = form.entrant_name_dob || "";
@@ -359,7 +470,8 @@ const server = http.createServer(async (req, res) => {
           to: email,
           name,
           lang,
-          formSummary
+          formSummary,
+          origin: req.headers.origin || ""
         });
         emailStatus = emailResult.status;
       } catch (error) {
