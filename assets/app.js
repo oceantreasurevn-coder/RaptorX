@@ -1510,6 +1510,20 @@ const ChatbotWidget = ({
     }
   }, [messages, isSending, isOpen]);
   useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (isTouch) {
+      setCursorShift({
+        x: 0,
+        y: 0
+      });
+      setEyeOffset({
+        x: 0,
+        y: 0
+      });
+      setIsCursorNear(false);
+      return undefined;
+    }
     let animationFrame = null;
     const handleMove = event => {
       if (event.pointerType && event.pointerType !== "mouse") return;
@@ -1736,7 +1750,9 @@ const ChatbotWidget = ({
       inputRef.current.focus();
     }
   };
-  const activeExpression = isCursorNear ? "happy" : robotMood;
+  const isTouchInput = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  const reducedMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const activeExpression = isTouchInput || reducedMotion ? robotMood : isCursorNear ? "happy" : robotMood;
   const renderChatBrand = text => {
     if (typeof text !== "string") return text;
     const pattern = /(RAPTOR\s*\[X\]|Raptor\s*\[X\]|Raptor\[X\])/g;

@@ -560,7 +560,20 @@
                 gap: 18px;
             }
 
-            .mobile-layout .chat-launcher {
+                        .mobile-layout .chat-float,
+            .mobile-layout .chat-glow,
+            .mobile-layout .chat-orbit,
+            .mobile-layout .chat-robot-3d,
+            .mobile-layout .chat-robot-tilt,
+            .mobile-layout .chat-robot-head,
+            .mobile-layout .chat-robot-body,
+            .mobile-layout .chat-robot-board,
+            .mobile-layout .chat-robot-wheel {
+                animation: none !important;
+                transform: none !important;
+            }
+
+.mobile-layout .chat-launcher {
                 box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
             }
         }
@@ -2258,6 +2271,15 @@
             }, [messages, isSending, isOpen]);
 
             useEffect(() => {
+                if (typeof window === "undefined") return undefined;
+                const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+                if (isTouch) {
+                    setCursorShift({ x: 0, y: 0 });
+                    setEyeOffset({ x: 0, y: 0 });
+                    setIsCursorNear(false);
+                    return undefined;
+                }
+
                 let animationFrame = null;
                 const handleMove = (event) => {
                     if (event.pointerType && event.pointerType !== "mouse") return;
@@ -2501,7 +2523,9 @@
                 }
             };
 
-            const activeExpression = isCursorNear ? "happy" : robotMood;
+            const isTouchInput = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            const reducedMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const activeExpression = (isTouchInput || reducedMotion) ? robotMood : (isCursorNear ? "happy" : robotMood);
 
             const renderChatBrand = (text) => {
                 if (typeof text !== "string") return text;
@@ -4027,6 +4051,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260123-0905" defer></script>
+    <script src="assets/app.js?v=20260123-0910" defer></script>
 </body>
 </html>
