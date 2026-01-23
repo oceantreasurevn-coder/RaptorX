@@ -2471,7 +2471,7 @@
                     <section id="register" className="relative py-20 md:py-32 bg-black text-white">
                         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50 register-overlay"></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
-                            <RevealOnScroll>
+                            <RevealOnScroll className="reveal-no-transform">
                                 <h2 className="text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none font-graffiti">{t.register.title} <br/> <span className="text-gray-500">{t.register.sub}</span></h2>
                                 <p className="text-gray-400 mb-12 max-w-lg mx-auto text-lg">{t.register.desc}</p>
                                 <form className="w-full max-w-3xl mx-auto space-y-6 register-form" onSubmit={handleRegisterSubmit}>

@@ -3362,7 +3362,9 @@ const App = () => {
     className: "absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black opacity-50 register-overlay"
   }), /*#__PURE__*/React.createElement("div", {
     className: "container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center"
-  }, /*#__PURE__*/React.createElement(RevealOnScroll, null, /*#__PURE__*/React.createElement("h2", {
+  }, /*#__PURE__*/React.createElement(RevealOnScroll, {
+    className: "reveal-no-transform"
+  }, /*#__PURE__*/React.createElement("h2", {
     className: "text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none font-graffiti"
   }, t.register.title, " ", /*#__PURE__*/React.createElement("br", null), " ", /*#__PURE__*/React.createElement("span", {
     className: "text-gray-500"
