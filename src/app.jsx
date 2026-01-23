@@ -108,7 +108,7 @@
                 },
                 marquee2: "NEXT LEVEL PERFORMANCE // PRECISION ENGINEERED //",
                 nextLevel: { title: "Next Level", sub: "Performance . Precision . Power", alt: "Raptor [X] banner background" },
-                timeline: { title: "Timeline", imageAlt: "RAPTOR [X] billboard at a skate plaza" },
+                timeline: { title: "Timeline", imageAlt: "ROADSHOW2026 event poster" },
                 register: {
                     title: "Ready to",
                     sub: "Dominate?",
@@ -216,7 +216,7 @@
                 },
                 marquee2: "PERFORMANCE DE NIVEAU SUPÉRIEUR // INGÉNIERIE DE PRÉCISION //",
                 nextLevel: { title: "Niveau Supérieur", sub: "Performance . Précision . Puissance", alt: "Arrière-plan bannière RAPTOR [X]" },
-                timeline: { title: "Chronologie", imageAlt: "Billboard RAPTOR [X] sur une place skate" },
+                timeline: { title: "Chronologie", imageAlt: "Affiche ROADSHOW2026" },
                 register: {
                     title: "Prêt à",
                     sub: "Dominer?",
@@ -1278,7 +1278,7 @@
             };
 
             return (
-                <div className="fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3">
+                <div className="fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3 chat-container">
                     {isOpen && showOfflineBanner && chatStatus.state === "offline" && (
                         <div className="flex items-center gap-3 rounded-full bg-black text-yellow-300 border border-yellow-400 px-4 py-2 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
                             <span className="text-[10px] uppercase tracking-widest font-bold">{t.chat.statusOffline}</span>
@@ -1287,7 +1287,7 @@
                             </button>
                         </div>
                     )}
-                    <div className={`relative transition-all duration-500 ${isOpen ? 'w-[86vw] sm:w-[340px] md:w-[400px] opacity-100 translate-y-0 pointer-events-auto' : 'w-0 h-0 opacity-0 translate-y-6 pointer-events-none overflow-hidden'}`}>
+                    <div className={`relative transition-all duration-500 chat-panel ${isOpen ? 'w-[86vw] sm:w-[340px] md:w-[400px] opacity-100 translate-y-0 pointer-events-auto' : 'w-0 h-0 opacity-0 translate-y-6 pointer-events-none overflow-hidden'}`}>
                         <div className="chat-glow"></div>
                         <div className="chat-orbit"></div>
                         <div className="relative rounded-3xl overflow-hidden border border-black/10 bg-white text-black shadow-[0_30px_70px_rgba(0,0,0,0.2)]">
@@ -2082,11 +2082,12 @@
                             <RevealOnScroll>
                                 <div className="mb-16">
                                     <img
-                                        src="ng v.jpg"
+                                        src="ROADSHOW2026.jpg"
                                         alt={t.timeline.imageAlt}
                                         className="w-full h-auto object-contain shadow-xl"
                                         loading="lazy"
                                         decoding="async"
+                                        data-tag="event"
                                     />
                                 </div>
                             </RevealOnScroll>
