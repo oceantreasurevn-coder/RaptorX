@@ -876,21 +876,22 @@
 
         @media (max-width: 900px) {
             body {
-                display: flex;
-                justify-content: center;
-                padding: 0 16px;
+                display: block;
+                justify-content: initial;
+                padding: 0;
             }
 
             #root {
-                width: 410px;
-                min-width: 410px;
-                min-height: 1105px;
-                margin: 0 auto;
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                min-height: 0;
+                margin: 0;
             }
 
             .product-blueprint-board {
-                width: 410px;
-                max-width: 410px;
+                width: 100%;
+                max-width: 100%;
                 height: 520px;
             }
         }
@@ -4139,6 +4140,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260123-1310" defer></script>
+    <script src="assets/app.js?v=20260123-1355" defer></script>
 </body>
 </html>
