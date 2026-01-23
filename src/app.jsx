@@ -1906,6 +1906,9 @@
                                         </span>
                                     </div>
                                     <div className="overflow-hidden"><h3 className={`text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform collection-title ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeTheme.textClass}`}>{activeProduct.name}</h3></div>
+                                    <div className="overflow-hidden">
+                                        <img src="Scater%20RaptorX%20Quality.png" alt="Scater RaptorX Quality badge" className={`mx-auto md:mx-0 mt-3 mb-1 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain transition-all duration-500 delay-150 transform ${isAnimating ? 'translate-y-6 opacity-0' : 'translate-y-0 opacity-100'}`} loading="lazy" decoding="async" />
+                                    </div>
                                     <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform collection-subtitle ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`}>{activeSub}</p></div>
                                     <div className="flex gap-4 pt-8 collection-nav">
                                         <button onClick={handlePrev} className="p-3 sm:p-4 border border-gray-200 hover:bg-black hover:text-white transition-colors rounded-full shadow-lg active:scale-95 cursor-pointer"><ChevronLeft size={24} /></button>
