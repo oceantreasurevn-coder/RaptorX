@@ -1892,7 +1892,7 @@ const ChatbotWidget = ({
     onClick: refreshStatus,
     className: "text-[10px] uppercase tracking-widest bg-yellow-400 text-black px-3 py-1 rounded-full font-bold hover:bg-yellow-300 transition"
   }, t.chat.retry)), /*#__PURE__*/React.createElement("div", {
-    className: `relative w-[86vw] sm:w-[340px] md:w-[400px] transition-all duration-500 ${isOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-6 pointer-events-none'}`
+    className: `relative transition-all duration-500 ${isOpen ? 'w-[86vw] sm:w-[340px] md:w-[400px] opacity-100 translate-y-0 pointer-events-auto' : 'w-0 h-0 opacity-0 translate-y-6 pointer-events-none overflow-hidden'}`
   }, /*#__PURE__*/React.createElement("div", {
     className: "chat-glow"
   }), /*#__PURE__*/React.createElement("div", {
