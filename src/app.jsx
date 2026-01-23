@@ -1647,11 +1647,14 @@
                 const borderRgb = luminance > 0.7 ? mixRgb(base, { r: 0, g: 0, b: 0 }, 0.6) : base;
                 const bgTop = mixRgb(base, { r: 255, g: 255, b: 255 }, 0.92);
                 const bgBottom = mixRgb(base, { r: 255, g: 255, b: 255 }, 0.8);
+                const accentRgb = luminance < 0.35 ? mixRgb(base, { r: 255, g: 255, b: 255 }, 0.35) : base;
                 return {
                     border: rgbToHex(borderRgb),
                     bgTop: rgbToHex(bgTop),
                     bgBottom: rgbToHex(bgBottom),
-                    glow: rgba(borderRgb, 0.28)
+                    glow: rgba(borderRgb, 0.32),
+                    accent: rgbToHex(accentRgb),
+                    accentSoft: rgba(accentRgb, 0.28)
                 };
             };
 
@@ -1944,9 +1947,13 @@
                                                 "--quality-frame-border": qualityFrameColors.border,
                                                 "--quality-frame-bg-top": qualityFrameColors.bgTop,
                                                 "--quality-frame-bg-bottom": qualityFrameColors.bgBottom,
-                                                "--quality-frame-glow": qualityFrameColors.glow
+                                                "--quality-frame-glow": qualityFrameColors.glow,
+                                                "--quality-frame-accent": qualityFrameColors.accent,
+                                                "--quality-frame-accent-soft": qualityFrameColors.accentSoft
                                             }}
                                         >
+                                            <span className="quality-tech-overlay" aria-hidden="true"></span>
+                                            <span className="quality-tech-struts" aria-hidden="true"></span>
                                             <img src="Scater%20RaptorX%20Quality.jpg" alt="Scater RaptorX Quality badge" className="quality-tech-image mx-auto md:mx-0 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain" loading="lazy" decoding="async" />
                                         </div>
                                     </div>
