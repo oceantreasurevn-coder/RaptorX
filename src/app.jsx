@@ -76,7 +76,7 @@
                     label: "Limited time",
                     title: "Gift for Student",
                     desc: "Unlock a bonus pack when you register today.",
-                    cta: "Claim now"
+                    cta: "Hashtag: #ScatersRaptorX now"
                 },
                 blueprint: {
                     title: "Under The Hood",
@@ -184,7 +184,7 @@
                     label: "Série limitée",
                     title: "Gift for Student",
                     desc: "Débloque un bonus en t'inscrivant maintenant.",
-                    cta: "Obtenir"
+                    cta: "Hashtag: #ScatersRaptorX now"
                 },
                 blueprint: {
                     title: "Sous le capot",
@@ -1836,9 +1836,9 @@
                                         <h3 className="text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight">{t.giftBanner.title}</h3>
                                         <p className="text-sm font-bold text-neutral-600 mt-1">{t.giftBanner.desc}</p>
                                     </div>
-                                    <a href="#schedule" onClick={scrollToSchedule} onTouchEnd={scrollToSchedule} onPointerUp={scrollToSchedule} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
-                                        {t.giftBanner.cta}
-                                    </a>
+                                    <div className="shrink-0 text-right">
+                                        <span className="hashtag-cta">{t.giftBanner.cta}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
