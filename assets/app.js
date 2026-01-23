@@ -2442,6 +2442,18 @@ const App = () => {
       window.location.hash = "#register";
     }
   };
+  const scrollToSchedule = event => {
+    if (event?.preventDefault) event.preventDefault();
+    const target = document.getElementById("schedule");
+    if (target?.scrollIntoView) {
+      target.scrollIntoView({
+        behavior: "auto",
+        block: "start"
+      });
+    } else {
+      window.location.hash = "#schedule";
+    }
+  };
   const handleRegisterSubmit = async event => {
     event.preventDefault();
     if (isRegisterSending) return;
@@ -2636,8 +2648,8 @@ const App = () => {
   }, t.giftBanner.title), /*#__PURE__*/React.createElement("p", {
     className: "text-sm font-bold text-neutral-600 mt-1"
   }, t.giftBanner.desc)), /*#__PURE__*/React.createElement("a", {
-    href: "#register",
-    onClick: scrollToRegister,
+    href: "#schedule",
+    onClick: scrollToSchedule,
     className: "shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg"
   }, t.giftBanner.cta))))), /*#__PURE__*/React.createElement("header", {
     className: "relative w-full min-h-[100svh] md:h-screen overflow-hidden bg-black flex items-center justify-center"

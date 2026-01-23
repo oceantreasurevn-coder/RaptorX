@@ -1674,6 +1674,16 @@
                 }
             };
 
+            const scrollToSchedule = (event) => {
+                if (event?.preventDefault) event.preventDefault();
+                const target = document.getElementById("schedule");
+                if (target?.scrollIntoView) {
+                    target.scrollIntoView({ behavior: "auto", block: "start" });
+                } else {
+                    window.location.hash = "#schedule";
+                }
+            };
+
             const handleRegisterSubmit = async (event) => {
                 event.preventDefault();
                 if (isRegisterSending) return;
@@ -1827,7 +1837,7 @@
                                         <h3 className="text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight">{t.giftBanner.title}</h3>
                                         <p className="text-sm font-bold text-neutral-600 mt-1">{t.giftBanner.desc}</p>
                                     </div>
-                                    <a href="#register" onClick={scrollToRegister} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
+                                    <a href="#schedule" onClick={scrollToSchedule} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
                                         {t.giftBanner.cta}
                                     </a>
                                 </div>
