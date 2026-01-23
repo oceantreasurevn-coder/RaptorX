@@ -237,7 +237,7 @@ const translations = {
       label: "Limited time",
       title: "Gift for Student",
       desc: "Unlock a bonus pack when you register today.",
-      cta: "Claim now"
+      cta: "Hashtag: #ScatersRaptorX now"
     },
     blueprint: {
       title: "Under The Hood",
@@ -452,7 +452,7 @@ const translations = {
       label: "Série limitée",
       title: "Gift for Student",
       desc: "Débloque un bonus en t'inscrivant maintenant.",
-      cta: "Obtenir"
+      cta: "Hashtag: #ScatersRaptorX now"
     },
     blueprint: {
       title: "Sous le capot",
@@ -2641,13 +2641,11 @@ const App = () => {
     className: "text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight"
   }, t.giftBanner.title), /*#__PURE__*/React.createElement("p", {
     className: "text-sm font-bold text-neutral-600 mt-1"
-  }, t.giftBanner.desc)), /*#__PURE__*/React.createElement("a", {
-    href: "#schedule",
-    onClick: scrollToSchedule,
-    onTouchEnd: scrollToSchedule,
-    onPointerUp: scrollToSchedule,
-    className: "shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg"
-  }, t.giftBanner.cta))))), /*#__PURE__*/React.createElement("header", {
+  }, t.giftBanner.desc)), /*#__PURE__*/React.createElement("div", {
+    className: "shrink-0 text-right"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "hashtag-cta"
+  }, t.giftBanner.cta)))))), /*#__PURE__*/React.createElement("header", {
     className: "relative w-full min-h-[100svh] md:h-screen overflow-hidden bg-black flex items-center justify-center"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 w-full h-full z-0 flex items-center justify-center"
