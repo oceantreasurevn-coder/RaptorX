@@ -2808,7 +2808,7 @@ const App = () => {
       "--quality-frame-glow": qualityFrameColors.glow
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "Scater%20RaptorX%20Quality.png",
+    src: "Scater%20RaptorX%20Quality.jpg",
     alt: "Scater RaptorX Quality badge",
     className: "quality-tech-image mx-auto md:mx-0 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain",
     loading: "lazy",

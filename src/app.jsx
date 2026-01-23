@@ -1947,7 +1947,7 @@
                                                 "--quality-frame-glow": qualityFrameColors.glow
                                             }}
                                         >
-                                            <img src="Scater%20RaptorX%20Quality.png" alt="Scater RaptorX Quality badge" className="quality-tech-image mx-auto md:mx-0 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain" loading="lazy" decoding="async" />
+                                            <img src="Scater%20RaptorX%20Quality.jpg" alt="Scater RaptorX Quality badge" className="quality-tech-image mx-auto md:mx-0 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain" loading="lazy" decoding="async" />
                                         </div>
                                     </div>
                                     <div className="overflow-hidden"><p className={`text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform collection-subtitle ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`}>{activeSub}</p></div>
