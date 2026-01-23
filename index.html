@@ -205,7 +205,7 @@
             opacity: 0.7;
             z-index: 60;
             pointer-events: auto;
-            touch-action: manipulation;
+            touch-action: auto;
         }
 
         .collection-switch--prev {
@@ -507,10 +507,20 @@
                 display: none;
             }
 
+            .mobile-layout #register,
+            .mobile-layout #register * {
+                pointer-events: auto !important;
+            }
+
             .mobile-layout #register .register-form,
             .mobile-layout #register .register-form * {
-                pointer-events: auto;
-                touch-action: manipulation;
+                pointer-events: auto !important;
+                touch-action: auto !important;
+            }
+
+            .mobile-layout .register-card {
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
             }
 
             .mobile-layout #register .register-form {
@@ -528,6 +538,7 @@
                 z-index: 45;
                 -webkit-user-select: text;
                 user-select: text;
+                touch-action: auto;
             }
 
             .mobile-layout #register select,
@@ -537,6 +548,7 @@
                 z-index: 45;
                 -webkit-user-select: text;
                 user-select: text;
+                touch-action: auto;
             }
 
             .mobile-layout footer .footer-layout {
@@ -578,8 +590,14 @@
             }
 
             #register,
-            #register form {
-                pointer-events: auto;
+            #register form,
+            #register * {
+                pointer-events: auto !important;
+            }
+
+            .register-card {
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
             }
 
             #register {
@@ -591,7 +609,7 @@
             #register label,
             #register button,
             #register select {
-                touch-action: manipulation;
+                touch-action: auto;
                 pointer-events: auto;
             }
         }
@@ -1388,7 +1406,7 @@
             z-index: 3;
         }
         .register-option-label {
-            touch-action: manipulation;
+            touch-action: auto;
             display: inline-flex;
             align-items: center;
         }
@@ -3824,7 +3842,7 @@
                                 <h2 className="text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none font-graffiti">{t.register.title} <br/> <span className="text-gray-500">{t.register.sub}</span></h2>
                                 <p className="text-gray-400 mb-12 max-w-lg mx-auto text-lg">{t.register.desc}</p>
                                 <form className="w-full max-w-3xl mx-auto space-y-6 register-form" onSubmit={handleRegisterSubmit}>
-                                    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur">
+                                    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur register-card">
                                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-6">
                                             <div>
                                                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-yellow-400">{t.registerSurvey.title}</p>
@@ -4008,6 +4026,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260123-0847" defer></script>
+    <script src="assets/app.js?v=20260123-0856" defer></script>
 </body>
 </html>

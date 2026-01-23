@@ -3374,7 +3374,7 @@ const App = () => {
     className: "w-full max-w-3xl mx-auto space-y-6 register-form",
     onSubmit: handleRegisterSubmit
   }, /*#__PURE__*/React.createElement("div", {
-    className: "rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur"
+    className: "rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur register-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-6"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {

@@ -2475,7 +2475,7 @@
                                 <h2 className="text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none font-graffiti">{t.register.title} <br/> <span className="text-gray-500">{t.register.sub}</span></h2>
                                 <p className="text-gray-400 mb-12 max-w-lg mx-auto text-lg">{t.register.desc}</p>
                                 <form className="w-full max-w-3xl mx-auto space-y-6 register-form" onSubmit={handleRegisterSubmit}>
-                                    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur">
+                                    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur register-card">
                                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-6">
                                             <div>
                                                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-yellow-400">{t.registerSurvey.title}</p>
