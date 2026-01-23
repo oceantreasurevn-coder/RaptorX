@@ -869,10 +869,11 @@
             useEffect(() => {
                 let animationFrame = null;
                 const handleMove = (event) => {
+                    if (event.pointerType && event.pointerType !== "mouse") return;
                     if (animationFrame) cancelAnimationFrame(animationFrame);
                     animationFrame = requestAnimationFrame(() => {
-                        const offsetX = (event.clientX / window.innerWidth - 0.5) * 24;
-                        const offsetY = (event.clientY / window.innerHeight - 0.5) * 24;
+                        const offsetX = (event.clientX / window.innerWidth - 0.5) * 6;
+                        const offsetY = (event.clientY / window.innerHeight - 0.5) * 6;
                         setCursorShift({ x: offsetX, y: offsetY });
 
                         const candidates = [robotRef.current, headerRobotRef.current].filter(Boolean);
@@ -888,7 +889,7 @@
                             const centerY = rect.top + rect.height / 2;
                             const dx = event.clientX - centerX;
                             const dy = event.clientY - centerY;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            const distance = Math.hypot(dx, dy);
                             if (distance < minDistance) {
                                 minDistance = distance;
                                 closest = { dx, dy };
@@ -896,19 +897,19 @@
                         });
 
                         if (!closest) return;
-                        const maxDistance = 220;
+                        const maxDistance = 80;
                         const influence = Math.max(0, Math.min(1, (maxDistance - minDistance) / maxDistance));
-                        const clamp = (value) => Math.max(-6, Math.min(6, value * 0.06));
+                        const clamp = (value) => Math.max(-4, Math.min(4, value * 0.04));
                         setEyeOffset({
                             x: clamp(closest.dx) * influence,
                             y: clamp(closest.dy) * influence
                         });
-                        setIsCursorNear(minDistance < 140);
+                        setIsCursorNear(minDistance < 50);
                     });
                 };
-                window.addEventListener("mousemove", handleMove);
+                window.addEventListener("pointermove", handleMove, { passive: true });
                 return () => {
-                    window.removeEventListener("mousemove", handleMove);
+                    window.removeEventListener("pointermove", handleMove);
                     if (animationFrame) cancelAnimationFrame(animationFrame);
                 };
             }, []);
