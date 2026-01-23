@@ -67,7 +67,7 @@
             en: {
                 nav: { product: "Products", gear: "Gear", blog: "Blog/Event", schedule: "Schedule", register: "Register" },
                 meta: { title: "RAPTOR [X] - Street Skateboarding" },
-                hero: { badge: "SPECIAL", subtext: "[X] SERIES", desc: "The perfect fusion of ergonomic design and ultimate sensor technology.", boldDesc: "Pitch Black. Powerful. Premium.", preOrder: "Pre-Order Now", explore: "Explore", alt: "Raptor [X] hero background" },
+                hero: { badge: "SPECIAL", subtext: "[X] SERIES", desc: "The perfect fusion of ergonomic design and ultimate sensor technology.", boldDesc: "Pitch Black. Powerful. Premium.", preOrder: "Ready to Dominate?", explore: "Timeline", alt: "Raptor [X] hero background" },
                 marquee: "STREET // SKATE // POWER // RAPTOR-X //",
                 collection: { title: "Collection", sub: "Upcoming Products 2026" },
                 gear: { title: "Gear", sub: "Essential Accessories for the Ultimate Skate Experience", cta: "Add to Cart" },
@@ -175,7 +175,7 @@
             fr: {
                 nav: { product: "Produits", gear: "Équipement", blog: "Blog/Événements", schedule: "Programme", register: "S'inscrire" },
                 meta: { title: "RAPTOR [X] - Skate de rue" },
-                hero: { badge: "SPÉCIAL", subtext: "[X] SÉRIE", desc: "La fusion parfaite d'un design ergonomique et d'une technologie de capteur ultime.", boldDesc: "Noir Absolu. Puissant. Premium.", preOrder: "Pré-commander", explore: "Explorer", alt: "Arrière-plan héro RAPTOR [X]" },
+                hero: { badge: "SPÉCIAL", subtext: "[X] SÉRIE", desc: "La fusion parfaite d'un design ergonomique et d'une technologie de capteur ultime.", boldDesc: "Noir Absolu. Puissant. Premium.", preOrder: "Prêt à dominer ?", explore: "Chronologie", alt: "Arrière-plan héro RAPTOR [X]" },
                 marquee: "RUE // SKATE // PUISSANCE // RAPTOR-X //",
                 collection: { title: "Collection", sub: "Produits à venir 2026" },
                 gear: { title: "Équipement", sub: "Accessoires Essentiels pour l'Expérience Skate Ultime", cta: "Ajouter au panier" },
@@ -1668,14 +1668,19 @@
 
             const scrollToSchedule = (event) => {
                 if (event?.preventDefault) event.preventDefault();
+                if (event?.stopPropagation) event.stopPropagation();
                 const target = document.getElementById("schedule");
                 if (!target) {
                     window.location.hash = "#schedule";
                     return;
                 }
-                const top = target.getBoundingClientRect().top + window.pageYOffset;
+                const nav = document.querySelector("nav");
+                const navOffset = nav ? nav.offsetHeight : 0;
+                const top = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
                 window.scrollTo({ top, behavior: "smooth" });
-                window.location.hash = "#schedule";
+                setTimeout(() => {
+                    window.location.hash = "#schedule";
+                }, 150);
             };
 
             const handleRegisterSubmit = async (event) => {
@@ -1831,7 +1836,7 @@
                                         <h3 className="text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight">{t.giftBanner.title}</h3>
                                         <p className="text-sm font-bold text-neutral-600 mt-1">{t.giftBanner.desc}</p>
                                     </div>
-                                    <a href="#schedule" onClick={scrollToSchedule} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
+                                    <a href="#schedule" onClick={scrollToSchedule} onTouchEnd={scrollToSchedule} onPointerUp={scrollToSchedule} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
                                         {t.giftBanner.cta}
                                     </a>
                                 </div>
@@ -1865,7 +1870,7 @@
                                         <span className="relative z-10 group-hover:text-white transition-colors duration-300 font-graffiti">{t.hero.preOrder}</span>
                                         <div className="absolute inset-0 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
                                     </a>
-                                    <a href="#products" className="group px-10 py-4 border border-white text-white font-bold text-lg uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm flex items-center gap-2 cursor-pointer">
+                                    <a href="#schedule" className="group px-10 py-4 border border-white text-white font-bold text-lg uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm flex items-center gap-2 cursor-pointer">
                                         <span className="font-graffiti">{t.hero.explore}</span>
                                         <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform"/>
                                     </a>
@@ -1879,7 +1884,7 @@
 
                     <InfiniteMarquee text={t.marquee} speed={25} className="bg-yellow-400 text-black border-black" />
 
-                    <section id="products" className="py-20 md:py-32 bg-white text-black overflow-hidden relative">
+                    <section id="products" className="py-20 md:py-32 bg-white text-black overflow-hidden relative perf-section">
                         <div className="absolute inset-0 z-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
                             <RevealOnScroll className="reveal-no-transform">
@@ -1961,7 +1966,7 @@
                         </div>
                     </section>
 
-                    <section id="gear" className="py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative">
+                    <section id="gear" className="py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative perf-section">
                         <div className="absolute inset-0 z-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
                             <RevealOnScroll>
@@ -2065,7 +2070,7 @@
                         </div>
                     </section>
 
-                    <section id="schedule" className="py-20 md:py-32 bg-neutral-100">
+                    <section id="schedule" className="py-20 md:py-32 bg-neutral-100 perf-section">
                         <div className="container mx-auto px-4 sm:px-6">
                             <RevealOnScroll>
                                 <div className="mb-20">
@@ -2114,7 +2119,7 @@
                         </div>
                     </section>
 
-                    <section id="blog" className="py-20 md:py-32 bg-black text-white overflow-hidden relative">
+                    <section id="blog" className="py-20 md:py-32 bg-black text-white overflow-hidden relative perf-section">
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
                                                         <style>{`
                                                         :root{

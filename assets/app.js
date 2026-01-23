@@ -215,8 +215,8 @@ const translations = {
       subtext: "[X] SERIES",
       desc: "The perfect fusion of ergonomic design and ultimate sensor technology.",
       boldDesc: "Pitch Black. Powerful. Premium.",
-      preOrder: "Pre-Order Now",
-      explore: "Explore",
+      preOrder: "Ready to Dominate?",
+      explore: "Timeline",
       alt: "Raptor [X] hero background"
     },
     marquee: "STREET // SKATE // POWER // RAPTOR-X //",
@@ -430,8 +430,8 @@ const translations = {
       subtext: "[X] SÉRIE",
       desc: "La fusion parfaite d'un design ergonomique et d'une technologie de capteur ultime.",
       boldDesc: "Noir Absolu. Puissant. Premium.",
-      preOrder: "Pré-commander",
-      explore: "Explorer",
+      preOrder: "Prêt à dominer ?",
+      explore: "Chronologie",
       alt: "Arrière-plan héro RAPTOR [X]"
     },
     marquee: "RUE // SKATE // PUISSANCE // RAPTOR-X //",
@@ -2431,17 +2431,22 @@ const App = () => {
   };
   const scrollToSchedule = event => {
     if (event?.preventDefault) event.preventDefault();
+    if (event?.stopPropagation) event.stopPropagation();
     const target = document.getElementById("schedule");
     if (!target) {
       window.location.hash = "#schedule";
       return;
     }
-    const top = target.getBoundingClientRect().top + window.pageYOffset;
+    const nav = document.querySelector("nav");
+    const navOffset = nav ? nav.offsetHeight : 0;
+    const top = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
     window.scrollTo({
       top,
       behavior: "smooth"
     });
-    window.location.hash = "#schedule";
+    setTimeout(() => {
+      window.location.hash = "#schedule";
+    }, 150);
   };
   const handleRegisterSubmit = async event => {
     event.preventDefault();
@@ -2639,6 +2644,8 @@ const App = () => {
   }, t.giftBanner.desc)), /*#__PURE__*/React.createElement("a", {
     href: "#schedule",
     onClick: scrollToSchedule,
+    onTouchEnd: scrollToSchedule,
+    onPointerUp: scrollToSchedule,
     className: "shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg"
   }, t.giftBanner.cta))))), /*#__PURE__*/React.createElement("header", {
     className: "relative w-full min-h-[100svh] md:h-screen overflow-hidden bg-black flex items-center justify-center"
@@ -2690,7 +2697,7 @@ const App = () => {
   }, t.hero.preOrder), /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"
   })), /*#__PURE__*/React.createElement("a", {
-    href: "#products",
+    href: "#schedule",
     className: "group px-10 py-4 border border-white text-white font-bold text-lg uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm flex items-center gap-2 cursor-pointer"
   }, /*#__PURE__*/React.createElement("span", {
     className: "font-graffiti"
@@ -2708,7 +2715,7 @@ const App = () => {
     className: "bg-yellow-400 text-black border-black"
   }), /*#__PURE__*/React.createElement("section", {
     id: "products",
-    className: "py-20 md:py-32 bg-white text-black overflow-hidden relative"
+    className: "py-20 md:py-32 bg-white text-black overflow-hidden relative perf-section"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 z-0 opacity-5 pointer-events-none",
     style: {
@@ -2840,7 +2847,7 @@ const App = () => {
     }, productSub));
   })))), /*#__PURE__*/React.createElement("section", {
     id: "gear",
-    className: "py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative"
+    className: "py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative perf-section"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 z-0 opacity-5 pointer-events-none",
     style: {
@@ -2967,7 +2974,7 @@ const App = () => {
     className: "text-gray-400 font-light text-base sm:text-xl tracking-widest uppercase"
   }, t.nextLevel.sub)))), /*#__PURE__*/React.createElement("section", {
     id: "schedule",
-    className: "py-20 md:py-32 bg-neutral-100"
+    className: "py-20 md:py-32 bg-neutral-100 perf-section"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container mx-auto px-4 sm:px-6"
   }, /*#__PURE__*/React.createElement(RevealOnScroll, null, /*#__PURE__*/React.createElement("div", {
@@ -3008,7 +3015,7 @@ const App = () => {
     key: `${event.time}-${lineIndex}`
   }, line, lineIndex < lines.length - 1 && /*#__PURE__*/React.createElement("br", null)))))))))))), /*#__PURE__*/React.createElement("section", {
     id: "blog",
-    className: "py-20 md:py-32 bg-black text-white overflow-hidden relative"
+    className: "py-20 md:py-32 bg-black text-white overflow-hidden relative perf-section"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container mx-auto px-4 sm:px-6 relative z-10"
   }, /*#__PURE__*/React.createElement("style", null, `
