@@ -719,20 +719,6 @@
             letter-spacing: 0.08em;
         }
 
-        .hashtag-cta {
-            display: inline-block;
-            font-family: 'Sedgwick Ave Display', cursive;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #facc15;
-            -webkit-text-stroke: 1.6px #111111;
-            text-shadow:
-                2px 2px 0 #111111,
-                4px 4px 0 #000000,
-                0 0 12px rgba(250, 204, 21, 0.55);
-        }
-
         .perspective-1000 {
             perspective: 1000px;
         }
@@ -1614,7 +1600,7 @@
                     label: "Limited time",
                     title: "Gift for Student",
                     desc: "Unlock a bonus pack when you register today.",
-                    cta: "Hashtag: #ScatersRaptorX now"
+                    cta: "Claim now"
                 },
                 blueprint: {
                     title: "Under The Hood",
@@ -1701,7 +1687,7 @@
                     label: "Série limitée",
                     title: "Gift for Student",
                     desc: "Débloque un bonus en t'inscrivant maintenant.",
-                    cta: "Hashtag: #ScatersRaptorX now"
+                    cta: "Obtenir"
                 },
                 blueprint: {
                     title: "Sous le capot",
@@ -3330,9 +3316,9 @@
                                         <h3 className="text-xl font-black uppercase font-graffiti text-neutral-900 leading-tight">{t.giftBanner.title}</h3>
                                         <p className="text-sm font-bold text-neutral-600 mt-1">{t.giftBanner.desc}</p>
                                     </div>
-                                    <div className="shrink-0 text-right">
-                                        <span className="hashtag-cta">{t.giftBanner.cta}</span>
-                                    </div>
+                                    <a href="#schedule" onClick={scrollToSchedule} onTouchEnd={scrollToSchedule} onPointerUp={scrollToSchedule} className="shrink-0 px-4 py-2 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.25em] shadow-lg">
+                                        {t.giftBanner.cta}
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -4153,6 +4139,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260123-1340" defer></script>
+    <script src="assets/app.js?v=20260123-1310" defer></script>
 </body>
 </html>
