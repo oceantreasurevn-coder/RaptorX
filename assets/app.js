@@ -1251,7 +1251,7 @@ const RevealOnScroll = ({
   }, []);
   return /*#__PURE__*/React.createElement("div", {
     ref: ref,
-    className: `reveal-wrapper transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`
+    className: `transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`
   }, children);
 };
 const RobotAvatar = ({
@@ -1737,9 +1737,7 @@ const ChatbotWidget = ({
       inputRef.current.focus();
     }
   };
-  const isTouchInput = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-  const reducedMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const activeExpression = isTouchInput || reducedMotion ? robotMood : isCursorNear ? "happy" : robotMood;
+  const activeExpression = isCursorNear ? "happy" : robotMood;
   const renderChatBrand = text => {
     if (typeof text !== "string") return text;
     const pattern = /(RAPTOR\s*\[X\]|Raptor\s*\[X\]|Raptor\[X\])/g;
@@ -2715,7 +2713,7 @@ const App = () => {
     className: "bg-yellow-400 text-black border-black"
   }), /*#__PURE__*/React.createElement("section", {
     id: "products",
-    className: "py-20 md:py-32 bg-white text-black overflow-hidden relative perf-section"
+    className: "py-20 md:py-32 bg-white text-black overflow-hidden relative"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 z-0 opacity-5 pointer-events-none",
     style: {
@@ -2847,7 +2845,7 @@ const App = () => {
     }, productSub));
   })))), /*#__PURE__*/React.createElement("section", {
     id: "gear",
-    className: "py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative perf-section"
+    className: "py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative"
   }, /*#__PURE__*/React.createElement("div", {
     className: "absolute inset-0 z-0 opacity-5 pointer-events-none",
     style: {
@@ -2974,7 +2972,7 @@ const App = () => {
     className: "text-gray-400 font-light text-base sm:text-xl tracking-widest uppercase"
   }, t.nextLevel.sub)))), /*#__PURE__*/React.createElement("section", {
     id: "schedule",
-    className: "py-20 md:py-32 bg-neutral-100 perf-section"
+    className: "py-20 md:py-32 bg-neutral-100"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container mx-auto px-4 sm:px-6"
   }, /*#__PURE__*/React.createElement(RevealOnScroll, null, /*#__PURE__*/React.createElement("div", {
@@ -3015,7 +3013,7 @@ const App = () => {
     key: `${event.time}-${lineIndex}`
   }, line, lineIndex < lines.length - 1 && /*#__PURE__*/React.createElement("br", null)))))))))))), /*#__PURE__*/React.createElement("section", {
     id: "blog",
-    className: "py-20 md:py-32 bg-black text-white overflow-hidden relative perf-section"
+    className: "py-20 md:py-32 bg-black text-white overflow-hidden relative"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container mx-auto px-4 sm:px-6 relative z-10"
   }, /*#__PURE__*/React.createElement("style", null, `

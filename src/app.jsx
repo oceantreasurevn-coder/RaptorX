@@ -609,7 +609,7 @@
             }, []);
 
             return (
-                <div ref={ref} className={`reveal-wrapper transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}>
+                <div ref={ref} className={`transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}>
                     {children}
                 </div>
             );
@@ -1113,9 +1113,7 @@
                 }
             };
 
-            const isTouchInput = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-            const reducedMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const activeExpression = (isTouchInput || reducedMotion) ? robotMood : (isCursorNear ? "happy" : robotMood);
+            const activeExpression = isCursorNear ? "happy" : robotMood;
 
             const renderChatBrand = (text) => {
                 if (typeof text !== "string") return text;
@@ -1884,7 +1882,7 @@
 
                     <InfiniteMarquee text={t.marquee} speed={25} className="bg-yellow-400 text-black border-black" />
 
-                    <section id="products" className="py-20 md:py-32 bg-white text-black overflow-hidden relative perf-section">
+                    <section id="products" className="py-20 md:py-32 bg-white text-black overflow-hidden relative">
                         <div className="absolute inset-0 z-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
                             <RevealOnScroll className="reveal-no-transform">
@@ -1966,7 +1964,7 @@
                         </div>
                     </section>
 
-                    <section id="gear" className="py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative perf-section">
+                    <section id="gear" className="py-20 md:py-32 bg-gray-50 text-black overflow-hidden relative">
                         <div className="absolute inset-0 z-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
                             <RevealOnScroll>
@@ -2070,7 +2068,7 @@
                         </div>
                     </section>
 
-                    <section id="schedule" className="py-20 md:py-32 bg-neutral-100 perf-section">
+                    <section id="schedule" className="py-20 md:py-32 bg-neutral-100">
                         <div className="container mx-auto px-4 sm:px-6">
                             <RevealOnScroll>
                                 <div className="mb-20">
@@ -2119,7 +2117,7 @@
                         </div>
                     </section>
 
-                    <section id="blog" className="py-20 md:py-32 bg-black text-white overflow-hidden relative perf-section">
+                    <section id="blog" className="py-20 md:py-32 bg-black text-white overflow-hidden relative">
                         <div className="container mx-auto px-4 sm:px-6 relative z-10">
                                                         <style>{`
                                                         :root{
