@@ -1669,11 +1669,13 @@
             const scrollToSchedule = (event) => {
                 if (event?.preventDefault) event.preventDefault();
                 const target = document.getElementById("schedule");
-                if (target?.scrollIntoView) {
-                    target.scrollIntoView({ behavior: "auto", block: "start" });
-                } else {
+                if (!target) {
                     window.location.hash = "#schedule";
+                    return;
                 }
+                const top = target.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({ top, behavior: "smooth" });
+                window.location.hash = "#schedule";
             };
 
             const handleRegisterSubmit = async (event) => {
