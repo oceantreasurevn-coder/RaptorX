@@ -2386,6 +2386,55 @@ const App = () => {
     if (typeof value === "string") return value;
     return value?.[lang] || value?.en || "";
   };
+  const clampColor = value => Math.max(0, Math.min(255, Math.round(value)));
+  const hexToRgb = hex => {
+    if (typeof hex !== "string") return null;
+    const normalized = hex.replace("#", "").trim();
+    const full = normalized.length === 3 ? normalized.split("").map(c => c + c).join("") : normalized;
+    if (full.length !== 6 || !/^[0-9a-fA-F]+$/.test(full)) return null;
+    const num = parseInt(full, 16);
+    return {
+      r: num >> 16 & 255,
+      g: num >> 8 & 255,
+      b: num & 255
+    };
+  };
+  const mixRgb = (rgb, target, amount) => ({
+    r: clampColor(rgb.r + (target.r - rgb.r) * amount),
+    g: clampColor(rgb.g + (target.g - rgb.g) * amount),
+    b: clampColor(rgb.b + (target.b - rgb.b) * amount)
+  });
+  const rgbToHex = rgb => `#${[rgb.r, rgb.g, rgb.b].map(v => v.toString(16).padStart(2, "0")).join("")}`;
+  const rgba = (rgb, alpha) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+  const getQualityFrameColors = accent => {
+    const base = hexToRgb(accent) || {
+      r: 17,
+      g: 17,
+      b: 17
+    };
+    const luminance = (0.2126 * base.r + 0.7152 * base.g + 0.0722 * base.b) / 255;
+    const borderRgb = luminance > 0.7 ? mixRgb(base, {
+      r: 0,
+      g: 0,
+      b: 0
+    }, 0.6) : base;
+    const bgTop = mixRgb(base, {
+      r: 255,
+      g: 255,
+      b: 255
+    }, 0.92);
+    const bgBottom = mixRgb(base, {
+      r: 255,
+      g: 255,
+      b: 255
+    }, 0.8);
+    return {
+      border: rgbToHex(borderRgb),
+      bgTop: rgbToHex(bgTop),
+      bgBottom: rgbToHex(bgBottom),
+      glow: rgba(borderRgb, 0.28)
+    };
+  };
   const resolveApiBase = () => {
     if (typeof window === "undefined") return "";
     const params = new URLSearchParams(window.location.search);
@@ -2549,6 +2598,7 @@ const App = () => {
     color: "white",
     boxShadow: `0 0 20px ${activeTheme.accent}40`
   };
+  const qualityFrameColors = getQualityFrameColors(activeTheme.accent);
   return /*#__PURE__*/React.createElement("div", {
     className: `font-sans text-neutral-900 bg-white overflow-x-hidden selection:bg-black selection:text-white ${isMobileView ? 'mobile-layout' : 'desktop-layout'}`
   }, /*#__PURE__*/React.createElement(CustomCursor, null), /*#__PURE__*/React.createElement("div", {
@@ -2749,13 +2799,21 @@ const App = () => {
     className: `text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-none transition-all duration-500 delay-100 transform collection-title ${isAnimating ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'} ${activeTheme.textClass}`
   }, activeProduct.name)), /*#__PURE__*/React.createElement("div", {
     className: "overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: `quality-tech-frame transition-all duration-500 delay-150 transform ${isAnimating ? 'translate-y-6 opacity-0' : 'translate-y-0 opacity-100'}`,
+    style: {
+      "--quality-frame-border": qualityFrameColors.border,
+      "--quality-frame-bg-top": qualityFrameColors.bgTop,
+      "--quality-frame-bg-bottom": qualityFrameColors.bgBottom,
+      "--quality-frame-glow": qualityFrameColors.glow
+    }
   }, /*#__PURE__*/React.createElement("img", {
     src: "Scater%20RaptorX%20Quality.png",
     alt: "Scater RaptorX Quality badge",
-    className: `mx-auto md:mx-0 mt-3 mb-1 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain transition-all duration-500 delay-150 transform ${isAnimating ? 'translate-y-6 opacity-0' : 'translate-y-0 opacity-100'}`,
+    className: "quality-tech-image mx-auto md:mx-0 w-full max-w-[220px] sm:max-w-[260px] h-auto object-contain",
     loading: "lazy",
     decoding: "async"
-  })), /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("div", {
     className: "overflow-hidden"
   }, /*#__PURE__*/React.createElement("p", {
     className: `text-xl font-bold text-white uppercase tracking-widest transition-all duration-500 delay-200 transform collection-subtitle ${isAnimating ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'}`
