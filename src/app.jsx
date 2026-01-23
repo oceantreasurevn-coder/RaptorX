@@ -609,7 +609,7 @@
             }, []);
 
             return (
-                <div ref={ref} className={`transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}>
+                <div ref={ref} className={`reveal-wrapper transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}>
                     {children}
                 </div>
             );
@@ -868,14 +868,6 @@
 
             useEffect(() => {
                 if (typeof window === "undefined") return undefined;
-                const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-                if (isTouch) {
-                    setCursorShift({ x: 0, y: 0 });
-                    setEyeOffset({ x: 0, y: 0 });
-                    setIsCursorNear(false);
-                    return undefined;
-                }
-
                 let animationFrame = null;
                 const handleMove = (event) => {
                     if (event.pointerType && event.pointerType !== "mouse") return;
@@ -906,14 +898,14 @@
                         });
 
                         if (!closest) return;
-                        const maxDistance = 80;
+                        const maxDistance = 28;
                         const influence = Math.max(0, Math.min(1, (maxDistance - minDistance) / maxDistance));
-                        const clamp = (value) => Math.max(-4, Math.min(4, value * 0.04));
+                        const clamp = (value) => Math.max(-2, Math.min(2, value * 0.03));
                         setEyeOffset({
                             x: clamp(closest.dx) * influence,
                             y: clamp(closest.dy) * influence
                         });
-                        setIsCursorNear(minDistance < 50);
+                        setIsCursorNear(minDistance < 16);
                     });
                 };
                 window.addEventListener("pointermove", handleMove, { passive: true });
@@ -1278,7 +1270,7 @@
             };
 
             return (
-                <div className="fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3 chat-container">
+                <div className="fixed bottom-6 right-4 sm:right-6 z-[9997] flex flex-col items-end gap-3">
                     {isOpen && showOfflineBanner && chatStatus.state === "offline" && (
                         <div className="flex items-center gap-3 rounded-full bg-black text-yellow-300 border border-yellow-400 px-4 py-2 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
                             <span className="text-[10px] uppercase tracking-widest font-bold">{t.chat.statusOffline}</span>
@@ -1287,7 +1279,7 @@
                             </button>
                         </div>
                     )}
-                    <div className={`relative transition-all duration-500 chat-panel ${isOpen ? 'w-[86vw] sm:w-[340px] md:w-[400px] opacity-100 translate-y-0 pointer-events-auto' : 'w-0 h-0 opacity-0 translate-y-6 pointer-events-none overflow-hidden'}`}>
+                    <div className={`relative transition-all duration-500 ${isOpen ? 'w-[86vw] sm:w-[340px] md:w-[400px] opacity-100 translate-y-0 pointer-events-auto' : 'w-0 h-0 opacity-0 translate-y-6 pointer-events-none overflow-hidden'}`}>
                         <div className="chat-glow"></div>
                         <div className="chat-orbit"></div>
                         <div className="relative rounded-3xl overflow-hidden border border-black/10 bg-white text-black shadow-[0_30px_70px_rgba(0,0,0,0.2)]">
