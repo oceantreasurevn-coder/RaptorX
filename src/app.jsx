@@ -1973,9 +1973,9 @@
                                     <ProductBlueprint product={activeProduct} isAnimating={isAnimating} lang={lang} />
                                 </div>
                             </div>
-                            <div className="hidden md:block mt-12">
-                                <div className="rounded-[28px] border border-neutral-200 bg-white/90 shadow-[0_24px_60px_rgba(0,0,0,0.08)] p-8">
-                                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+                            <div className="mt-12 tech-specs-panel">
+                                <div className="rounded-[28px] border border-neutral-200 bg-white/90 shadow-[0_24px_60px_rgba(0,0,0,0.08)] p-8 tech-specs-card">
+                                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 tech-specs-header">
                                         <div>
                                             <p className="text-xs font-black uppercase tracking-[0.4em] text-neutral-400 mb-2">{t.techSpecs.sub}</p>
                                             <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-neutral-900 font-graffiti">{t.techSpecs.title}</h3>
@@ -1985,7 +1985,7 @@
                                             <span className="hidden lg:inline">Core deck spec sheet</span>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 tech-specs-grid">
                                         {t.techSpecs.items.map((item) => (
                                             <div key={item.key} className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
                                                 <p className="text-[11px] font-black uppercase tracking-[0.3em] text-neutral-400 mb-2">{item.label}</p>

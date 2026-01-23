@@ -503,6 +503,26 @@
                 padding: 18px 16px;
             }
 
+            .mobile-layout .tech-specs-panel {
+                margin-top: 32px;
+            }
+
+            .mobile-layout .tech-specs-card {
+                padding: 20px 16px;
+                border-radius: 22px;
+                text-align: left;
+            }
+
+            .mobile-layout .tech-specs-header {
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+
+            .mobile-layout .tech-specs-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
             .mobile-layout #register {
                 padding-top: 72px;
                 padding-bottom: 72px;
@@ -3479,6 +3499,28 @@
                                     <ProductBlueprint product={activeProduct} isAnimating={isAnimating} lang={lang} />
                                 </div>
                             </div>
+                            <div className="mt-12 tech-specs-panel">
+                                <div className="rounded-[28px] border border-neutral-200 bg-white/90 shadow-[0_24px_60px_rgba(0,0,0,0.08)] p-8 tech-specs-card">
+                                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 tech-specs-header">
+                                        <div>
+                                            <p className="text-xs font-black uppercase tracking-[0.4em] text-neutral-400 mb-2">{t.techSpecs.sub}</p>
+                                            <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-neutral-900 font-graffiti">{t.techSpecs.title}</h3>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em] text-neutral-500">
+                                            <span className="px-3 py-1 rounded-full border border-neutral-200">RAPTOR [X]</span>
+                                            <span className="hidden lg:inline">Core deck spec sheet</span>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 tech-specs-grid">
+                                        {t.techSpecs.items.map((item) => (
+                                            <div key={item.key} className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+                                                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-neutral-400 mb-2">{item.label}</p>
+                                                <p className="text-lg font-black text-neutral-900">{item.value}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-10 border-t border-gray-100 collection-thumbs">
                                 {products.map((item, index) => {
                                     const productSub = getLocalized(item.sub);
@@ -4214,6 +4256,6 @@
             </ErrorBoundary>
         );
     </script>
-    <script src="assets/app.js?v=20260123-1715" defer></script>
+    <script src="assets/app.js?v=20260123-1745" defer></script>
 </body>
 </html>

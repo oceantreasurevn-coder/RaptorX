@@ -2871,11 +2871,11 @@ const App = () => {
     isAnimating: isAnimating,
     lang: lang
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "hidden md:block mt-12"
+    className: "mt-12 tech-specs-panel"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "rounded-[28px] border border-neutral-200 bg-white/90 shadow-[0_24px_60px_rgba(0,0,0,0.08)] p-8"
+    className: "rounded-[28px] border border-neutral-200 bg-white/90 shadow-[0_24px_60px_rgba(0,0,0,0.08)] p-8 tech-specs-card"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8"
+    className: "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 tech-specs-header"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     className: "text-xs font-black uppercase tracking-[0.4em] text-neutral-400 mb-2"
   }, t.techSpecs.sub), /*#__PURE__*/React.createElement("h3", {
@@ -2887,7 +2887,7 @@ const App = () => {
   }, "RAPTOR [X]"), /*#__PURE__*/React.createElement("span", {
     className: "hidden lg:inline"
   }, "Core deck spec sheet"))), /*#__PURE__*/React.createElement("div", {
-    className: "grid grid-cols-2 lg:grid-cols-3 gap-4"
+    className: "grid grid-cols-2 lg:grid-cols-3 gap-4 tech-specs-grid"
   }, t.techSpecs.items.map(item => /*#__PURE__*/React.createElement("div", {
     key: item.key,
     className: "rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm"
