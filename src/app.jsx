@@ -2112,7 +2112,7 @@
                                     <SkateboardIcon size={32} className="text-white" />
                                 </div>
                                 <svg width="100%" height="150" viewBox="0 0 800 150" className="mx-auto block overflow-visible">
-                                    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" className="font-graffiti text-4xl sm:text-6xl md:text-9xl font-black fill-transparent stroke-white animate-draw-text">{t.nextLevel.title}</text>
+                                    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" className="next-level-title font-graffiti text-4xl sm:text-6xl md:text-9xl font-black fill-transparent stroke-white animate-draw-text">{t.nextLevel.title}</text>
                                 </svg>
                                 <p className="text-gray-400 font-light text-base sm:text-xl tracking-widest uppercase">{t.nextLevel.sub}</p>
                             </RevealOnScroll>

@@ -3048,7 +3048,7 @@ const App = () => {
     y: "50%",
     dominantBaseline: "middle",
     textAnchor: "middle",
-    className: "font-graffiti text-4xl sm:text-6xl md:text-9xl font-black fill-transparent stroke-white animate-draw-text"
+    className: "next-level-title font-graffiti text-4xl sm:text-6xl md:text-9xl font-black fill-transparent stroke-white animate-draw-text"
   }, t.nextLevel.title)), /*#__PURE__*/React.createElement("p", {
     className: "text-gray-400 font-light text-base sm:text-xl tracking-widest uppercase"
   }, t.nextLevel.sub)))), /*#__PURE__*/React.createElement("section", {
